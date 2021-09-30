@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import { createGlobalStyle } from 'styled-components';
 import GlobalStyle from './styles/globalStyle';
+import { ThemeProvider } from 'styled-components';
+import theme from './styles/theme';
 
 import App from './components/App';
 
@@ -14,9 +16,9 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ThemeProvider theme={theme}>
     <GlobalStyle />
     <App />
-  </React.StrictMode>,
+  </ThemeProvider>,
   document.getElementById('root'),
 );
