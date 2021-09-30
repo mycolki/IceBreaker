@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Button from '../share/Button';
 
 function Menu() {
@@ -12,14 +14,11 @@ function Menu() {
       </TitleWrapper>
       <MenuButtons>
         <li className="button">
-          <Button size="large" color="skyBlue">
-            얼음깨기
-          </Button>
-        </li>
-        <li className="button">
-          <Button size="large" color="skyBlue">
-            처음으로
-          </Button>
+          <Link to="/ready">
+            <Button size="large" color="skyBlue">
+              얼음깨기
+            </Button>
+          </Link>
         </li>
         <li className="button">
           <Button size="large" color="skyBlue">
@@ -55,12 +54,12 @@ const Container = styled.div`
 
 const TitleWrapper = styled.div`
   position: relative;
-  height: 45%;
+  height: 48%;
   text-align: center;
 
   .app-title {
     position: absolute;
-    top: 50%;
+    top: 75%;
     left: 50%;
     width: 100%;
     line-height: 1.6em;
@@ -72,10 +71,10 @@ const TitleWrapper = styled.div`
 `;
 
 const MenuButtons = styled.ul`
-  height: 55%;
+  height: 52%;
   text-align: center;
 
   .button {
-    margin-top: 0.7em;
+    margin-bottom: 0.7em;
   }
 `;

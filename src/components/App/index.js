@@ -1,10 +1,18 @@
+import { Route } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Menu from '../Menu';
+import Ready from '../Ready';
 
 function App() {
   return (
     <AppContainer>
-      <Menu />
+      <Route exact path="/">
+        <Menu />
+      </Route>
+      <Route path="/ready">
+        <Ready />
+      </Route>
     </AppContainer>
   );
 }
