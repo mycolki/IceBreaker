@@ -1,6 +1,6 @@
 {
   "name": "ICE BREAKER",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "description": "Guess what's inside the ice!",
   "author": "Yang Ha Yun <mycolki@gmail.com>",
@@ -12,6 +12,7 @@
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.1",
     "styled-normalize": "^8.0.7",
+    "styled-reset": "^4.3.4",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

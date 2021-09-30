@@ -12,7 +12,9 @@ const SIZE_PRESET = {
   `,
   large: css`
     width: 190px;
-    height: 45px;
+    height: 40px;
+    font-size: 1.1em;
+    line-height: 1em;
   `,
 };
 

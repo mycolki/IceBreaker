@@ -7,7 +7,7 @@ const theme = {
   pink: '#f178b6',
   deepPink: '#f54379',
   skyBlue: '#7cd0ff',
-  deepBlue: '#297ead',
+  deepBlue: '#38a3df',
   purple: '#7879f1',
   lightPurple: '#8ba5ff',
   deepGray: '#373737',
