@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createGlobalStyle } from 'styled-components';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
+import GlobalStyle from './styles/globalStyle';
+import theme from './styles/theme';
 
 import App from './components/App';
 
@@ -12,9 +16,11 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 ReactDOM.render(
-  <React.StrictMode>
-    <GlobalStyle />
-    <App />
-  </React.StrictMode>,
+  <Router>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <App />
+    </ThemeProvider>
+  </Router>,
   document.getElementById('root'),
 );

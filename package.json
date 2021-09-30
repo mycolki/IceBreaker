@@ -1,15 +1,19 @@
 {
   "name": "ICE BREAKER",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "private": true,
   "description": "Guess what's inside the ice!",
   "author": "Yang Ha Yun <mycolki@gmail.com>",
   "dependencies": {
+    "firebase": "^9.1.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.1",
+    "styled-normalize": "^8.0.7",
+    "styled-reset": "^4.3.4",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -44,6 +48,7 @@
     "@testing-library/user-event": "^12.1.10",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.2"
   }
 }
