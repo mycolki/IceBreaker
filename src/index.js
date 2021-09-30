@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { createGlobalStyle } from 'styled-components';
+import GlobalStyle from './styles/globalStyle';
 
 import App from './components/App';
 
