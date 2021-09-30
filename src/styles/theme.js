@@ -11,6 +11,7 @@ const theme = {
   purple: '#7879f1',
   lightPurple: '#8ba5ff',
   deepGray: '#373737',
+  /* gradient-background */
   mainSkyBlueBg: 'linear-gradient(180deg, #b0c5ff 0%, #12a4f5 100%)',
   redCircleBg:
     'linear-gradient(180deg, rgba(255, 86, 86, 0.84) 0%, rgba(221, 37, 37, 0.84) 100%)',
@@ -26,7 +27,8 @@ const theme = {
   makingIceBg: 'linear-gradient(180deg, #fafdff 0%, #33b6ff 100%)',
   rankingBg:
     'linear-gradient(180deg, rgba(252, 139, 35, 0.65) 0%, rgba(120, 121, 241, 0.79) 100%)',
-  buttonBorder: '3px solid #ffffff;',
+  /* config */
+  buttonBorder: '2px solid #ffffff',
 };
 
 export default theme;
