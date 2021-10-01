@@ -13,14 +13,14 @@ const theme = {
   deepGray: '#373737',
   /* gradient-background */
   mainSkyBlueBg: 'linear-gradient(180deg, #b0c5ff 0%, #12a4f5 100%)',
+  readyGameBg:
+    'linear-gradient(180deg, rgba(197, 227, 244, 0.7) 0%, rgba(70, 192, 134, 0.7625) 26.56%, #fc8b23 100%)',
   redCircleBg:
     'linear-gradient(180deg, rgba(255, 86, 86, 0.84) 0%, rgba(221, 37, 37, 0.84) 100%)',
   greenCircleBg:
     'linear-gradient(180deg, rgba(53, 135, 101, 0.84) 0%, rgba(29, 108, 75, 0.84) 100%)',
   yellowCircleBg:
     'linear-gradient(180deg, rgba(247, 202, 44, 0.89) 0%, rgba(249, 166, 42, 0.89) 100%)',
-  readyGameBg:
-    'linear-gradient(180deg, rgba(197, 227, 244, 0.7) 0%, rgba(70, 192, 134, 0.7625) 26.56%, #fc8b23 100%)',
   winGameBg: 'linear-gradient(180deg, #f9682a 0%, #ffe587 100%)',
   loseGameBg:
     'linear-gradient(180deg, #f54379 0%, rgba(76, 95, 174, 0.67) 100%)',

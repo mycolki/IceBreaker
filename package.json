@@ -5,10 +5,13 @@
   "description": "Guess what's inside the ice!",
   "author": "Yang Ha Yun <mycolki@gmail.com>",
   "dependencies": {
+    "fabric": "^4.6.0",
     "firebase": "^9.1.0",
+    "gsap": "^3.8.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-gsap": "^3.2.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.1",
@@ -21,7 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "eslint-check": "eslint --print-config path/to/main.js | eslint-config-prettier-check"
   },
   "eslintConfig": {
     "extends": [
@@ -46,9 +50,21 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "eslint-config-airbnb": "^18.2.1",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.10.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jest": "^24.5.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.2"
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^3.10.2",
+    "husky": "^7.0.2",
+    "prettier": "^2.4.1"
   }
 }
