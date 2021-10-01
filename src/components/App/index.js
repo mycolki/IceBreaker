@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
+import Breaking from '../Breaking';
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
       </Route>
       <Route path="/ready">
         <Ready />
+      </Route>
+      <Route path="/game/breaking">
+        <Breaking />
       </Route>
     </AppContainer>
   );
