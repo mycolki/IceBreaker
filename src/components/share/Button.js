@@ -75,7 +75,7 @@ const StyledButton = styled.button`
   text-align: center;
   border: none;
   border-radius: 20px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: ${({ theme }) => theme.buttonShadow};
   color: ${({ theme }) => theme.white};
   transition: all 200ms ease-in;
 
