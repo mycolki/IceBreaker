@@ -12,6 +12,8 @@ const theme = {
   lightPurple: '#8ba5ff',
   deepGray: '#373737',
   /* gradient-background */
+  icePlate:
+    'linear-gradient(180deg, rgba(114, 112, 219, 0.26) 11.27%, rgba(252, 146, 216, 0.39) 48.77%, rgba(130, 210, 255, 0.92) 98.77%)',
   skyBlueCube:
     'linear-gradient(180deg, #7CD0FF 0%, rgba(207, 218, 255, 0.36) 100%)',
   mainSkyBlueBg: 'linear-gradient(180deg, #b0c5ff 0%, #12a4f5 100%)',
