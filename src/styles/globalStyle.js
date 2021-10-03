@@ -6,8 +6,6 @@ const GlobalStyle = createGlobalStyle`
   ${normalize}
   ${reset}
 
-  @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Rammetto+One&display=swap');
-
   a:link {
     text-decoration: none;
   }
