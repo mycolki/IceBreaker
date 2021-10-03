@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 
 import theme from '../../styles/theme';
@@ -43,7 +41,3 @@ function Cube() {
 }
 
 export default Cube;
-
-const Wrapper = styled.div`
-  background-color: black;
-`;
