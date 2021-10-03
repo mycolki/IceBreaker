@@ -28,7 +28,7 @@ const AppContainer = styled.div`
   top: 50%;
   left: 50%;
   width: 375px;
-  height: 91vh;
+  height: 713px;
   margin: auto;
   background-color: white;
   transform: translate(-50%, -50%);
