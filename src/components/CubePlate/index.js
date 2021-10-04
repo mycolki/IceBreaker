@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 
-const stageStyle = {
-  height: '58%',
-};
-
 function IcePlate() {
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
 
@@ -42,7 +38,7 @@ function IcePlate() {
   };
 
   return (
-    <Stage style={stageStyle} width={367} height={413.53}>
+    <Stage style={{ height: '58%' }} width={367} height={413.53}>
       <Layer>
         <RegularPolygon
           x={182}
@@ -71,10 +67,10 @@ function IcePlate() {
             x={coord.x}
             y={coord.y}
             sides={6}
-            radius={25}
+            radius={20}
             rotation={90}
-            fillLinearGradientStartPoint={{ x: -20, y: 0 }}
-            fillLinearGradientEndPoint={{ x: 20, y: 0 }}
+            fillLinearGradientStartPoint={{ x: 20, y: 30 }}
+            fillLinearGradientEndPoint={{ x: -20, y: -10 }}
             fillLinearGradientColorStops={[0, '#e8e3ff', 1, '#bd9cf2']}
             shadowColor="#000000"
             shadowBlur={4}
