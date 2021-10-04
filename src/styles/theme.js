@@ -1,6 +1,6 @@
 const theme = {
   white: '#ffffff',
-  red: '#e32f2f',
+  red: '#e95353',
   green: '#358765',
   yellow: '#f6ca2c',
   orange: '#fba85c',
@@ -16,7 +16,8 @@ const theme = {
     'linear-gradient(180deg, rgba(114, 112, 219, 0.26) 11.27%, rgba(252, 146, 216, 0.39) 48.77%, rgba(130, 210, 255, 0.92) 98.77%)',
   skyBlueCube:
     'linear-gradient(180deg, #7CD0FF 0%, rgba(207, 218, 255, 0.36) 100%)',
-  mainSkyBlueBg: 'linear-gradient(180deg, #b0c5ff 0%, #12a4f5 100%)',
+  menuBg: 'linear-gradient(180deg, #b0c5ff 0%, #12a4f5 100%)',
+  breakingBg: 'linear-gradient(180deg, #7cd0ff 0%, #379dd7 100%)',
   readyGameBg:
     'linear-gradient(180deg, rgba(197, 227, 244, 0.7) 0%, rgba(70, 192, 134, 0.7625) 26.56%, #fc8b23 100%)',
   redCircleBg:

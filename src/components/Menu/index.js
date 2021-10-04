@@ -49,7 +49,7 @@ export default Menu;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.mainSkyBlueBg};
+  background: ${({ theme }) => theme.menuBg};
 `;
 
 const TitleWrapper = styled.div`
