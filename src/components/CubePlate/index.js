@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 
 const stageStyle = {
@@ -5,17 +6,76 @@ const stageStyle = {
 };
 
 function IcePlate() {
+  const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
+
+  useEffect(() => {
+    const coordinates = [];
+    let x = 0;
+    let y = 0;
+
+    for (let i = 0; i < 4; i++) {
+      x = 181 + i * 39;
+      y = 78 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    for (let i = 0; i < 5; i++) {
+      x = 142 + i * 39;
+      y = 100 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    for (let i = 0; i < 6; i++) {
+      x = 103 + i * 39;
+      y = 122 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    for (let i = 0; i < 7; i++) {
+      x = 64 + i * 39;
+      y = 144 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    for (let i = 0; i < 6; i++) {
+      x = 64 + i * 39;
+      y = 188 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    for (let i = 0; i < 5; i++) {
+      x = 64 + i * 39;
+      y = 232 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    for (let i = 0; i < 4; i++) {
+      x = 64 + i * 39;
+      y = 276 + i * 22;
+
+      coordinates.push({ x, y });
+    }
+
+    setCubeCoordinates(coordinates);
+  }, []);
+
   return (
     <Stage style={stageStyle} width={367} height={413.53}>
       <Layer>
         <RegularPolygon
           x={182}
           y={206}
-          sides={6}
-          radius={170}
-          rotation={140}
-          fillLinearGradientStartPoint={{ x: -10, y: 100, z: 50 }}
-          fillLinearGradientEndPoint={{ x: 90, y: -150, z: 0 }}
+          sides={7}
+          radius={177}
+          rotation={80}
+          fillLinearGradientStartPoint={{ x: -100, y: 60, z: 0 }}
+          fillLinearGradientEndPoint={{ x: 150, y: 0, z: 0 }}
           fillLinearGradientColorStops={[
             0,
             '#62A8F2',
@@ -29,55 +89,23 @@ function IcePlate() {
           shadowOffset={{ x: 0, y: 10 }}
           shadowOpacity="0.4"
         />
-        <RegularPolygon
-          x={120}
-          y={120}
-          sides={6}
-          radius={25}
-          fillLinearGradientStartPoint={{ x: -50, y: -50 }}
-          fillLinearGradientEndPoint={{ x: 50, y: 50 }}
-          fillLinearGradientColorStops={[
-            0,
-            'rgba(114, 112, 219',
-            1,
-            'rgba(252, 146, 216)',
-          ]}
-          shadowColor="#ffffff"
-          shadowBlur={0}
-          shadowOffset={{ x: 2.5, y: 1.5 }}
-          rotation={90}
-        />
-        <RegularPolygon
-          x={159}
-          y={142}
-          sides={6}
-          radius={25}
-          fillLinearGradientStartPoint={{ x: -50, y: -50 }}
-          fillLinearGradientEndPoint={{ x: 50, y: 50 }}
-          fillLinearGradientColorStops={[
-            0,
-            'rgba(114, 112, 219',
-            1,
-            'rgba(252, 146, 216)',
-          ]}
-          shadowColor="#ffffff"
-          shadowBLur={0}
-          shadowOffset={{ x: 2.5, y: 1.5 }}
-          rotation={90}
-        />
-        <RegularPolygon
-          x={120}
-          y={165}
-          sides={6}
-          radius={25}
-          fillLinearGradientStartPoint={{ x: -50, y: -50 }}
-          fillLinearGradientEndPoint={{ x: 50, y: 50 }}
-          fillLinearGradientColorStops={[0, 'orange', 1, 'rgba(252, 146, 216)']}
-          shadowColor="#ffffff"
-          shadowBLur={0}
-          shadowOffset={{ x: 2.5, y: 1.5 }}
-          rotation={90}
-        />
+        {cubeCoordinates?.map((coord, index) => (
+          <RegularPolygon
+            x={coord.x}
+            y={coord.y}
+            draggable="true"
+            sides={6}
+            radius={25}
+            rotation={90}
+            fillLinearGradientStartPoint={{ x: -20, y: 0 }}
+            fillLinearGradientEndPoint={{ x: 20, y: 0 }}
+            fillLinearGradientColorStops={[0, '#E8E3FF', 1, '#BD9CF2']}
+            shadowColor="#000000"
+            shadowBlur={4}
+            shadowOffset={{ x: 1, y: 6 }}
+            shadowOpacity="0.2"
+          />
+        ))}
       </Layer>
     </Stage>
   );
