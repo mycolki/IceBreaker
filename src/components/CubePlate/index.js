@@ -37,6 +37,11 @@ function IcePlate() {
     ev.target.visible(false);
   };
 
+  const displayCursorPointer = (ev) => {
+    const container = ev.target.getStage().container();
+    container.style.cursor = 'pointer';
+  };
+
   return (
     <Stage style={{ height: '58%' }} width={367} height={413.53}>
       <Layer>
@@ -78,6 +83,7 @@ function IcePlate() {
             shadowOpacity={0.2}
             onClick={removeCube}
             onTouchEnd={removeCube}
+            onMouseEnter={displayCursorPointer}
           />
         ))}
       </Layer>

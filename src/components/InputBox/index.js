@@ -8,5 +8,5 @@ export default InputBox;
 
 const Wrapper = styled.div`
   height: 12.5%;
-  background-color: yellowgreen;
+  background-color: ${({ theme }) => theme.skyBlue};
 `;

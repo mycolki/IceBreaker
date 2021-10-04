@@ -8,5 +8,5 @@ export default AnswerDisplayBox;
 
 const Wrapper = styled.div`
   height: 12.5%;
-  background-color: skyblue;
+  background-color: ${({ theme }) => theme.skyBlue};
 `;

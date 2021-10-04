@@ -12,7 +12,7 @@ function Header() {
             x={40}
             y={31}
             sides={6}
-            radius={25}
+            radius={26}
             rotation={90}
             fill={theme.pink}
           />
@@ -53,13 +53,15 @@ const Score = styled.div`
   }
 
   .score {
-    font-size: 1.4em;
+    font-size: 1.5em;
     -webkit-text-stroke: 1px ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.deepBlue};
   }
 `;
 
 const Time = styled.div`
+  display: flex;
+
   .clock {
     font-size: 1.5em;
     margin-right: 5px;
