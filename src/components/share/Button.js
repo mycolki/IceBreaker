@@ -7,8 +7,8 @@ const SIZE_PRESET = {
     height: 55px;
   `,
   medium: css`
-    width: 120px;
-    height: 55px;
+    height: 45px;
+    font-size: 0.7em;
   `,
   large: css`
     width: 190px;
