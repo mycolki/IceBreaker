@@ -6,7 +6,7 @@ import theme from '../../styles/theme';
 function Header() {
   return (
     <Wrapper>
-      <Stage width="100" height="60">
+      <Stage width={100} height={60}>
         <Layer>
           <RegularPolygon
             x={40}

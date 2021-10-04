@@ -57,7 +57,7 @@ function IcePlate() {
             0,
             '#62a8f2',
             0.5,
-            '#B7A4ee',
+            '#b7a4ee',
             1,
             '#8bcffc',
           ]}

@@ -20,7 +20,7 @@ function Footer() {
 
   return (
     <Wrapper>
-      <Stage width="120" height="60">
+      <Stage width={120} height={60}>
         <Layer>
           <RegularPolygon
             x={37}
