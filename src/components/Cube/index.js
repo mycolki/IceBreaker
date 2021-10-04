@@ -12,28 +12,60 @@ function Cube() {
     <Stage style={stageStyle} width={350} height={350}>
       <Layer>
         <RegularPolygon
-          x={100}
-          y={100}
+          x={120}
+          y={120}
           sides={6}
           radius={25}
-          fillLinearGradientStartPoint={{
-            x1: 0,
-            y1: 0,
-          }}
-          fillLinearGradientEndPoint={{
-            x2: 0,
-            y2: 50,
-          }}
-          fillLinearGradientColorStops={[
-            0,
-            '#7cdffF',
-            1,
-            'rgba(207, 218, 255)',
-          ]}
-          shadowColor="#ffffff"
-          shadowBLur={0}
-          shadowOffset={{ x: 2, y: 1 }}
           rotation={90}
+          fillLinearGradientStartPoint={{ x: -20, y: 0 }}
+          fillLinearGradientEndPoint={{ x: 20, y: 0 }}
+          fillLinearGradientColorStops={[0, '#E8E3FF', 1, '#BD9CF2']}
+          shadowColor="#000000"
+          shadowBlur={4}
+          shadowOffset={{ x: 1, y: 6 }}
+          shadowOpacity="0.2"
+        />
+        <RegularPolygon
+          x={159}
+          y={142}
+          sides={6}
+          radius={25}
+          rotation={90}
+          fillLinearGradientStartPoint={{ x: -20, y: 0 }}
+          fillLinearGradientEndPoint={{ x: 20, y: 0 }}
+          fillLinearGradientColorStops={[0, '#E8E3FF', 1, '#BD9CF2']}
+          shadowColor="#000000"
+          shadowBlur={4}
+          shadowOffset={{ x: 1, y: 6 }}
+          shadowOpacity="0.2"
+        />
+        <RegularPolygon
+          x={120}
+          y={165}
+          sides={6}
+          radius={25}
+          rotation={90}
+          fillLinearGradientStartPoint={{ x: 20, y: -10 }}
+          fillLinearGradientEndPoint={{ x: 10, y: 20 }}
+          fillLinearGradientColorStops={[0, ' #54BEFA', 1, '#CFDAFF']}
+          shadowColor="#000000"
+          shadowBlur={4}
+          shadowOffset={{ x: 1, y: 6 }}
+          shadowOpacity="0.2"
+        />
+        <RegularPolygon
+          x={159}
+          y={187}
+          sides={6}
+          radius={25}
+          rotation={90}
+          fillLinearGradientStartPoint={{ x: 20, y: -10 }}
+          fillLinearGradientEndPoint={{ x: 10, y: 20 }}
+          fillLinearGradientColorStops={[0, ' #54BEFA', 1, '#CFDAFF']}
+          shadowColor="#000000"
+          shadowBlur={4}
+          shadowOffset={{ x: 1, y: 6 }}
+          shadowOpacity="0.2"
         />
       </Layer>
     </Stage>
