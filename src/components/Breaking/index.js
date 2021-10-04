@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+
+import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
 import IcePlate from '../CubePlate';
-import Footer from '../Footer';
-import Header from '../Header';
 import InputBox from '../InputBox';
+import Footer from '../Footer';
 
 function Breaking() {
   return (
@@ -22,6 +23,5 @@ export default Breaking;
 const Container = styled.div`
   height: 100%;
   background: ${({ theme }) => theme.mainSkyBlueBg};
-
   border: 4px solid black;
 `;
