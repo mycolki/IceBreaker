@@ -6,13 +6,13 @@ function IcePlate() {
 
   useEffect(() => {
     const standards = [
-      [4, 181, 78],
-      [5, 142, 100],
-      [6, 103, 122],
-      [7, 64, 144],
-      [6, 64, 188],
-      [5, 64, 232],
-      [4, 64, 276],
+      [4, 181, 74],
+      [5, 142, 96],
+      [6, 103, 118],
+      [7, 64, 140],
+      [6, 64, 184],
+      [5, 64, 228],
+      [4, 64, 272],
     ];
 
     const makeCoordinates = (standards) => {
@@ -43,14 +43,14 @@ function IcePlate() {
   };
 
   return (
-    <Stage style={{ height: '58%' }} width={367} height={413.53}>
+    <Stage style={{ height: '54%' }} width={367} height={400}>
       <Layer>
         <RegularPolygon
           x={182}
-          y={206}
+          y={212}
           sides={7}
           radius={177}
-          rotation={80}
+          rotation={0}
           fillLinearGradientStartPoint={{ x: -100, y: 60, z: 0 }}
           fillLinearGradientEndPoint={{ x: 150, y: 0, z: 0 }}
           fillLinearGradientColorStops={[
@@ -72,7 +72,7 @@ function IcePlate() {
             x={coord.x}
             y={coord.y}
             sides={6}
-            radius={20}
+            radius={22}
             rotation={90}
             fillLinearGradientStartPoint={{ x: 20, y: 30 }}
             fillLinearGradientEndPoint={{ x: -20, y: -10 }}

@@ -6,7 +6,7 @@ function InputBox() {
   return (
     <Wrapper>
       <Form>
-        <input type="text" placeholder="정답을 입력해주세요" />
+        <input type="text" placeholder="Guess What" />
         <Button color="lightPurple" size="medium">
           Break
         </Button>
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 11%;
+  height: 16%;
 `;
 
 const Form = styled.form`
@@ -30,8 +30,8 @@ const Form = styled.form`
   text-align: center;
 
   input {
-    width: 130px;
-    height: 45px;
+    width: 140px;
+    height: 55px;
     padding: 0;
     margin-right: 10px;
     border: 0;
@@ -40,8 +40,8 @@ const Form = styled.form`
     background-color: #ffffff80;
 
     ::placeholder {
-      font-size: 0.9em;
-      color: ${({ theme }) => theme.purple};
+      font-size: 0.8em;
+      color: ${({ theme }) => theme.deepGray60};
     }
   }
 `;

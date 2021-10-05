@@ -7,7 +7,7 @@ const SIZE_PRESET = {
     height: 55px;
   `,
   medium: css`
-    height: 45px;
+    height: 55px;
     font-size: 0.7em;
   `,
   large: css`
@@ -69,7 +69,7 @@ Button.defaultProps = {
 
 const StyledButton = styled.button`
   margin: 0;
-  padding: 10px 20px;
+  padding: 10px 10px;
   outline: none;
   cursor: pointer;
   text-align: center;
