@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Stage, Layer, RegularPolygon } from 'react-konva';
+import { Stage, Line, Layer, RegularPolygon } from 'react-konva';
 
 function IcePlate() {
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
 
   useEffect(() => {
     const standards = [
-      [4, 181, 74],
-      [5, 142, 96],
-      [6, 103, 118],
-      [7, 64, 140],
-      [6, 64, 184],
-      [5, 64, 228],
-      [4, 64, 272],
+      [3, 229, 95],
+      [5, 157, 95],
+      [6, 121, 116],
+      [7, 85, 137],
+      [6, 85, 179],
+      [7, 49, 200],
+      [4, 85, 263],
+      [2, 85, 305],
     ];
 
     const makeCoordinates = (standards) => {
@@ -21,8 +22,8 @@ function IcePlate() {
       standards.forEach((standard) => {
         for (let i = 0; i < standard[0]; i++) {
           coordinates.push({
-            x: standard[1] + i * 39,
-            y: standard[2] + i * 22,
+            x: standard[1] + i * 36,
+            y: standard[2] + i * 21,
           });
         }
       });
@@ -45,14 +46,13 @@ function IcePlate() {
   return (
     <Stage style={{ height: '54%' }} width={367} height={400}>
       <Layer>
-        <RegularPolygon
-          x={182}
-          y={212}
-          sides={7}
-          radius={177}
-          rotation={0}
-          fillLinearGradientStartPoint={{ x: -100, y: 60, z: 0 }}
-          fillLinearGradientEndPoint={{ x: 150, y: 0, z: 0 }}
+        <Line
+          points={[
+            15, 210, 73, 80, 210, 40, 330, 112, 350, 250, 280, 360, 83, 360,
+          ]}
+          closed="true"
+          fillLinearGradientStartPoint={{ x: 100, y: -80, z: 0 }}
+          fillLinearGradientEndPoint={{ x: -30, y: 0, z: 0 }}
           fillLinearGradientColorStops={[
             0,
             '#62a8f2',
@@ -72,11 +72,11 @@ function IcePlate() {
             x={coord.x}
             y={coord.y}
             sides={6}
-            radius={22}
+            radius={23}
             rotation={90}
             fillLinearGradientStartPoint={{ x: 20, y: 30 }}
-            fillLinearGradientEndPoint={{ x: -20, y: -10 }}
-            fillLinearGradientColorStops={[0, '#e8e3ff', 1, '#bd9cf2']}
+            fillLinearGradientEndPoint={{ x: 0, y: -10 }}
+            fillLinearGradientColorStops={[0, '#54BEFA', 1, '#CFDAFF']}
             shadowColor="#000000"
             shadowBlur={4}
             shadowOffset={{ x: 1, y: 6 }}

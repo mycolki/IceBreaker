@@ -75,7 +75,7 @@ const StyledButton = styled.button`
   text-align: center;
   border: none;
   border-radius: 20px;
-  box-shadow: ${({ theme }) => theme.buttonShadow};
+  box-shadow: ${({ theme }) => theme.boxShadow};
   color: ${({ theme }) => theme.white};
   transition: all 200ms ease-in;
 

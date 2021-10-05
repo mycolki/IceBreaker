@@ -87,6 +87,7 @@ const Nav = styled.div`
 
   .menu {
     margin-right: 25px;
+    color: ${({ theme }) => theme.white};
   }
 
   .hint {

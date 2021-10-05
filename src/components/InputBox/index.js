@@ -34,10 +34,10 @@ const Form = styled.form`
     height: 55px;
     padding: 0;
     margin-right: 10px;
-    border: 0;
     text-align: center;
     border-radius: 20px;
     background-color: #ffffff80;
+    box-shadow: ${({ theme }) => theme.boxShadow};
 
     ::placeholder {
       font-size: 0.8em;
