@@ -50,11 +50,14 @@ function Footer() {
           />
         </Layer>
       </Stage>
-      <Nav>
+      <Nav coke={coke}>
         <Link to="/">
           <span className="menu">MENU</span>
         </Link>
-        <span className="hint">HINT</span>
+        <span className="hint">
+          <img src={coke} alt="coke" width="20" height="25" />
+          HINT
+        </span>
       </Nav>
       <Cokes>
         <img src={coke} alt="coke" width="27" height="41" />
@@ -73,7 +76,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 10%;
+  height: 9%;
   padding-right: 10px;
 `;
 
@@ -84,11 +87,19 @@ const Nav = styled.div`
 
   .menu {
     margin-right: 25px;
+    color: ${({ theme }) => theme.white};
+  }
+
+  .hint {
+    img {
+      position: absolute;
+      transform: translate(5px, -30px) rotate(20deg);
+    }
   }
 `;
 
 const Cokes = styled.div`
-  transform: translateY(3px);
+  transform: translateY(5px);
 
   img {
     transform: rotate(20deg);

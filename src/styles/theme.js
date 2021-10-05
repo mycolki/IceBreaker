@@ -34,7 +34,7 @@ const theme = {
     'linear-gradient(180deg, rgba(252, 139, 35, 0.65) 0%, rgba(120, 121, 241, 0.79) 100%)',
   /* config */
   buttonBorder: '2px solid #ffffff',
-  buttonShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
 };
 
 export default theme;

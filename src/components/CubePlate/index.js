@@ -1,18 +1,27 @@
 import { useState, useEffect } from 'react';
-import { Stage, Layer, RegularPolygon } from 'react-konva';
+import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
+import banana from '../../asset/banana.png';
 
 function IcePlate() {
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
+  const [images, setImages] = useState(null);
+
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = banana;
+    setImages(image);
+  }, []);
 
   useEffect(() => {
     const standards = [
-      [4, 181, 78],
-      [5, 142, 100],
-      [6, 103, 122],
-      [7, 64, 144],
-      [6, 64, 188],
-      [5, 64, 232],
-      [4, 64, 276],
+      [3, 229, 95],
+      [5, 157, 95],
+      [6, 121, 116],
+      [7, 85, 137],
+      [6, 85, 179],
+      [7, 49, 200],
+      [4, 85, 263],
+      [2, 85, 305],
     ];
 
     const makeCoordinates = (standards) => {
@@ -21,8 +30,8 @@ function IcePlate() {
       standards.forEach((standard) => {
         for (let i = 0; i < standard[0]; i++) {
           coordinates.push({
-            x: standard[1] + i * 39,
-            y: standard[2] + i * 22,
+            x: standard[1] + i * 36,
+            y: standard[2] + i * 21,
           });
         }
       });
@@ -43,16 +52,25 @@ function IcePlate() {
   };
 
   return (
-    <Stage style={{ height: '58%' }} width={367} height={413.53}>
+    <Stage style={{ height: '54%' }} width={367} height={400}>
       <Layer>
-        <RegularPolygon
-          x={182}
-          y={206}
-          sides={7}
-          radius={177}
-          rotation={80}
-          fillLinearGradientStartPoint={{ x: -100, y: 60, z: 0 }}
-          fillLinearGradientEndPoint={{ x: 150, y: 0, z: 0 }}
+        <Line
+          points={[
+            25, 208, 83, 85, 210, 50, 320, 115, 340, 248, 273, 350, 80, 350,
+          ]}
+          closed="true"
+          fill="black"
+          draggable="true"
+        />
+      </Layer>
+      <Layer>
+        <Line
+          points={[
+            15, 208, 73, 80, 210, 40, 330, 112, 350, 250, 283, 360, 73, 360,
+          ]}
+          closed="true"
+          fillLinearGradientStartPoint={{ x: 100, y: -80, z: 0 }}
+          fillLinearGradientEndPoint={{ x: -30, y: 0, z: 0 }}
           fillLinearGradientColorStops={[
             0,
             '#62a8f2',
@@ -65,27 +83,42 @@ function IcePlate() {
           shadowBlur={10}
           shadowOffset={{ x: 0, y: 10 }}
           shadowOpacity={0.4}
+          draggable="true"
         />
-        {cubeCoordinates?.map((coord) => (
-          <RegularPolygon
-            key={String(coord.x) + String(coord.y)}
-            x={coord.x}
-            y={coord.y}
-            sides={6}
-            radius={20}
-            rotation={90}
-            fillLinearGradientStartPoint={{ x: 20, y: 30 }}
-            fillLinearGradientEndPoint={{ x: -20, y: -10 }}
-            fillLinearGradientColorStops={[0, '#e8e3ff', 1, '#bd9cf2']}
-            shadowColor="#000000"
-            shadowBlur={4}
-            shadowOffset={{ x: 1, y: 6 }}
-            shadowOpacity={0.2}
-            onClick={removeCube}
-            onTouchEnd={removeCube}
-            onMouseEnter={displayCursorPointer}
-          />
-        ))}
+      </Layer>
+      <Layer>
+        <Image
+          x={40}
+          y={60}
+          image={images}
+          width={280}
+          height={280}
+          draggable="true"
+        />
+      </Layer>
+      <Layer>
+        <Group>
+          {cubeCoordinates?.map((coord) => (
+            <RegularPolygon
+              onClick={removeCube}
+              key={String(coord.x) + String(coord.y)}
+              x={coord.x}
+              y={coord.y}
+              sides={6}
+              radius={23}
+              rotation={90}
+              fillLinearGradientStartPoint={{ x: 20, y: 30 }}
+              fillLinearGradientEndPoint={{ x: 0, y: -10 }}
+              fillLinearGradientColorStops={[0, '#54BEFA', 1, '#CFDAFF']}
+              shadowColor="#000000"
+              shadowBlur={4}
+              shadowOffset={{ x: 1, y: 6 }}
+              shadowOpacity={0.2}
+              onMouseEnter={displayCursorPointer}
+              draggable="true"
+            />
+          ))}
+        </Group>
       </Layer>
     </Stage>
   );

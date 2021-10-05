@@ -22,6 +22,11 @@ const GlobalStyle = createGlobalStyle`
   body {
     overflow: hidden;
     font-family: 'Rammetto One', 'Do Hyeon';
+
+    input {
+      border: none;
+      outline: none;
+    }
   }
 `;
 
