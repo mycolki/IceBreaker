@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Stage, Line, Layer, RegularPolygon } from 'react-konva';
+import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
+import banana from '../../asset/banana.png';
 
 function IcePlate() {
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
+  const [images, setImages] = useState(null);
+
+  useEffect(() => {
+    const image = new window.Image();
+    image.src = banana;
+    setImages(image);
+  }, []);
 
   useEffect(() => {
     const standards = [
@@ -48,7 +56,17 @@ function IcePlate() {
       <Layer>
         <Line
           points={[
-            15, 210, 73, 80, 210, 40, 330, 112, 350, 250, 280, 360, 83, 360,
+            25, 208, 83, 85, 210, 50, 320, 115, 340, 248, 273, 350, 80, 350,
+          ]}
+          closed="true"
+          fill="black"
+          draggable="true"
+        />
+      </Layer>
+      <Layer>
+        <Line
+          points={[
+            15, 208, 73, 80, 210, 40, 330, 112, 350, 250, 283, 360, 73, 360,
           ]}
           closed="true"
           fillLinearGradientStartPoint={{ x: 100, y: -80, z: 0 }}
@@ -65,27 +83,42 @@ function IcePlate() {
           shadowBlur={10}
           shadowOffset={{ x: 0, y: 10 }}
           shadowOpacity={0.4}
+          draggable="true"
         />
-        {cubeCoordinates?.map((coord) => (
-          <RegularPolygon
-            key={String(coord.x) + String(coord.y)}
-            x={coord.x}
-            y={coord.y}
-            sides={6}
-            radius={23}
-            rotation={90}
-            fillLinearGradientStartPoint={{ x: 20, y: 30 }}
-            fillLinearGradientEndPoint={{ x: 0, y: -10 }}
-            fillLinearGradientColorStops={[0, '#54BEFA', 1, '#CFDAFF']}
-            shadowColor="#000000"
-            shadowBlur={4}
-            shadowOffset={{ x: 1, y: 6 }}
-            shadowOpacity={0.2}
-            onClick={removeCube}
-            onTouchEnd={removeCube}
-            onMouseEnter={displayCursorPointer}
-          />
-        ))}
+      </Layer>
+      <Layer>
+        <Image
+          x={40}
+          y={60}
+          image={images}
+          width={280}
+          height={280}
+          draggable="true"
+        />
+      </Layer>
+      <Layer>
+        <Group>
+          {cubeCoordinates?.map((coord) => (
+            <RegularPolygon
+              onClick={removeCube}
+              key={String(coord.x) + String(coord.y)}
+              x={coord.x}
+              y={coord.y}
+              sides={6}
+              radius={23}
+              rotation={90}
+              fillLinearGradientStartPoint={{ x: 20, y: 30 }}
+              fillLinearGradientEndPoint={{ x: 0, y: -10 }}
+              fillLinearGradientColorStops={[0, '#54BEFA', 1, '#CFDAFF']}
+              shadowColor="#000000"
+              shadowBlur={4}
+              shadowOffset={{ x: 1, y: 6 }}
+              shadowOpacity={0.2}
+              onMouseEnter={displayCursorPointer}
+              draggable="true"
+            />
+          ))}
+        </Group>
       </Layer>
     </Stage>
   );
