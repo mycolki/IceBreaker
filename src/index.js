@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from '../src/store';
 
+import './config/firebase';
+
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/globalStyle';
 import theme from './styles/theme';
