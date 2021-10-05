@@ -5,6 +5,7 @@
   "description": "Guess what's inside the ice!",
   "author": "Yang Ha Yun <mycolki@gmail.com>",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.2",
     "fabric": "^4.6.0",
     "firebase": "^9.1.0",
     "gsap": "^3.8.0",
@@ -15,6 +16,7 @@
     "react-gsap": "^3.2.1",
     "react-konva": "^17.0.2-5",
     "react-konva-utils": "^0.2.0",
+    "react-redux": "^7.2.5",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.1",
