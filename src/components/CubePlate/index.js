@@ -61,7 +61,6 @@ function IcePlate() {
           ]}
           closed="true"
           fill="black"
-          draggable="true"
         />
       </Layer>
       <Layer>
@@ -116,7 +115,6 @@ function IcePlate() {
               shadowOffset={{ x: 1, y: 6 }}
               shadowOpacity={0.2}
               onMouseEnter={displayCursorPointer}
-              draggable="true"
             />
           ))}
         </Group>

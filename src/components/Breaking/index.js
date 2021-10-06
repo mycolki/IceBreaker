@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Header from '../Header';
@@ -7,12 +9,65 @@ import InputBox from '../InputBox';
 import Footer from '../Footer';
 
 function Breaking() {
+  const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+  const [correctLetters, setCorrectLetters] = useState([]);
+  const [letterCounts, setLetterCounts] = useState([]);
+  const [matchedCounts, setMatchedCounts] = useState(0);
+
+  useEffect(() => {
+    if (!answer) return;
+
+    const letters = {};
+
+    for (const str of [...answer]) {
+      if (letters[str]) {
+        letters[str] = +1;
+        continue;
+      }
+
+      letters[str] = 1;
+    }
+
+    setLetterCounts(letters);
+    setCorrectLetters(Array(answer.length).fill(''));
+  }, [answer]);
+
+  const compareInputWithAnswer = (input) => {
+    // if (input === answer) {
+    //   console.log('정답');
+    // } else {
+    //   console.log('오답')
+    // }
+
+    const corrected = Array(answer.length).fill('');
+    const newLetterCounts = { ...letterCounts };
+    let count = 0;
+
+    for (let i = 0; i < answer.length; i++) {
+      const inputString = input[i];
+      const answerString = answer[i];
+
+      if (inputString === answerString) {
+        corrected[i] = answerString;
+        continue;
+      }
+
+      if (newLetterCounts[inputString] > 0) {
+        count++;
+        newLetterCounts[inputString] -= 1;
+      }
+    }
+
+    setCorrectLetters(corrected);
+    setMatchedCounts(count);
+  };
+
   return (
     <Container>
       <Header />
-      <AnswerDisplayBox />
+      <AnswerDisplayBox correctLetters={correctLetters} />
       <IcePlate />
-      <InputBox />
+      <InputBox compareWithAnswer={compareInputWithAnswer} />
       <Footer />
     </Container>
   );
