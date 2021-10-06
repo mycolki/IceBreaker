@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
-import banana from '../../asset/banana.png';
 
 function IcePlate() {
+  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
   const [images, setImages] = useState(null);
 
   useEffect(() => {
     const image = new window.Image();
-    image.src = banana;
+    image.src = imgUrl;
     setImages(image);
-  }, []);
+  }, [imgUrl]);
 
   useEffect(() => {
     const standards = [
@@ -88,11 +89,11 @@ function IcePlate() {
       </Layer>
       <Layer>
         <Image
-          x={40}
-          y={60}
+          x={30}
+          y={50}
           image={images}
-          width={280}
-          height={280}
+          width={300}
+          height={300}
           draggable="true"
         />
       </Layer>

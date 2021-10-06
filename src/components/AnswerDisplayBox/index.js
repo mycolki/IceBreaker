@@ -1,11 +1,15 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 function AnswerDisplayBox() {
+  const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+
   return (
     <Wrapper>
-      <input className="answer" type="text" value="바" readOnly />
-      <input className="answer" type="text" value="나" readOnly />
-      <input className="answer" type="text" value="나" readOnly />
+      {answer &&
+        [...answer].map((str, index) => (
+          <input key={str + index} className="answer" type="text" readOnly />
+        ))}
     </Wrapper>
   );
 }

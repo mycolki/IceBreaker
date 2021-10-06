@@ -1,9 +1,13 @@
+import { useSelector } from 'react-redux';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 function Header() {
+  const level = useSelector((state) => state.quiz?.currentQuestion?.level);
+  const score = useSelector((state) => state.quiz?.score);
+
   return (
     <Wrapper>
       <Stage width={100} height={60}>
@@ -19,8 +23,8 @@ function Header() {
         </Layer>
       </Stage>
       <Score>
-        <span className="level">Lv.1</span>
-        <span className="score">200</span>
+        <span className="level">Lv.{level}</span>
+        <span className="score">{score}</span>
       </Score>
       <Time>
         <span className="clock">⏰</span>
@@ -42,18 +46,16 @@ const Wrapper = styled.div`
 
 const Score = styled.div`
   text-align: center;
-  transform: translateX(-151px);
+  transform: translate(-153px, 3px);
 
   .level {
     display: block;
-
-    font-family: 'Do Hyeon';
     font-size: 0.7em;
     color: ${({ theme }) => theme.white};
   }
 
   .score {
-    font-size: 1.5em;
+    font-size: 1.6em;
     -webkit-text-stroke: 1px ${({ theme }) => theme.white};
     color: ${({ theme }) => theme.deepBlue};
   }
