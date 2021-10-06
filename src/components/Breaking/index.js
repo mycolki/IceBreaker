@@ -23,5 +23,4 @@ export default Breaking;
 const Container = styled.div`
   height: 100%;
   background: ${({ theme }) => theme.breakingBg};
-  border: 4px solid black;
 `;
