@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Header from '../Header';
@@ -8,8 +7,6 @@ import InputBox from '../InputBox';
 import Footer from '../Footer';
 
 function Breaking() {
-  const { questions } = useSelector((state) => state.quiz);
-
   return (
     <Container>
       <Header />

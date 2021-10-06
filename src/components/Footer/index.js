@@ -82,7 +82,7 @@ const Wrapper = styled.div`
 
 const Nav = styled.div`
   font-size: 0.4em;
-  transform: translate(-106px, 2px);
+  transform: translate(-110px, 2px);
   color: ${({ theme }) => theme.white};
 
   .menu {
