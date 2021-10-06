@@ -7,7 +7,7 @@ const SIZE_PRESET = {
     height: 55px;
   `,
   medium: css`
-    height: 55px;
+    height: 50px;
     font-size: 0.7em;
   `,
   large: css`

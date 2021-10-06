@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
+import Message from '../Message.js';
 import IcePlate from '../CubePlate';
 import InputBox from '../InputBox';
 import Footer from '../Footer';
@@ -12,7 +13,7 @@ function Breaking() {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [letterCounts, setLetterCounts] = useState([]);
-  const [matchedCounts, setMatchedCounts] = useState(0);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (!answer) return;
@@ -33,11 +34,11 @@ function Breaking() {
   }, [answer]);
 
   const compareInputWithAnswer = (input) => {
-    // if (input === answer) {
-    //   console.log('정답');
-    // } else {
-    //   console.log('오답')
-    // }
+    if (input === answer) {
+      console.log('정답');
+    } else {
+      console.log('오답');
+    }
 
     const corrected = Array(answer.length).fill('');
     const newLetterCounts = { ...letterCounts };
@@ -59,13 +60,19 @@ function Breaking() {
     }
 
     setCorrectLetters(corrected);
-    setMatchedCounts(count);
+
+    if (count === 0) {
+      setMessage('얼음속을 다시 들여다보세요');
+    } else {
+      setMessage(`정답과 ${count} 글자가 일치합니다`);
+    }
   };
 
   return (
     <Container>
       <Header />
       <AnswerDisplayBox correctLetters={correctLetters} />
+      <Message message={message} />
       <IcePlate />
       <InputBox compareWithAnswer={compareInputWithAnswer} />
       <Footer />

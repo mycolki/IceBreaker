@@ -19,8 +19,13 @@ function InputBox({ compareWithAnswer }) {
     const inputValue = value.trim();
     const answerLength = answer.length;
 
+    if (inputValue.length === 0) {
+      alert('다시 입력해주세요');
+    }
+
     if (inputValue.length > answerLength) {
       alert(`정답은 ${answerLength}자리 입니다.`);
+
       setInput(inputValue.slice(0, answerLength));
       return;
     }
@@ -63,7 +68,7 @@ const Form = styled.form`
 
   .input {
     width: 140px;
-    height: 55px;
+    height: 50px;
     padding: 0;
     margin-right: 10px;
     text-align: center;

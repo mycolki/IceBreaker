@@ -22,12 +22,12 @@ export default AnswerDisplayBox;
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 10%;
+  align-items: flex-start;
+  height: 11%;
 
   .answer {
     width: 40px;
-    height: 50px;
+    height: 52px;
     margin: 7px;
     text-align: center;
     border-radius: 15px;
