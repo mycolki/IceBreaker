@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 function Message({ message }) {
-  return <Wrapper>{message}</Wrapper>;
+  const isMessage = !!message;
+  return <Wrapper isMessage={isMessage}>{message}</Wrapper>;
 }
 
 export default Message;
@@ -12,7 +13,9 @@ const Wrapper = styled.div`
   font-family: 'Do Hyeon';
   font-size: 1em;
   line-height: 2.3em;
-  background-color: ${({ theme }) => theme.deepBlue};
+  background-color: ${({ theme, isMessage }) =>
+    isMessage ? theme.deepBlue : 'transparent'};
   color: ${({ theme }) => theme.white};
-  box-shadow: inset ${({ theme }) => theme.boxShadow};
+  box-shadow: inset
+    ${({ theme, isMessage }) => (isMessage ? theme.boxShadow : null)};
 `;
