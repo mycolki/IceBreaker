@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 function AnswerDisplayBox({ correctLetters }) {
-  console.log('디스플레이', correctLetters);
   return (
     <Wrapper>
       {correctLetters.map((str, index) => (

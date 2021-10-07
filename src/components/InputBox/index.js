@@ -2,14 +2,31 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { inspectKorean } from '../../utils/inspectKorean';
+import { VALIDATE_INPUT } from '../../constants/Message';
+
 import Button from '../../components/share/Button';
 
-function InputBox({ compareWithAnswer }) {
+function InputBox({ compareWithAnswer, showMessage }) {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
     ev.preventDefault();
+
+    if (input.length === 0) {
+      return showMessage(VALIDATE_INPUT.FILL_BLANK);
+    }
+
+    if (!inspectKorean(input)) {
+      setInput('');
+      return showMessage(VALIDATE_INPUT.ONLY_KOREAN);
+    }
+
+    if (input.length < answer.length) {
+      return showMessage(`정답은 ${answer.length}자리 입니다.`);
+    }
+
     compareWithAnswer(input);
     setInput('');
   };
@@ -17,20 +34,13 @@ function InputBox({ compareWithAnswer }) {
   const handleInput = ({ target }) => {
     const { value } = target;
     const inputValue = value.trim();
-    const answerLength = answer.length;
 
-    if (inputValue.length === 0) {
-      alert('다시 입력해주세요');
+    if (inputValue.length > answer.length) {
+      setInput(inputValue.slice(0, answer.length));
+      return showMessage(`정답은 ${answer.length}자리 입니다.`);
     }
 
-    if (inputValue.length > answerLength) {
-      alert(`정답은 ${answerLength}자리 입니다.`);
-
-      setInput(inputValue.slice(0, answerLength));
-      return;
-    }
-
-    setInput(value);
+    setInput(inputValue);
   };
 
   return (

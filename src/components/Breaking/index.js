@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { VALIDATE_ANSWER } from '../../constants/Message';
+
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
 import Message from '../Message.js';
-import IcePlate from '../CubePlate';
+import IcePlate from '../IcePlate';
 import InputBox from '../InputBox';
 import Footer from '../Footer';
 
@@ -34,11 +36,11 @@ function Breaking() {
   }, [answer]);
 
   const compareInputWithAnswer = (input) => {
-    if (input === answer) {
-      console.log('정답');
-    } else {
-      console.log('오답');
-    }
+    // if (input === answer) {
+    //   console.log('정답');
+    // } else {
+    //   console.log('오답');
+    // }
 
     const corrected = Array(answer.length).fill('');
     const newLetterCounts = { ...letterCounts };
@@ -62,9 +64,9 @@ function Breaking() {
     setCorrectLetters(corrected);
 
     if (count === 0) {
-      setMessage('얼음속을 다시 들여다보세요');
+      setMessage(VALIDATE_ANSWER.ALL_WRONG);
     } else {
-      setMessage(`정답과 ${count} 글자가 일치합니다`);
+      setMessage(`정답과 ${count}글자가 일치합니다`);
     }
   };
 
@@ -74,7 +76,10 @@ function Breaking() {
       <AnswerDisplayBox correctLetters={correctLetters} />
       <Message message={message} />
       <IcePlate />
-      <InputBox compareWithAnswer={compareInputWithAnswer} />
+      <InputBox
+        compareWithAnswer={compareInputWithAnswer}
+        showMessage={setMessage}
+      />
       <Footer />
     </Container>
   );
