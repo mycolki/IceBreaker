@@ -28,3 +28,16 @@ export const READY = {
     opacity: 0,
   },
 };
+
+export const MESSAGE = {
+  TEXT: '.messageText',
+  FADE_IN: {
+    duration: 2,
+    opacity: 1,
+  },
+  FADE_OUT: {
+    delay: 2,
+    duration: 2,
+    opacity: 0,
+  },
+};

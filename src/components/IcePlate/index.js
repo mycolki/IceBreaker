@@ -2,15 +2,23 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
 
+import { activateSubmit } from '../../store/quizSlice';
+
 function IcePlate() {
   const dispatch = useDispatch();
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
+
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
   const [image, setImage] = useState(null);
 
   useEffect(() => {
     const questionImage = new window.Image();
+
     questionImage.src = imgUrl;
+    questionImage.onload = () => {
+      dispatch(activateSubmit());
+    };
+
     setImage(questionImage);
   }, [imgUrl, dispatch]);
 
@@ -59,16 +67,6 @@ function IcePlate() {
       <Layer>
         <Line
           points={[
-            25, 208, 83, 85, 210, 50, 320, 115, 340, 248, 273, 350, 80, 350,
-          ]}
-          closed="true"
-          fill="black"
-          draggable="true"
-        />
-      </Layer>
-      <Layer>
-        <Line
-          points={[
             15, 192, 73, 60, 230, 20, 340, 102, 360, 230, 293, 350, 90, 350,
           ]}
           closed="true"
@@ -91,11 +89,11 @@ function IcePlate() {
       </Layer>
       <Layer>
         <Image
-          x={30}
-          y={50}
+          x={90}
+          y={100}
           image={image}
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           draggable="true"
         />
       </Layer>
@@ -114,7 +112,7 @@ function IcePlate() {
               fillLinearGradientEndPoint={{ x: 0, y: -20 }}
               fillLinearGradientColorStops={[0, '#3d9fff', 1, '#CFDAFF']}
               stroke="#ffffff"
-              strokeWidth="2"
+              strokeWidth={2}
               shadowColor="#54BEFA"
               shadowBlur={1}
               shadowOffset={{ x: 6, y: 5 }}

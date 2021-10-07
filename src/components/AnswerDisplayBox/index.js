@@ -1,17 +1,23 @@
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-function AnswerDisplayBox({ correctLetters }) {
+function AnswerDisplayBox() {
+  const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+  const userInput = useSelector((state) => state.quiz?.userInput);
+
   return (
     <Wrapper>
-      {correctLetters.map((str, index) => (
-        <input
-          key={str + index}
-          className="answer"
-          type="text"
-          value={str}
-          readOnly
-        />
-      ))}
+      {answer
+        ? [...answer].map((letter, i) => (
+            <input
+              key={letter + i}
+              className="answer"
+              type="text"
+              value={letter === userInput[i] ? letter : ''}
+              readOnly
+            />
+          ))
+        : null}
     </Wrapper>
   );
 }

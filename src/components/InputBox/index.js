@@ -1,33 +1,69 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import {
+  showMessage,
+  showQuestionResult,
+  showAnswerBoxByInput,
+} from '../../store/quizSlice';
+
+import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
-import { VALIDATE_INPUT } from '../../constants/Message';
+import { VALIDATE_INPUT, VALIDATE_ANSWER } from '../../constants/Message';
 
-import Button from '../../components/share/Button';
+import Button from '../share/Button';
 
-function InputBox({ compareWithAnswer, showMessage }) {
+function InputBox() {
+  const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
     ev.preventDefault();
 
+    if (input === answer) {
+      dispatch(showAnswerBoxByInput(input));
+      return dispatch(showQuestionResult('정답!'));
+    }
+
     if (input.length === 0) {
-      return showMessage(VALIDATE_INPUT.FILL_BLANK);
+      return dispatch(showMessage(VALIDATE_INPUT.FILL_BLANK));
     }
 
     if (!inspectKorean(input)) {
       setInput('');
-      return showMessage(VALIDATE_INPUT.ONLY_KOREAN);
+      return dispatch(showMessage(VALIDATE_INPUT.ONLY_KOREAN));
     }
 
     if (input.length < answer.length) {
-      return showMessage(`정답은 ${answer.length}자리 입니다.`);
+      return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
     }
 
-    compareWithAnswer(input);
+    const numberOfLetter = countEachLetter(answer);
+    let count = 0;
+
+    for (let i = 0; i < answer.length; i++) {
+      const inputStr = input[i];
+      if (inputStr === answer[i]) {
+        count++;
+        numberOfLetter[inputStr] -= 1;
+        continue;
+      }
+
+      if (numberOfLetter[inputStr] > 0) {
+        count++;
+        numberOfLetter[inputStr] -= 1;
+      }
+    }
+
+    count === 0
+      ? dispatch(showMessage(VALIDATE_ANSWER.ALL_WRONG))
+      : dispatch(showMessage(`정답과 ${count}글자가 일치합니다`));
+
+    dispatch(showAnswerBoxByInput(input));
+    dispatch(showQuestionResult('얼음땡!'));
     setInput('');
   };
 
@@ -37,7 +73,7 @@ function InputBox({ compareWithAnswer, showMessage }) {
 
     if (inputValue.length > answer.length) {
       setInput(inputValue.slice(0, answer.length));
-      return showMessage(`정답은 ${answer.length}자리 입니다.`);
+      return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
     }
 
     setInput(inputValue);
@@ -54,7 +90,12 @@ function InputBox({ compareWithAnswer, showMessage }) {
           value={input}
           onChange={handleInput}
         />
-        <Button color="lightPurple" size="medium" type="submit">
+        <Button
+          color="lightPurple"
+          size="medium"
+          type="submit"
+          disabled={!isImageLoaded}
+        >
           Break
         </Button>
       </Form>
