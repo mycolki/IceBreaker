@@ -7,13 +7,14 @@ import { MESSAGE } from '../../../styles/gsapStyle';
 
 function Message() {
   const message = useSelector((state) => state.quiz?.message);
+  const userInput = useSelector((state) => state.quiz?.userInput);
 
-  useEffect(() => {
-    if (!message) return;
+  // useEffect(() => {
+  //   if (!message) return;
 
-    gsap.from(MESSAGE.TEXT, MESSAGE.FADE_IN);
-    gsap.to(MESSAGE.TEXT, MESSAGE.FADE_OUT);
-  }, [message]);
+  //   gsap.from(MESSAGE.TEXT, MESSAGE.FADE_IN);
+  //   gsap.to(MESSAGE.TEXT, MESSAGE.FADE_OUT);
+  // }, [message, userInput]);
 
   return (
     <Wrapper>

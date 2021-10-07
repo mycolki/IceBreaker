@@ -8,7 +8,6 @@ const initialState = {
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
-  questionResult: '',
   userInput: '',
   message: '',
   score: 0,
@@ -32,9 +31,6 @@ const quizSlice = createSlice({
     showMessage(state, action) {
       state.message = action.payload;
     },
-    showQuestionResult(state, action) {
-      state.questionResult = action.payload;
-    },
     showAnswerBoxByInput(state, action) {
       state.userInput = action.payload;
     },
@@ -45,7 +41,6 @@ export const {
   saveQuizData,
   activateSubmit,
   showMessage,
-  showQuestionResult,
   showAnswerBoxByInput,
 } = quizSlice.actions;
 

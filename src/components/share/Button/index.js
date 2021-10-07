@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 
 const SIZE_PRESET = {
   small: css`
-    width: 80px;
-    height: 55px;
+    height: 50px;
+    font-size: 14px;
   `,
   medium: css`
-    height: 50px;
-    font-size: 0.7em;
+    min-width: 130px;
+    height: 55px;
+    font-size: 22px;
   `,
   large: css`
     width: 190px;
@@ -77,7 +78,7 @@ const StyledButton = styled.button`
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.boxShadow};
   color: ${({ theme }) => theme.white};
-  transition: all 200ms ease-in;
+  transition: all 100ms ease-out;
 
   ${({ sizePreset }) => sizePreset}
   ${({ colorPreset }) => colorPreset}

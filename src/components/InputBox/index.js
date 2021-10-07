@@ -2,15 +2,11 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import {
-  showMessage,
-  showQuestionResult,
-  showAnswerBoxByInput,
-} from '../../store/quizSlice';
+import { showMessage, showAnswerBoxByInput } from '../../store/quizSlice';
 
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
-import { VALIDATE_INPUT, VALIDATE_ANSWER } from '../../constants/Message';
+import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
 import Button from '../share/Button';
 
@@ -24,17 +20,16 @@ function InputBox() {
     ev.preventDefault();
 
     if (input === answer) {
-      dispatch(showAnswerBoxByInput(input));
-      return dispatch(showQuestionResult('정답!'));
+      return dispatch(showAnswerBoxByInput(input));
     }
 
     if (input.length === 0) {
-      return dispatch(showMessage(VALIDATE_INPUT.FILL_BLANK));
+      return dispatch(showMessage(VALIDATION_INPUT.FILL_BLANK));
     }
 
     if (!inspectKorean(input)) {
       setInput('');
-      return dispatch(showMessage(VALIDATE_INPUT.ONLY_KOREAN));
+      return dispatch(showMessage(VALIDATION_INPUT.ONLY_KOREAN));
     }
 
     if (input.length < answer.length) {
@@ -45,25 +40,25 @@ function InputBox() {
     let count = 0;
 
     for (let i = 0; i < answer.length; i++) {
-      const inputStr = input[i];
-      if (inputStr === answer[i]) {
+      const inputLetter = input[i];
+
+      if (inputLetter === answer[i]) {
         count++;
-        numberOfLetter[inputStr] -= 1;
+        numberOfLetter[inputLetter] -= 1;
         continue;
       }
 
-      if (numberOfLetter[inputStr] > 0) {
+      if (numberOfLetter[inputLetter] > 0) {
         count++;
-        numberOfLetter[inputStr] -= 1;
+        numberOfLetter[inputLetter] -= 1;
       }
     }
 
     count === 0
-      ? dispatch(showMessage(VALIDATE_ANSWER.ALL_WRONG))
+      ? dispatch(showMessage(VALIDATION_ANSWER.ALL_WRONG))
       : dispatch(showMessage(`정답과 ${count}글자가 일치합니다`));
 
     dispatch(showAnswerBoxByInput(input));
-    dispatch(showQuestionResult('얼음땡!'));
     setInput('');
   };
 
@@ -81,7 +76,7 @@ function InputBox() {
 
   return (
     <Wrapper>
-      <Form onSubmit={submitInput}>
+      <Form onSubmit={submitInput} isAnswer={answer === input}>
         <input
           className="input"
           type="text"
@@ -92,7 +87,7 @@ function InputBox() {
         />
         <Button
           color="lightPurple"
-          size="medium"
+          size="small"
           type="submit"
           disabled={!isImageLoaded}
         >
@@ -116,6 +111,7 @@ const Form = styled.form`
   display: flex;
   justify-content: center;
   text-align: center;
+  z-index: ${({ isAnswer }) => (isAnswer ? '99' : '999')};
 
   .input {
     width: 140px;
