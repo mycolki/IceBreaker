@@ -4,8 +4,7 @@ import styled from 'styled-components';
 
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
-
-import theme from '../../styles/theme';
+import { READY } from '../../styles/gsapStyle';
 
 gsap.registerPlugin(TextPlugin);
 
@@ -15,35 +14,14 @@ function Ready() {
 
   useEffect(() => {
     if (second === 3) {
-      gsap.from('.circle', {
-        duration: 1,
-        background: theme.redCircleBg,
-      });
+      gsap.from(READY.CIRCLE, READY.RED_CIRCLE);
     } else if (second === 2) {
-      gsap.to('.circle', {
-        duration: 1,
-        background: theme.greenCircleBg,
-      });
-
-      gsap.to('.circle', {
-        duration: 0.4,
-        scale: 1.5,
-      });
+      gsap.to(READY.CIRCLE, READY.GREEN_CIRCLE);
+      gsap.to(READY.CIRCLE, READY.SCALE_UP_FROM_GREEN);
     } else if (second === 1) {
-      gsap.to('.circle', {
-        duration: 1,
-        background: 'transparent',
-      });
-
-      gsap.to('.background', {
-        background: theme.yellowCircleBg,
-      });
-
-      gsap.to('.circle', {
-        duration: 2,
-        scale: 20,
-        opacity: 0,
-      });
+      gsap.to(READY.CIRCLE, READY.TRANSPARENT_FROM_GREEN);
+      gsap.to(READY.BACKGROUND, READY.YELLOW_CIRCLE);
+      gsap.to(READY.CIRCLE, READY.SCALE_UP_FROM_YELLOW);
     }
   }, [second]);
 

@@ -37,7 +37,7 @@ function Header() {
 export default Header;
 
 const Wrapper = styled.div`
-  height: 10%;
+  height: 9%;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-const QUIZ_LENGTH = 7;
+
+import { getRandomList } from '../utils/getRandomList';
 
 const name = 'quiz';
+const QUIZ_LENGTH = 7;
 const initialState = {
   questions: [],
   currentQuestion: null,
+  isImageLoaded: false,
+  userInput: '',
+  message: '',
   score: 0,
 };
 
@@ -13,20 +18,30 @@ const quizSlice = createSlice({
   initialState,
   reducers: {
     saveQuizData(state, action) {
-      const randoms = [...Object.values(action.payload)];
+      const allQuestions = Object.values(action.payload);
+      const randomQuestions = getRandomList(allQuestions);
 
-      for (let i = 0; i < randoms.length; i++) {
-        const temp = Math.floor(Math.random() * (i + 1));
-        [randoms[i], randoms[temp]] = [randoms[temp], randoms[i]];
-      }
-
-      state.questions = randoms.slice(0, QUIZ_LENGTH);
-
+      state.questions = randomQuestions.slice(0, QUIZ_LENGTH);
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
+    },
+    activateSubmit(state) {
+      state.isImageLoaded = true;
+    },
+    showMessage(state, action) {
+      state.message = action.payload;
+    },
+    showAnswerBoxByInput(state, action) {
+      state.userInput = action.payload;
     },
   },
 });
 
-export const { saveQuizData } = quizSlice.actions;
+export const {
+  saveQuizData,
+  activateSubmit,
+  showMessage,
+  showAnswerBoxByInput,
+} = quizSlice.actions;
+
 export default quizSlice.reducer;
