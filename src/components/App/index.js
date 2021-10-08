@@ -47,7 +47,7 @@ function App() {
       <Route path="/ready">
         <Ready />
       </Route>
-      <Route path="/game/breaking">
+      <Route path="/breaking">
         <Breaking />
       </Route>
       <Route path="/gameover">

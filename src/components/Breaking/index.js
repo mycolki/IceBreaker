@@ -22,7 +22,7 @@ function Breaking() {
   const userInput = useSelector((state) => state.quiz?.userInput);
 
   const isAnswer = userInput ? answer === userInput : null;
-  const LAST_LEVEL = 7;
+  const LAST_LEVEL = 5;
 
   const goToNextLevel = (ev) => {
     if (level === LAST_LEVEL) {

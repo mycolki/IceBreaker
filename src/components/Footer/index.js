@@ -80,16 +80,18 @@ const Wrapper = styled.div`
 `;
 
 const Nav = styled.div`
+  display: flex;
   font-size: 0.4em;
-  transform: translate(-110px, 2px);
   color: ${({ theme }) => theme.white};
+  transform: translate(-123px, 2px);
 
   .menu {
-    margin-right: 25px;
+    display: block;
     color: ${({ theme }) => theme.white};
   }
 
   .hint {
+    transform: translateX(25px);
     img {
       position: absolute;
       transform: translate(5px, -30px) rotate(20deg);

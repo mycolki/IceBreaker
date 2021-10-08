@@ -33,7 +33,7 @@ function Ready() {
         setSecond((prev) => prev - 1);
       }, 1000);
     } else {
-      history.push('/game/breaking');
+      history.push('/breaking');
     }
 
     return () => clearTimeout(timer);
