@@ -10,7 +10,10 @@ const initialState = {
   isImageLoaded: false,
   isOverBreaking: false,
   userInput: '',
-  message: '',
+  message: {
+    type: '',
+    text: '',
+  },
   score: 0,
 };
 
@@ -33,7 +36,9 @@ const quizSlice = createSlice({
       state.isOverBreaking = !state.isOverBreaking;
     },
     showMessage(state, action) {
-      state.message = action.payload;
+      const { type, text } = action.payload;
+      state.message.type = type;
+      state.message.text = text;
     },
     showAnswerBoxByInput(state, action) {
       state.userInput = action.payload;

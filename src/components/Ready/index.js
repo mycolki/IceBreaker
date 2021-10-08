@@ -6,6 +6,8 @@ import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
 import { READY } from '../../styles/gsapStyle';
 
+import { ROUTE } from '../../constants/quiz';
+
 gsap.registerPlugin(TextPlugin);
 
 function Ready() {
@@ -33,7 +35,7 @@ function Ready() {
         setSecond((prev) => prev - 1);
       }, 1000);
     } else {
-      history.push('/breaking');
+      history.push(ROUTE.BREAKING);
     }
 
     return () => clearTimeout(timer);

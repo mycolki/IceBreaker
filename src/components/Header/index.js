@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
-
-import { toggleForm } from '../../store/quizSlice';
-
 import styled from 'styled-components';
 import theme from '../../styles/theme';
+
+import { toggleForm, showMessage } from '../../store/quizSlice';
+import { GAME } from '../../constants/messages';
 
 function Header() {
   const dispatch = useDispatch();
@@ -28,10 +28,14 @@ function Header() {
     };
 
     (async () => {
+      dispatch(showMessage(GAME.BREAK_ICE));
       await countToZero(3);
       dispatch(toggleForm());
 
+      dispatch(showMessage(GAME.START));
+      document.querySelector('.second').classList.add('answer');
       await countToZero(10);
+      await waitForOneSecond();
       dispatch(toggleForm());
     })();
   }, [dispatch]);
@@ -99,6 +103,10 @@ const Time = styled.div`
 
   .second {
     font-size: 1.7em;
+    color: ${({ theme }) => theme.purple};
+  }
+
+  .answer {
     color: ${({ theme }) => theme.red};
   }
 `;

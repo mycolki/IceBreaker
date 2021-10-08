@@ -35,30 +35,40 @@ function InputBox() {
     }
 
     if (input.length < answer.length) {
-      return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
+      return dispatch(
+        showMessage({
+          type: VALIDATION_INPUT.TYPE,
+          text: `정답은 ${answer.length}자리 입니다.`,
+        }),
+      );
     }
 
     const numberOfLetter = countEachLetter(answer);
     let count = 0;
 
     for (let i = 0; i < answer.length; i++) {
-      const inputLetter = input[i];
+      const str = input[i];
 
-      if (inputLetter === answer[i]) {
+      if (str === answer[i]) {
         count++;
-        numberOfLetter[inputLetter] -= 1;
+        numberOfLetter[str] -= 1;
         continue;
       }
 
-      if (numberOfLetter[inputLetter] > 0) {
+      if (numberOfLetter[str] > 0) {
         count++;
-        numberOfLetter[inputLetter] -= 1;
+        numberOfLetter[str] -= 1;
       }
     }
 
     count === 0
       ? dispatch(showMessage(VALIDATION_ANSWER.ALL_WRONG))
-      : dispatch(showMessage(`정답과 ${count}글자가 일치합니다`));
+      : dispatch(
+          showMessage({
+            type: VALIDATION_ANSWER.TYPE,
+            text: `정답과 ${count}글자가 일치합니다`,
+          }),
+        );
 
     dispatch(showAnswerBoxByInput(input));
     setInput('');
@@ -70,7 +80,12 @@ function InputBox() {
 
     if (answer && inputValue.length > answer.length) {
       setInput(inputValue.slice(0, answer.length));
-      return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
+      return dispatch(
+        showMessage({
+          type: VALIDATION_ANSWER.TYPE,
+          text: `정답은 ${answer.length}자리 입니다.`,
+        }),
+      );
     }
 
     setInput(inputValue);

@@ -9,3 +9,9 @@ export const SCORES = {
   lv6: 70,
   lv7: 230,
 };
+
+export const ROUTE = {
+  MENU: '/',
+  BREAKING: '/breaking',
+  GAME_OVER: '/gameover',
+};

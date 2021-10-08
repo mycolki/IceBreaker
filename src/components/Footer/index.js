@@ -1,15 +1,16 @@
 import { Link, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
-
 import theme from '../../styles/theme';
+
 import coke from '../../asset/coke.png';
+import { ROUTE } from '../../constants/quiz';
 
 function Footer() {
   const history = useHistory();
 
   const moveToMenu = () => {
-    history.push('/');
+    history.push(ROUTE.MENU);
   };
 
   const displayCursorPointer = (ev) => {

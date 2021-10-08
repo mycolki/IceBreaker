@@ -1,9 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 import { showAnswerBoxByInput, passNextLevel } from '../../store/quizSlice';
-import theme from '../../styles/theme';
+import { ROUTE } from '../../constants/quiz';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
@@ -26,7 +27,7 @@ function Breaking() {
 
   const goToNextLevel = (ev) => {
     if (level === LAST_LEVEL) {
-      return history.push('/gameover');
+      return history.push(ROUTE.GAME_OVER);
     }
 
     dispatch(showAnswerBoxByInput(''));
@@ -40,7 +41,6 @@ function Breaking() {
       {userInput && (
         <Answer isAnswer={isAnswer}>
           <div className="result">
-            {<span className="start-text">얼음깨기 시작</span>}
             <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>
             {isAnswer && (
               <>
