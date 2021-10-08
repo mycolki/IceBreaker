@@ -65,9 +65,11 @@ function InputBox() {
 
   const handleInput = ({ target }) => {
     const { value } = target;
+    console.log('value', value);
     const inputValue = value.trim();
+    console.log('answer', answer);
 
-    if (inputValue.length > answer.length) {
+    if (answer && inputValue.length > answer.length) {
       setInput(inputValue.slice(0, answer.length));
       return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
     }

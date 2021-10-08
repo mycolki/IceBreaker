@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { showAnswerBoxByInput, passNextLevel } from '../../store/quizSlice';
+import theme from '../../styles/theme';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
@@ -11,21 +12,21 @@ import IcePlate from '../IcePlate';
 import InputBox from '../InputBox';
 import Footer from '../Footer';
 import Button from '../share/Button';
-import theme from '../../styles/theme';
 
 function Breaking() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const userInput = useSelector((state) => state.quiz?.userInput);
-  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
 
   const isAnswer = userInput ? answer === userInput : null;
-  const QUIZ_LENGTH = 7;
+  const LAST_LEVEL = 7;
 
-  const goToNextLevel = () => {
-    if (level === QUIZ_LENGTH) {
-      console.log('마지막 7레벨');
+  const goToNextLevel = (ev) => {
+    if (level === LAST_LEVEL) {
+      return history.push('/gameover');
     }
 
     dispatch(showAnswerBoxByInput(''));
@@ -49,16 +50,14 @@ function Breaking() {
                   width="130"
                   height="130"
                 />
-                <Link to="/game/breaking">
-                  <Button
-                    className="button"
-                    size="medium"
-                    color="lightPurple"
-                    onClick={goToNextLevel}
-                  >
-                    NEXT
-                  </Button>
-                </Link>
+                <Button
+                  className="button"
+                  size="medium"
+                  color="lightPurple"
+                  onClick={goToNextLevel}
+                >
+                  NEXT
+                </Button>
               </>
             )}
           </div>
