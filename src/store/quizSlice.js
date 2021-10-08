@@ -36,7 +36,7 @@ const quizSlice = createSlice({
     toggleForm(state) {
       state.canPlaying = !state.canPlaying;
     },
-    showAnswer(state) {
+    toggleAnswerResult(state) {
       state.isEnding = !state.isEnding;
     },
     showMessage(state, action) {
@@ -62,7 +62,7 @@ export const {
   saveQuizData,
   activateSubmit,
   toggleForm,
-  showAnswer,
+  toggleAnswerResult,
   showMessage,
   showAnswerBoxByInput,
   passNextLevel,

@@ -1,9 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import theme from '../../styles/theme';
 
-import { showAnswerBoxByInput, passNextLevel } from '../../store/quizSlice';
+import {
+  showAnswerBoxByInput,
+  toggleAnswerResult,
+  passNextLevel,
+} from '../../store/quizSlice';
 import { ROUTE } from '../../constants/quiz';
 
 import Header from '../Header';
@@ -31,6 +34,7 @@ function Breaking() {
       return history.push(ROUTE.GAME_OVER);
     }
 
+    dispatch(toggleAnswerResult());
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
   };
@@ -40,28 +44,24 @@ function Breaking() {
       <Header />
       <AnswerDisplayBox />
       {isEnding && (
-        <Answer isAnswer={isAnswer}>
+        <Answer>
           <div className="result">
             <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>
-            {isAnswer && (
-              <>
-                <img
-                  className="img"
-                  src={imgUrl}
-                  alt={answer}
-                  width="130"
-                  height="130"
-                />
-                <Button
-                  className="button"
-                  size="medium"
-                  color="lightPurple"
-                  onClick={goToNextLevel}
-                >
-                  NEXT
-                </Button>
-              </>
-            )}
+            <img
+              className="img"
+              src={imgUrl}
+              alt={answer}
+              width="130"
+              height="130"
+            />
+            <Button
+              className="button"
+              size="medium"
+              color="lightPurple"
+              onClick={goToNextLevel}
+            >
+              NEXT
+            </Button>
           </div>
         </Answer>
       )}
@@ -81,18 +81,18 @@ const Container = styled.div`
 `;
 
 const Answer = styled.div`
+  z-index: 199;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ${({ isAnswer }) => isAnswer && `${theme.deepGray}85`};
-  z-index: ${({ isAnswer }) => isAnswer && '100'};
+  background-color: ${({ theme }) => `${theme.deepGray}85`};
 
   .result {
     z-index: 199;
     position: absolute;
-    top: ${({ isAnswer }) => (isAnswer ? '7%' : '23%')};
+    top: 7%;
     left: 50%;
     text-align: center;
     color: ${({ theme }) => theme.white};
