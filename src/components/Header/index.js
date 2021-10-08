@@ -4,7 +4,7 @@ import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-import { toggleForm, showMessage } from '../../store/quizSlice';
+import { toggleForm, showAnswer, showMessage } from '../../store/quizSlice';
 import { GAME } from '../../constants/messages';
 
 function Header() {
@@ -37,6 +37,7 @@ function Header() {
       await countToZero(10);
       await waitForOneSecond();
       dispatch(toggleForm());
+      dispatch(showAnswer());
     })();
   }, [dispatch]);
 

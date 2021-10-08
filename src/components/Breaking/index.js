@@ -21,6 +21,7 @@ function Breaking() {
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const userInput = useSelector((state) => state.quiz?.userInput);
+  const isEnding = useSelector((state) => state.quiz?.isEnding);
 
   const isAnswer = userInput ? answer === userInput : null;
   const LAST_LEVEL = 5;
@@ -38,7 +39,7 @@ function Breaking() {
     <Container>
       <Header />
       <AnswerDisplayBox />
-      {userInput && (
+      {isEnding && (
         <Answer isAnswer={isAnswer}>
           <div className="result">
             <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>

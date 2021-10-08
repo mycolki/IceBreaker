@@ -8,7 +8,8 @@ const initialState = {
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
-  isOverBreaking: false,
+  canPlaying: false,
+  isEnding: false,
   userInput: '',
   message: {
     type: '',
@@ -33,7 +34,10 @@ const quizSlice = createSlice({
       state.isImageLoaded = true;
     },
     toggleForm(state) {
-      state.isOverBreaking = !state.isOverBreaking;
+      state.canPlaying = !state.canPlaying;
+    },
+    showAnswer(state) {
+      state.isEnding = !state.isEnding;
     },
     showMessage(state, action) {
       const { type, text } = action.payload;
@@ -58,6 +62,7 @@ export const {
   saveQuizData,
   activateSubmit,
   toggleForm,
+  showAnswer,
   showMessage,
   showAnswerBoxByInput,
   passNextLevel,

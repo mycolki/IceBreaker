@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { showMessage, showAnswerBoxByInput } from '../../store/quizSlice';
-
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
@@ -14,7 +13,7 @@ function InputBox() {
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
-  const isOverBreaking = useSelector((state) => state.quiz?.isOverBreaking);
+  const canPlaying = useSelector((state) => state.quiz?.canPlaying);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
@@ -93,7 +92,7 @@ function InputBox() {
 
   return (
     <Wrapper>
-      {isOverBreaking && (
+      {canPlaying && (
         <Form onSubmit={submitInput} isAnswer={answer === input}>
           <input
             className="input"
