@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 const SIZE_PRESET = {
   small: css`
+    min-width: 70px;
     height: 50px;
-    font-size: 14px;
+    font-size: 13px;
   `,
   medium: css`
     min-width: 130px;
@@ -12,10 +13,10 @@ const SIZE_PRESET = {
     font-size: 22px;
   `,
   large: css`
-    width: 190px;
+    min-width: 190px;
     height: 40px;
-    font-size: 1.3em;
-    line-height: 0.8em;
+    font-size: 20px;
+    line-height: 16px;
   `,
 };
 

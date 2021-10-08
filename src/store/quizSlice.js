@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { getRandomList } from '../utils/getRandomList';
+import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/quiz';
 
-const name = 'quiz';
-const QUIZ_LENGTH = 7;
+const name = QUIZ;
 const initialState = {
   questions: [],
   currentQuestion: null,
@@ -39,6 +39,8 @@ const quizSlice = createSlice({
       const nextQuestion = state.questions.pop();
       nextQuestion.level = currentLevel + 1;
       state.currentQuestion = nextQuestion;
+
+      state.score += SCORES[`lv${currentLevel}`];
     },
   },
 });

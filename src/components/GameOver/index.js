@@ -20,12 +20,12 @@ function GameOver() {
         </li>
         <li className="button">
           <Button size="large" color="purple">
-            친구의 얼음깨기
+            랭킹 등록
           </Button>
         </li>
         <li className="button">
           <Button size="large" color="skyBlue">
-            랭킹 등록하기
+            처음으로
           </Button>
         </li>
       </MenuButtons>
