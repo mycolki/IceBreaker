@@ -37,7 +37,7 @@ const COLOR_PRESET = {
   `,
 };
 
-function Button({ children, type, disabled, size, color }) {
+function Button({ children, type, disabled, size, color, onClick }) {
   const sizePreset = SIZE_PRESET[size];
   const colorPreset = COLOR_PRESET[color];
 
@@ -47,6 +47,7 @@ function Button({ children, type, disabled, size, color }) {
       disabled={disabled}
       sizePreset={sizePreset}
       colorPreset={colorPreset}
+      onClick={onClick}
     >
       {children}
     </StyledButton>
@@ -61,6 +62,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   size: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
 };
 
 Button.defaultProps = {

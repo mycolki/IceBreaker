@@ -20,6 +20,7 @@ function InputBox() {
     ev.preventDefault();
 
     if (input === answer) {
+      setInput('');
       return dispatch(showAnswerBoxByInput(input));
     }
 

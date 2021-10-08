@@ -34,6 +34,12 @@ const quizSlice = createSlice({
     showAnswerBoxByInput(state, action) {
       state.userInput = action.payload;
     },
+    passNextLevel(state) {
+      const currentLevel = state.currentQuestion.level;
+      const nextQuestion = state.questions.pop();
+      nextQuestion.level = currentLevel + 1;
+      state.currentQuestion = nextQuestion;
+    },
   },
 });
 
@@ -42,6 +48,7 @@ export const {
   activateSubmit,
   showMessage,
   showAnswerBoxByInput,
+  passNextLevel,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

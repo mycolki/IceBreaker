@@ -1,6 +1,8 @@
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import styled, { css } from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { showAnswerBoxByInput, passNextLevel } from '../../store/quizSlice';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
@@ -12,13 +14,22 @@ import Button from '../share/Button';
 import theme from '../../styles/theme';
 
 function Breaking() {
-  const history = useHistory();
+  const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+  const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const userInput = useSelector((state) => state.quiz?.userInput);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
 
-  const moveToReady = () => {
-    history.push('/Ready');
+  const isAnswer = userInput ? answer === userInput : null;
+  const QUIZ_LENGTH = 7;
+
+  const goToNextLevel = () => {
+    if (level === QUIZ_LENGTH) {
+      console.log('마지막 7레벨');
+    }
+
+    dispatch(showAnswerBoxByInput(''));
+    dispatch(passNextLevel());
   };
 
   return (
@@ -26,12 +37,10 @@ function Breaking() {
       <Header />
       <AnswerDisplayBox />
       {userInput && (
-        <Answer isAnswer={answer === userInput}>
+        <Answer isAnswer={isAnswer}>
           <div className="result">
-            <span className="result-text">
-              {answer === userInput ? '정답' : '얼음땡!'}
-            </span>
-            {answer === userInput && (
+            <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>
+            {isAnswer && (
               <>
                 <img
                   className="img"
@@ -40,14 +49,16 @@ function Breaking() {
                   width="130"
                   height="130"
                 />
-                <Button
-                  className="button"
-                  size="medium"
-                  color="lightPurple"
-                  onClick={moveToReady}
-                >
-                  NEXT
-                </Button>
+                <Link to="/game/breaking">
+                  <Button
+                    className="button"
+                    size="medium"
+                    color="lightPurple"
+                    onClick={goToNextLevel}
+                  >
+                    NEXT
+                  </Button>
+                </Link>
               </>
             )}
           </div>
