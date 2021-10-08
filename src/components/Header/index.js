@@ -1,12 +1,31 @@
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
+
+import { activateForm } from '../../store/quizSlice';
 
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 function Header() {
+  const dispatch = useDispatch();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
+  const [second, setSecond] = useState(4);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (second === 0) {
+        return dispatch(activateForm());
+      }
+
+      setSecond((prev) => prev - 1);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [second, dispatch]);
 
   return (
     <Wrapper>
@@ -28,7 +47,7 @@ function Header() {
       </Score>
       <Time>
         <span className="clock">⏰</span>
-        <span className="second">30</span>
+        <span className="second">{second}</span>
       </Time>
     </Wrapper>
   );

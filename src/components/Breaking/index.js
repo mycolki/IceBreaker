@@ -40,6 +40,7 @@ function Breaking() {
       {userInput && (
         <Answer isAnswer={isAnswer}>
           <div className="result">
+            {<span className="start-text">얼음깨기 시작</span>}
             <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>
             {isAnswer && (
               <>
@@ -95,6 +96,10 @@ const Answer = styled.div`
     text-align: center;
     color: ${({ theme }) => theme.white};
     transform: translate(-50%, 50%);
+
+    .start-text {
+      font-size: 45px;
+    }
 
     .result-text {
       font-size: 45px;

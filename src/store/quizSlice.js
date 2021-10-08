@@ -8,6 +8,7 @@ const initialState = {
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
+  isOverBreaking: false,
   userInput: '',
   message: '',
   score: 0,
@@ -27,6 +28,9 @@ const quizSlice = createSlice({
     },
     activateSubmit(state) {
       state.isImageLoaded = true;
+    },
+    activateForm(state) {
+      state.isOverBreaking = true;
     },
     showMessage(state, action) {
       state.message = action.payload;
@@ -48,6 +52,7 @@ const quizSlice = createSlice({
 export const {
   saveQuizData,
   activateSubmit,
+  activateForm,
   showMessage,
   showAnswerBoxByInput,
   passNextLevel,

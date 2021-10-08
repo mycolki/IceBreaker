@@ -14,6 +14,7 @@ function InputBox() {
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+  const isOverBreaking = useSelector((state) => state.quiz?.isOverBreaking);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
@@ -65,9 +66,7 @@ function InputBox() {
 
   const handleInput = ({ target }) => {
     const { value } = target;
-    console.log('value', value);
     const inputValue = value.trim();
-    console.log('answer', answer);
 
     if (answer && inputValue.length > answer.length) {
       setInput(inputValue.slice(0, answer.length));
@@ -79,24 +78,26 @@ function InputBox() {
 
   return (
     <Wrapper>
-      <Form onSubmit={submitInput} isAnswer={answer === input}>
-        <input
-          className="input"
-          type="text"
-          lang="ko"
-          placeholder="Guess What"
-          value={input}
-          onChange={handleInput}
-        />
-        <Button
-          color="lightPurple"
-          size="small"
-          type="submit"
-          disabled={!isImageLoaded}
-        >
-          Break
-        </Button>
-      </Form>
+      {isOverBreaking && (
+        <Form onSubmit={submitInput} isAnswer={answer === input}>
+          <input
+            className="input"
+            type="text"
+            lang="ko"
+            placeholder="Guess What"
+            value={input}
+            onChange={handleInput}
+          />
+          <Button
+            color="lightPurple"
+            size="small"
+            type="submit"
+            disabled={!isImageLoaded}
+          >
+            Break
+          </Button>
+        </Form>
+      )}
     </Wrapper>
   );
 }
