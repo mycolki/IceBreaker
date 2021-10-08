@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 
-import { activateForm } from '../../store/quizSlice';
+import { toggleForm } from '../../store/quizSlice';
 
 import styled from 'styled-components';
 import theme from '../../styles/theme';
@@ -14,18 +14,27 @@ function Header() {
   const [second, setSecond] = useState(4);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (second === 0) {
-        return dispatch(activateForm());
-      }
-
-      setSecond((prev) => prev - 1);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
+    const waitForOneSecond = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 1000);
+      });
     };
-  }, [second, dispatch]);
+
+    const countToZero = async (from) => {
+      for (let i = from; i >= 0; i--) {
+        await waitForOneSecond();
+        setSecond(i);
+      }
+    };
+
+    (async () => {
+      await countToZero(3);
+      dispatch(toggleForm());
+
+      await countToZero(10);
+      dispatch(toggleForm());
+    })();
+  }, [dispatch]);
 
   return (
     <Wrapper>
@@ -47,7 +56,7 @@ function Header() {
       </Score>
       <Time>
         <span className="clock">⏰</span>
-        <span className="second">{second}</span>
+        <span className="second">{second < 10 ? `0${second}` : second}</span>
       </Time>
     </Wrapper>
   );

@@ -29,8 +29,8 @@ const quizSlice = createSlice({
     activateSubmit(state) {
       state.isImageLoaded = true;
     },
-    activateForm(state) {
-      state.isOverBreaking = true;
+    toggleForm(state) {
+      state.isOverBreaking = !state.isOverBreaking;
     },
     showMessage(state, action) {
       state.message = action.payload;
@@ -52,7 +52,7 @@ const quizSlice = createSlice({
 export const {
   saveQuizData,
   activateSubmit,
-  activateForm,
+  toggleForm,
   showMessage,
   showAnswerBoxByInput,
   passNextLevel,
