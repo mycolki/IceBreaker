@@ -9,6 +9,7 @@ import { saveQuizData } from '../../store/quizSlice';
 import Menu from '../Menu';
 import Ready from '../Ready';
 import Breaking from '../Breaking';
+import GameOver from '../GameOver';
 
 function App() {
   const dispatch = useDispatch();
@@ -48,6 +49,9 @@ function App() {
       </Route>
       <Route path="/game/breaking">
         <Breaking />
+      </Route>
+      <Route path="/game/gameOver">
+        <GameOver />
       </Route>
     </AppContainer>
   );
