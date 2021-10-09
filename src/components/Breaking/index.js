@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import {
   showAnswerBoxByInput,
-  toggleAnswerResult,
+  toggleAnswer,
   passNextLevel,
 } from '../../store/quizSlice';
 import { ROUTE } from '../../constants/quiz';
@@ -24,17 +24,17 @@ function Breaking() {
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const userInput = useSelector((state) => state.quiz?.userInput);
-  const isEnding = useSelector((state) => state.quiz?.isEnding);
+  const isEnd = useSelector((state) => state.quiz?.isEnd);
 
   const isAnswer = userInput ? answer === userInput : null;
   const LAST_LEVEL = 5;
 
-  const goToNextLevel = (ev) => {
+  const goToNextLevel = () => {
     if (level === LAST_LEVEL) {
       return history.push(ROUTE.GAME_OVER);
     }
 
-    dispatch(toggleAnswerResult());
+    dispatch(toggleAnswer());
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
   };
@@ -43,7 +43,7 @@ function Breaking() {
     <Container>
       <Header />
       <AnswerDisplayBox />
-      {isEnding && (
+      {isEnd && (
         <Answer>
           <div className="result">
             <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>

@@ -6,7 +6,7 @@ import {
   showMessage,
   showAnswerBoxByInput,
   toggleForm,
-  toggleAnswerResult,
+  toggleAnswer,
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
@@ -18,7 +18,7 @@ function InputBox() {
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
-  const canPlaying = useSelector((state) => state.quiz?.canPlaying);
+  const enableSubmit = useSelector((state) => state.quiz?.enableSubmit);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
@@ -26,9 +26,8 @@ function InputBox() {
 
     if (input === answer) {
       setInput('');
-      dispatch(toggleAnswerResult());
-      dispatch(toggleForm());
-      return dispatch(showAnswerBoxByInput(input));
+      dispatch(showAnswerBoxByInput(input));
+      return dispatch(toggleAnswer());
     }
 
     if (input.length === 0) {
@@ -99,7 +98,7 @@ function InputBox() {
 
   return (
     <Wrapper>
-      {canPlaying && (
+      {enableSubmit && (
         <Form onSubmit={submitInput} isAnswer={answer === input}>
           <input
             className="input"

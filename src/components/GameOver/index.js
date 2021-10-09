@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Button from '../share/Button';
@@ -24,9 +25,11 @@ function GameOver() {
           </Button>
         </li>
         <li className="button">
-          <Button size="large" color="skyBlue">
-            처음으로
-          </Button>
+          <Link to="/">
+            <Button size="large" color="skyBlue">
+              처음으로
+            </Button>
+          </Link>
         </li>
       </MenuButtons>
     </Container>
