@@ -30,7 +30,7 @@ export const READY = {
 };
 
 export const MESSAGE = {
-  TEXT: '.messageText',
+  TEXT: '.text',
   FADE_IN: {
     duration: 5,
     opacity: 1,

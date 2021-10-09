@@ -7,6 +7,7 @@ import { activateSubmit } from '../../store/quizSlice';
 function IcePlate() {
   const dispatch = useDispatch();
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
+  const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
 
   const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
   const [image, setImage] = useState(null);
@@ -51,10 +52,11 @@ function IcePlate() {
     };
 
     setCubeCoordinates(makeCoordinates(standards));
-  }, []);
+  }, [currentQuestion]);
 
   const removeCube = (ev) => {
-    ev.target.visible(false);
+    // ev.target.visible(false);
+    ev.target.remove();
   };
 
   const displayCursorPointer = (ev) => {

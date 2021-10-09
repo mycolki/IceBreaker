@@ -11,7 +11,6 @@ const theme = {
   purple: '#7879f1',
   lightPurple: '#8ba5ff',
   deepGray: '#373737',
-  /* gradient-background */
   icePlate:
     'linear-gradient(180deg, rgba(114, 112, 219, 0.26) 11.27%, rgba(252, 146, 216, 0.39) 48.77%, rgba(130, 210, 255, 0.92) 98.77%)',
   skyBlueCube:
@@ -32,7 +31,6 @@ const theme = {
   makingIceBg: 'linear-gradient(180deg, #fafdff 0%, #33b6ff 100%)',
   rankingBg:
     'linear-gradient(180deg, rgba(252, 139, 35, 0.65) 0%, rgba(120, 121, 241, 0.79) 100%)',
-  /* config */
   buttonBorder: '2px solid #ffffff',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
 };

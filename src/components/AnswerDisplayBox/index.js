@@ -7,17 +7,16 @@ function AnswerDisplayBox() {
 
   return (
     <Wrapper>
-      {answer
-        ? [...answer].map((letter, i) => (
-            <input
-              key={letter + i}
-              className="answer"
-              type="text"
-              value={letter === userInput[i] ? letter : ''}
-              readOnly
-            />
-          ))
-        : null}
+      {answer &&
+        [...answer].map((letter, i) => (
+          <input
+            key={letter + i}
+            className="answer"
+            type="text"
+            value={letter === userInput[i] ? letter : ''}
+            readOnly
+          />
+        ))}
     </Wrapper>
   );
 }

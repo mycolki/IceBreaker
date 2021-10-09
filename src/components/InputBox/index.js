@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { showMessage, showAnswerBoxByInput } from '../../store/quizSlice';
-
+import {
+  showMessage,
+  showAnswerBoxByInput,
+  toggleAnswer,
+  addScore,
+} from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
@@ -14,13 +18,17 @@ function InputBox() {
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+  const enableSubmit = useSelector((state) => state.quiz?.enableSubmit);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
     ev.preventDefault();
 
     if (input === answer) {
-      return dispatch(showAnswerBoxByInput(input));
+      setInput('');
+      dispatch(addScore());
+      dispatch(showAnswerBoxByInput(input));
+      return dispatch(toggleAnswer());
     }
 
     if (input.length === 0) {
@@ -33,30 +41,40 @@ function InputBox() {
     }
 
     if (input.length < answer.length) {
-      return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
+      return dispatch(
+        showMessage({
+          type: VALIDATION_INPUT.TYPE,
+          text: `정답은 ${answer.length}자리 입니다.`,
+        }),
+      );
     }
 
     const numberOfLetter = countEachLetter(answer);
     let count = 0;
 
     for (let i = 0; i < answer.length; i++) {
-      const inputLetter = input[i];
+      const str = input[i];
 
-      if (inputLetter === answer[i]) {
+      if (str === answer[i]) {
         count++;
-        numberOfLetter[inputLetter] -= 1;
+        numberOfLetter[str] -= 1;
         continue;
       }
 
-      if (numberOfLetter[inputLetter] > 0) {
+      if (numberOfLetter[str] > 0) {
         count++;
-        numberOfLetter[inputLetter] -= 1;
+        numberOfLetter[str] -= 1;
       }
     }
 
     count === 0
       ? dispatch(showMessage(VALIDATION_ANSWER.ALL_WRONG))
-      : dispatch(showMessage(`정답과 ${count}글자가 일치합니다`));
+      : dispatch(
+          showMessage({
+            type: VALIDATION_ANSWER.TYPE,
+            text: `정답과 ${count}글자가 일치합니다`,
+          }),
+        );
 
     dispatch(showAnswerBoxByInput(input));
     setInput('');
@@ -66,9 +84,14 @@ function InputBox() {
     const { value } = target;
     const inputValue = value.trim();
 
-    if (inputValue.length > answer.length) {
+    if (answer && inputValue.length > answer.length) {
       setInput(inputValue.slice(0, answer.length));
-      return dispatch(showMessage(`정답은 ${answer.length}자리 입니다.`));
+      return dispatch(
+        showMessage({
+          type: VALIDATION_INPUT.TYPE,
+          text: `정답은 ${answer.length}자리 입니다.`,
+        }),
+      );
     }
 
     setInput(inputValue);
@@ -76,24 +99,26 @@ function InputBox() {
 
   return (
     <Wrapper>
-      <Form onSubmit={submitInput} isAnswer={answer === input}>
-        <input
-          className="input"
-          type="text"
-          lang="ko"
-          placeholder="Guess What"
-          value={input}
-          onChange={handleInput}
-        />
-        <Button
-          color="lightPurple"
-          size="small"
-          type="submit"
-          disabled={!isImageLoaded}
-        >
-          Break
-        </Button>
-      </Form>
+      {enableSubmit && (
+        <Form onSubmit={submitInput} isAnswer={answer === input}>
+          <input
+            className="input"
+            type="text"
+            lang="ko"
+            placeholder="Guess What"
+            value={input}
+            onChange={handleInput}
+          />
+          <Button
+            color="lightPurple"
+            size="small"
+            type="submit"
+            disabled={!isImageLoaded}
+          >
+            Break
+          </Button>
+        </Form>
+      )}
     </Wrapper>
   );
 }
@@ -111,7 +136,6 @@ const Form = styled.form`
   display: flex;
   justify-content: center;
   text-align: center;
-  z-index: ${({ isAnswer }) => (isAnswer ? '99' : '999')};
 
   .input {
     width: 140px;

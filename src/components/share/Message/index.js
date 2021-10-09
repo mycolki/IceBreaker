@@ -1,25 +1,43 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import theme from '../../../styles/theme';
 
 import gsap from 'gsap';
 import { MESSAGE } from '../../../styles/gsapStyle';
 
+const STYLES = {
+  break: css`
+    background-color: ${theme.purple};
+  `,
+  start: css`
+    background-color: ${theme.deepPink};
+  `,
+  validationInput: css`
+    background-color: ${theme.deepBlue};
+  `,
+  validationAnswer: css`
+    background-color: ${theme.deepGray};
+  `,
+};
+
 function Message() {
-  const message = useSelector((state) => state.quiz?.message);
+  const type = useSelector((state) => state.quiz?.message?.type);
+  const text = useSelector((state) => state.quiz?.message?.text);
   const userInput = useSelector((state) => state.quiz?.userInput);
+  const messageStyle = type ? STYLES[type] : null;
 
   // useEffect(() => {
-  //   if (!message) return;
+  //   if (!text) return;
 
   //   gsap.from(MESSAGE.TEXT, MESSAGE.FADE_IN);
   //   gsap.to(MESSAGE.TEXT, MESSAGE.FADE_OUT);
-  // }, [message, userInput]);
+  // }, [text, userInput]);
 
   return (
     <Wrapper>
-      <Text isMessage={!!message} className="messageText">
-        {message}
+      <Text isMessage={!!text} className="text" messageStyle={messageStyle}>
+        {text}
       </Text>
     </Wrapper>
   );
@@ -37,9 +55,11 @@ const Text = styled.p`
   font-size: 1em;
   font-family: 'Do Hyeon';
   line-height: 2.3em;
-  background-color: ${({ theme, isMessage }) =>
-    isMessage ? theme.deepBlue : 'transparent'};
+  /* background-color: ${({ theme, isMessage }) =>
+    isMessage ? theme.deepBlue : 'transparent'}; */
   box-shadow: inset
     ${({ theme, isMessage }) => (isMessage ? theme.boxShadow : null)};
   color: ${({ theme }) => theme.white};
+
+  ${({ messageStyle }) => messageStyle};
 `;

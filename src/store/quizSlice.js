@@ -1,15 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { getRandomList } from '../utils/getRandomList';
+import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/quiz';
 
-const name = 'quiz';
-const QUIZ_LENGTH = 7;
+const name = QUIZ;
 const initialState = {
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
+  enableSubmit: false,
+  isEnd: false,
   userInput: '',
-  message: '',
+  message: {
+    type: '',
+    text: '',
+  },
   score: 0,
 };
 
@@ -28,11 +33,29 @@ const quizSlice = createSlice({
     activateSubmit(state) {
       state.isImageLoaded = true;
     },
+    toggleForm(state) {
+      state.enableSubmit = !state.enableSubmit;
+    },
+    toggleAnswer(state) {
+      state.isEnd = !state.isEnd;
+    },
     showMessage(state, action) {
-      state.message = action.payload;
+      const { type, text } = action.payload;
+      state.message.type = type;
+      state.message.text = text;
     },
     showAnswerBoxByInput(state, action) {
       state.userInput = action.payload;
+    },
+    passNextLevel(state) {
+      const currentLevel = state.currentQuestion.level;
+      const nextQuestion = state.questions.pop();
+      nextQuestion.level = currentLevel + 1;
+      state.currentQuestion = nextQuestion;
+    },
+    addScore(state) {
+      const currentLevel = state.currentQuestion.level;
+      state.score += SCORES[`lv${currentLevel}`];
     },
   },
 });
@@ -40,8 +63,12 @@ const quizSlice = createSlice({
 export const {
   saveQuizData,
   activateSubmit,
+  toggleForm,
+  toggleAnswer,
   showMessage,
   showAnswerBoxByInput,
+  passNextLevel,
+  addScore,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;
