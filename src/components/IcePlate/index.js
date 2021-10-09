@@ -50,7 +50,6 @@ function IcePlate() {
 
       return coordinates;
     };
-
     setCubeCoordinates(makeCoordinates(standards));
   }, [currentQuestion]);
 

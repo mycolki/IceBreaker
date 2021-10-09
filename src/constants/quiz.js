@@ -1,13 +1,24 @@
 export const QUIZ = 'quiz';
 export const QUIZ_LENGTH = 7;
 export const SCORES = {
-  lv1: 20,
-  lv2: 30,
-  lv3: 40,
-  lv4: 50,
-  lv5: 60,
-  lv6: 70,
-  lv7: 230,
+  Lv1: 20,
+  Lv2: 30,
+  Lv3: 40,
+  Lv4: 50,
+  Lv5: 60,
+  Lv6: 70,
+  Lv7: 230,
+};
+
+export const TIME_LIMIT_ANSWER = 5;
+export const SECONDS_PER_LEVEL = {
+  Lv1: 4,
+  Lv2: 3,
+  Lv3: 2,
+  Lv4: 2,
+  Lv5: 2,
+  Lv6: 2,
+  Lv7: 2,
 };
 
 export const ROUTE = {

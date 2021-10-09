@@ -6,15 +6,19 @@ import theme from '../../styles/theme';
 
 import { toggleForm, toggleAnswer, showMessage } from '../../store/quizSlice';
 import { GAME } from '../../constants/messages';
+import { SECONDS_PER_LEVEL, TIME_LIMIT_ANSWER } from '../../constants/quiz';
 
 function Header() {
   const dispatch = useDispatch();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
   const isEnd = useSelector((state) => state.quiz?.isEnd);
-  const [second, setSecond] = useState(4);
+  const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
+  const [second, setSecond] = useState(TIME_LIMIT_BREAK);
 
   useEffect(() => {
+    if (!level) return;
+
     let timer;
     const waitForOneSecond = () => {
       return new Promise((resolve) => {
@@ -37,20 +41,20 @@ function Header() {
       }
 
       dispatch(showMessage(GAME.BREAK_ICE));
-      await countToZero(4);
+      await countToZero(TIME_LIMIT_BREAK);
+      dispatch(showMessage(GAME.START));
       dispatch(toggleForm());
 
-      dispatch(showMessage(GAME.START));
       document.querySelector('.second').classList.add('answer');
       await waitForOneSecond();
-      await countToZero(10);
+      await countToZero(TIME_LIMIT_ANSWER);
       dispatch(toggleAnswer());
     })();
 
     return () => {
       clearTimeout(timer);
     };
-  }, [dispatch, isEnd]);
+  }, [dispatch, level, isEnd, TIME_LIMIT_BREAK]);
 
   return (
     <Wrapper>

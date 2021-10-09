@@ -55,7 +55,7 @@ const quizSlice = createSlice({
     },
     addScore(state) {
       const currentLevel = state.currentQuestion.level;
-      state.score += SCORES[`lv${currentLevel}`];
+      state.score += SCORES[`Lv${currentLevel}`];
     },
   },
 });
