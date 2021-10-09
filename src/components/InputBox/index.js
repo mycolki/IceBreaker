@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { showMessage, showAnswerBoxByInput } from '../../store/quizSlice';
+import {
+  showMessage,
+  showAnswerBoxByInput,
+  toggleForm,
+  toggleAnswerResult,
+} from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
@@ -21,6 +26,8 @@ function InputBox() {
 
     if (input === answer) {
       setInput('');
+      dispatch(toggleAnswerResult());
+      dispatch(toggleForm());
       return dispatch(showAnswerBoxByInput(input));
     }
 
@@ -81,7 +88,7 @@ function InputBox() {
       setInput(inputValue.slice(0, answer.length));
       return dispatch(
         showMessage({
-          type: VALIDATION_ANSWER.TYPE,
+          type: VALIDATION_INPUT.TYPE,
           text: `정답은 ${answer.length}자리 입니다.`,
         }),
       );
@@ -129,7 +136,6 @@ const Form = styled.form`
   display: flex;
   justify-content: center;
   text-align: center;
-  z-index: ${({ isAnswer }) => (isAnswer ? '99' : '999')};
 
   .input {
     width: 140px;

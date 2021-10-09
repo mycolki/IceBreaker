@@ -15,12 +15,14 @@ function Header() {
   const dispatch = useDispatch();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
+  const isEnding = useSelector((state) => state.quiz?.isEnding);
   const [second, setSecond] = useState(4);
 
   useEffect(() => {
+    let timer;
     const waitForOneSecond = () => {
       return new Promise((resolve) => {
-        setTimeout(() => resolve(), 1000);
+        timer = setTimeout(() => resolve(), 1000);
       });
     };
 
@@ -32,6 +34,10 @@ function Header() {
     };
 
     (async () => {
+      if (isEnding) {
+        return clearTimeout(timer);
+      }
+
       dispatch(showMessage(GAME.BREAK_ICE));
       await countToZero(3);
       dispatch(toggleForm());
@@ -43,7 +49,11 @@ function Header() {
       dispatch(toggleForm());
       dispatch(toggleAnswerResult());
     })();
-  }, [dispatch]);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, isEnding]);
 
   return (
     <Wrapper>
