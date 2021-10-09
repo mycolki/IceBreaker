@@ -20,7 +20,7 @@ function InputBox() {
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const enableSubmit = useSelector((state) => state.quiz?.enableSubmit);
   const [input, setInput] = useState('');
-  console.log(enableSubmit);
+
   const submitInput = (ev) => {
     ev.preventDefault();
 
