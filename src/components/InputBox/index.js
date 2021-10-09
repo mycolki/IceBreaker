@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import {
   showMessage,
   showAnswerBoxByInput,
-  toggleForm,
   toggleAnswer,
+  addScore,
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectKorean';
@@ -26,6 +26,7 @@ function InputBox() {
 
     if (input === answer) {
       setInput('');
+      dispatch(addScore());
       dispatch(showAnswerBoxByInput(input));
       return dispatch(toggleAnswer());
     }

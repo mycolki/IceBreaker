@@ -24,14 +24,15 @@ function Header() {
 
     const countToZero = async (from) => {
       for (let i = from; i >= 0; i--) {
-        await waitForOneSecond();
         setSecond(i);
+        await waitForOneSecond();
       }
     };
 
     (async () => {
       if (isEnd) {
         dispatch(toggleForm());
+        document.querySelector('.second').classList.remove('answer');
         return clearTimeout(timer);
       }
 
