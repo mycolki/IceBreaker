@@ -5,22 +5,24 @@ import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 import { activateBreaking } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
 import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
+import bearSrc from '../../asset/bear.png';
 
 function IcePlate() {
   const dispatch = useDispatch();
-  const initialCubesRef = useRef(null);
   const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
+  const initialCubesRef = useRef(null);
+  const bearRef = useRef();
 
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
-  const [image, setImage] = useState(null);
   const [newCubes, setNewCubes] = useState([]);
+  const [image, setImage] = useState(null);
+  const [bearImage, setBearImage] = useState(null);
 
   useEffect(() => {
     const questionImage = new window.Image();
-
     questionImage.src = imgUrl;
     questionImage.onload = () => {
       dispatch(activateBreaking());
@@ -30,9 +32,14 @@ function IcePlate() {
   }, [imgUrl, dispatch]);
 
   useEffect(() => {
+    const bear = new window.Image();
+    bear.src = bearSrc;
+    setBearImage(bear);
+  }, [level]);
+
+  useEffect(() => {
     const makePositions = (rows) => {
       const positions = [];
-
       rows.forEach((row) => {
         for (let i = 0; i < row[0]; i++) {
           positions.push({
@@ -113,10 +120,18 @@ function IcePlate() {
           shadowBlur={10}
           shadowOffset={{ x: 0, y: 10 }}
           shadowOpacity={0.4}
+          draggable
         />
       </Layer>
       <Layer>
-        <Image x={90} y={100} image={image} width={200} height={200} />
+        <Image
+          x={90}
+          y={100}
+          image={image}
+          width={200}
+          height={200}
+          draggable
+        />
       </Layer>
       <Layer id="initial-cubes" x={-4} y={-3} ref={initialCubesRef}>
         {initialPositions?.map((pos, i) => (
@@ -138,6 +153,7 @@ function IcePlate() {
             shadowOpacity={0.7}
             onMouseEnter={displayCursorPointer}
             onClick={hideCube}
+            draggable
           />
         ))}
       </Layer>
@@ -161,8 +177,19 @@ function IcePlate() {
             shadowOpacity={0.7}
             onMouseEnter={displayCursorPointer}
             onClick={hideStrongCube}
+            draggable
           />
         ))}
+      </Layer>
+      <Layer>
+        <Image
+          x={90}
+          y={100}
+          image={bearImage}
+          width={100}
+          height={60}
+          draggable
+        />
       </Layer>
     </Stage>
   );
