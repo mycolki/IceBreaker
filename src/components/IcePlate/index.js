@@ -20,6 +20,7 @@ function IcePlate() {
   const [newCubes, setNewCubes] = useState([]);
   const [image, setImage] = useState(null);
   const [bearImage, setBearImage] = useState(null);
+  const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
 
   useEffect(() => {
     const questionImage = new window.Image();
@@ -35,7 +36,7 @@ function IcePlate() {
     const bear = new window.Image();
     bear.src = bearSrc;
     setBearImage(bear);
-  }, [level]);
+  }, []);
 
   useEffect(() => {
     const makePositions = (rows) => {
@@ -67,9 +68,8 @@ function IcePlate() {
       }
 
       if (level >= 4 && randomIndexes.has(i)) {
-        cube.on('click', () => cube.off('click'));
-        cube.fill('white');
         cube.strokeWidth(0);
+        cube.on('click', () => cube.off('click'));
       }
     });
   }, [currentQuestion, level]);
@@ -134,28 +134,60 @@ function IcePlate() {
         />
       </Layer>
       <Layer id="initial-cubes" x={-4} y={-3} ref={initialCubesRef}>
-        {initialPositions?.map((pos, i) => (
-          <RegularPolygon
-            key={String(pos.x) + String(pos.y) + i}
-            x={pos.x}
-            y={pos.y}
-            sides={6}
-            radius={17}
-            rotation={90}
-            fillLinearGradientStartPoint={{ x: 0, y: 30 }}
-            fillLinearGradientEndPoint={{ x: 0, y: -20 }}
-            fillLinearGradientColorStops={[0, '#3d9fff', 1, '#CFDAFF']}
-            stroke="#ffffff"
-            strokeWidth={2}
-            shadowColor="#54BEFA"
-            shadowBlur={1}
-            shadowOffset={{ x: 6, y: 5 }}
-            shadowOpacity={0.7}
-            onMouseEnter={displayCursorPointer}
-            onClick={hideCube}
-            draggable
-          />
-        ))}
+        {initialPositions?.map((pos, i) => {
+          if (colorIndexes.has(i)) {
+            return (
+              <RegularPolygon
+                key={String(pos.x) + String(pos.y) + i}
+                x={pos.x}
+                y={pos.y}
+                sides={6}
+                radius={17}
+                rotation={90}
+                fillLinearGradientStartPoint={{ x: -20, y: 0 }}
+                fillLinearGradientEndPoint={{ x: 20, y: -30 }}
+                fillLinearGradientColorStops={[
+                  0,
+                  '#ffffff',
+                  0.5,
+                  '#8ba5ff',
+                  1,
+                  '#7879f1',
+                ]}
+                stroke="#ffffff"
+                strokeWidth={2}
+                shadowColor="#7879f1"
+                shadowBlur={1}
+                shadowOffset={{ x: 6, y: 5 }}
+                onMouseEnter={displayCursorPointer}
+                onClick={hideCube}
+                draggable
+                fillEnabled="true"
+              />
+            );
+          }
+          return (
+            <RegularPolygon
+              key={String(pos.x) + String(pos.y) + i}
+              x={pos.x}
+              y={pos.y}
+              sides={6}
+              radius={17}
+              rotation={90}
+              fillLinearGradientStartPoint={{ x: -10, y: -5 }}
+              fillLinearGradientEndPoint={{ x: 0, y: -15 }}
+              fillLinearGradientColorStops={[0, '#8EC7FF', 1, '#ffffff']}
+              stroke="#ffffff"
+              strokeWidth={2}
+              shadowColor="#2AA0ED"
+              shadowBlur={1}
+              shadowOffset={{ x: 6, y: 5 }}
+              onMouseEnter={displayCursorPointer}
+              onClick={hideCube}
+              draggable
+            />
+          );
+        })}
       </Layer>
       <Layer>
         {newCubes.map((pos, i) => (
@@ -166,15 +198,22 @@ function IcePlate() {
             sides={6}
             radius={17}
             rotation={90}
-            fillLinearGradientStartPoint={{ x: 0, y: 30 }}
-            fillLinearGradientEndPoint={{ x: 0, y: -20 }}
-            fillLinearGradientColorStops={[0, '#8ba5ff', 1, '#f178b6']}
-            stroke="#ffffff"
+            fillLinearGradientStartPoint={{ x: 10, y: 5 }}
+            fillLinearGradientEndPoint={{ x: 0, y: -10 }}
+            fillLinearGradientColorStops={[
+              0,
+              '#fba85c',
+              0.8,
+              '#f178b6',
+              1,
+              '#e95353',
+            ]}
+            stroke="#F8E8D3"
             strokeWidth={2}
-            shadowColor="#54BEFA"
+            shadowColor="#B4457E"
             shadowBlur={1}
-            shadowOffset={{ x: 6, y: 5 }}
-            shadowOpacity={0.7}
+            shadowOpacity={0.8}
+            shadowOffset={{ x: 5, y: 4 }}
             onMouseEnter={displayCursorPointer}
             onClick={hideStrongCube}
             draggable
@@ -183,6 +222,7 @@ function IcePlate() {
       </Layer>
       <Layer>
         <Image
+          ref={bearRef}
           x={90}
           y={100}
           image={bearImage}

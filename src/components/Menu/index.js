@@ -16,18 +16,20 @@ function Menu() {
         <li className="button">
           <Link to="/ready">
             <Button size="large" color="skyBlue">
-              얼음깨기
+              혼자 얼음깨기
+            </Button>
+          </Link>
+        </li>
+        <li className="button">
+          <Link to="/together">
+            <Button size="large" color="skyBlue">
+              같이 얼음깨기
             </Button>
           </Link>
         </li>
         <li className="button">
           <Button size="large" color="skyBlue">
-            친구의 얼음깨기
-          </Button>
-        </li>
-        <li className="button">
-          <Button size="large" color="skyBlue">
-            얼음 얼리기
+            방 만들기
           </Button>
         </li>
         <li className="button">
