@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getRandomList } from '../utils/getRandomList';
+import { getRandomQuestions } from '../utils/getRandomQuestions';
 import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/quiz';
 
 const name = QUIZ;
@@ -24,7 +24,7 @@ const quizSlice = createSlice({
   reducers: {
     saveQuizData(state, action) {
       const allQuestions = Object.values(action.payload);
-      const randomQuestions = getRandomList(allQuestions);
+      const randomQuestions = getRandomQuestions(allQuestions);
 
       state.questions = randomQuestions.slice(0, QUIZ_LENGTH);
       state.currentQuestion = state.questions.pop();

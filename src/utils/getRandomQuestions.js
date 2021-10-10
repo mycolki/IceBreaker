@@ -1,4 +1,4 @@
-export const getRandomList = (array) => {
+export const getRandomQuestions = (array) => {
   const randomList = [...array];
 
   for (let i = 0; i < randomList.length; i++) {
