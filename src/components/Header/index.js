@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 import { toggleForm, toggleAnswer, showMessage } from '../../store/quizSlice';
-import { GAME } from '../../constants/messages';
+import { ANSWER, BREAK } from '../../constants/messages';
 import { SECONDS_PER_LEVEL, TIME_LIMIT_ANSWER } from '../../constants/quiz';
 
 function Header() {
@@ -40,9 +40,10 @@ function Header() {
         return clearTimeout(timer);
       }
 
-      dispatch(showMessage(GAME.BREAK_ICE));
+      dispatch(showMessage(BREAK[`Lv${level}`]));
       await countToZero(TIME_LIMIT_BREAK);
-      dispatch(showMessage(GAME.START));
+
+      dispatch(showMessage(ANSWER[`Lv${level}`]));
       dispatch(toggleForm());
 
       document.querySelector('.second').classList.add('answer');
