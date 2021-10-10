@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
 
@@ -6,12 +6,12 @@ import { activateSubmit } from '../../store/quizSlice';
 
 function IcePlate() {
   const dispatch = useDispatch();
+  const stageRef = useRef();
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
   const [image, setImage] = useState(null);
   const [newCubes, setNewCubes] = useState([]);
-  const [hiddenCubes, setHiddenCubes] = useState([]);
 
   useEffect(() => {
     const questionImage = new window.Image();
@@ -54,8 +54,15 @@ function IcePlate() {
 
     setInitialPositions(makePositions(cubeRows));
 
-    hiddenCubes.forEach((cube) => cube.show());
-    setHiddenCubes([]);
+    stageRef.current.children.forEach((layer) => {
+      if (layer.attrs.id === 'initial-cubes') {
+        layer.children.forEach((cube) => {
+          if (!cube.isVisible()) {
+            cube.show();
+          }
+        });
+      }
+    });
   }, [currentQuestion]);
 
   const hideStrongCube = (ev) => {
@@ -70,8 +77,7 @@ function IcePlate() {
 
     setNewCubes([...newCubes, pos]);
 
-    ev.target.hide();
-    setHiddenCubes([...hiddenCubes, ev.target]);
+    ev.target.visible(false);
   };
 
   const displayCursorPointer = (ev) => {
@@ -80,7 +86,7 @@ function IcePlate() {
   };
 
   return (
-    <Stage style={{ height: '50%' }} width={375} height={400}>
+    <Stage style={{ height: '50%' }} width={375} height={400} ref={stageRef}>
       <Layer>
         <Line
           points={[
@@ -114,31 +120,29 @@ function IcePlate() {
           draggable="true"
         />
       </Layer>
-      <Layer>
-        <Group x={5} y={-7}>
-          {initialPositions?.map((pos, i) => (
-            <RegularPolygon
-              key={String(pos.x) + String(pos.y) + i}
-              x={pos.x}
-              y={pos.y}
-              sides={6}
-              radius={17}
-              rotation={90}
-              fillLinearGradientStartPoint={{ x: 0, y: 30 }}
-              fillLinearGradientEndPoint={{ x: 0, y: -20 }}
-              fillLinearGradientColorStops={[0, '#3d9fff', 1, '#CFDAFF']}
-              stroke="#ffffff"
-              strokeWidth={2}
-              shadowColor="#54BEFA"
-              shadowBlur={1}
-              shadowOffset={{ x: 6, y: 5 }}
-              shadowOpacity={0.7}
-              draggable="true"
-              onMouseEnter={displayCursorPointer}
-              onClick={hideCube}
-            />
-          ))}
-        </Group>
+      <Layer id="initial-cubes" x={5} y={-7}>
+        {initialPositions?.map((pos, i) => (
+          <RegularPolygon
+            key={String(pos.x) + String(pos.y) + i}
+            x={pos.x}
+            y={pos.y}
+            sides={6}
+            radius={17}
+            rotation={90}
+            fillLinearGradientStartPoint={{ x: 0, y: 30 }}
+            fillLinearGradientEndPoint={{ x: 0, y: -20 }}
+            fillLinearGradientColorStops={[0, '#3d9fff', 1, '#CFDAFF']}
+            stroke="#ffffff"
+            strokeWidth={2}
+            shadowColor="#54BEFA"
+            shadowBlur={1}
+            shadowOffset={{ x: 6, y: 5 }}
+            shadowOpacity={0.7}
+            draggable="true"
+            onMouseEnter={displayCursorPointer}
+            onClick={hideCube}
+          />
+        ))}
       </Layer>
       <Layer>
         {newCubes.map((pos, i) => (
