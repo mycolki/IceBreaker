@@ -8,8 +8,8 @@ const initialState = {
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
-  enableSubmit: false,
-  isEnd: false,
+  isNotBreaking: false,
+  isTimeOver: false,
   userInput: '',
   message: {
     type: '',
@@ -30,14 +30,14 @@ const quizSlice = createSlice({
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
-    activateSubmit(state) {
+    activateBreaking(state) {
       state.isImageLoaded = true;
     },
     toggleForm(state) {
-      state.enableSubmit = !state.enableSubmit;
+      state.isNotBreaking = !state.isNotBreaking;
     },
     toggleAnswer(state) {
-      state.isEnd = !state.isEnd;
+      state.isTimeOver = !state.isTimeOver;
     },
     showMessage(state, action) {
       const { type, text } = action.payload;
@@ -62,7 +62,7 @@ const quizSlice = createSlice({
 
 export const {
   saveQuizData,
-  activateSubmit,
+  activateBreaking,
   toggleForm,
   toggleAnswer,
   showMessage,

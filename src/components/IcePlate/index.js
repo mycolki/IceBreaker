@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 
-import { activateSubmit } from '../../store/quizSlice';
+import { activateBreaking } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
 import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
 
@@ -12,7 +12,7 @@ function IcePlate() {
   const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
-  const enableSubmit = useSelector((state) => state.quiz?.enableSubmit);
+  const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
 
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
   const [image, setImage] = useState(null);
@@ -23,7 +23,7 @@ function IcePlate() {
 
     questionImage.src = imgUrl;
     questionImage.onload = () => {
-      dispatch(activateSubmit());
+      dispatch(activateBreaking());
     };
 
     setImage(questionImage);
@@ -72,7 +72,7 @@ function IcePlate() {
   };
 
   const hideCube = (ev) => {
-    if (enableSubmit) return;
+    if (isNotBreaking) return;
 
     const pos = {
       x: ev.target.x(),

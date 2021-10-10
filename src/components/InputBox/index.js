@@ -18,7 +18,7 @@ function InputBox() {
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
-  const enableSubmit = useSelector((state) => state.quiz?.enableSubmit);
+  const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
   const [input, setInput] = useState('');
 
   const submitInput = (ev) => {
@@ -99,7 +99,7 @@ function InputBox() {
 
   return (
     <Wrapper>
-      {enableSubmit && (
+      {isNotBreaking && (
         <Form onSubmit={submitInput} isAnswer={answer === input}>
           <input
             className="input"

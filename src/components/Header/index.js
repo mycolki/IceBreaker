@@ -12,7 +12,9 @@ function Header() {
   const dispatch = useDispatch();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
-  const isEnd = useSelector((state) => state.quiz?.isEnd);
+  const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
+  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+
   const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
   const [second, setSecond] = useState(TIME_LIMIT_BREAK);
 
@@ -34,7 +36,9 @@ function Header() {
     };
 
     (async () => {
-      if (isEnd) {
+      if (!isImageLoaded) return;
+
+      if (isTimeOver) {
         dispatch(toggleForm());
         document.querySelector('.second').classList.remove('answer');
         return clearTimeout(timer);
@@ -55,7 +59,7 @@ function Header() {
     return () => {
       clearTimeout(timer);
     };
-  }, [dispatch, level, isEnd, TIME_LIMIT_BREAK]);
+  }, [dispatch, level, isTimeOver, isImageLoaded, TIME_LIMIT_BREAK]);
 
   return (
     <Wrapper>
