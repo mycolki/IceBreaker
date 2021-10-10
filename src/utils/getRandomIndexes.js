@@ -9,5 +9,5 @@ export const getRandomIndexes = (length, minNumber) => {
     }
   }
 
-  return Array.from(set);
+  return set;
 };

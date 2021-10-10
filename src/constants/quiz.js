@@ -12,13 +12,13 @@ export const SCORES = {
 
 export const TIME_LIMIT_ANSWER = 5;
 export const SECONDS_PER_LEVEL = {
-  Lv1: 3,
-  Lv2: 3,
-  Lv3: 3,
-  Lv4: 2,
-  Lv5: 2,
-  Lv6: 2,
-  Lv7: 2,
+  Lv1: 5,
+  Lv2: 5,
+  Lv3: 5,
+  Lv4: 5,
+  Lv5: 5,
+  Lv6: 5,
+  Lv7: 5,
 };
 
 export const ROUTE = {

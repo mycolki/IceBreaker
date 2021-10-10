@@ -58,7 +58,7 @@ function IcePlate() {
 
     setInitialPositions(makePositions(cubeRows));
 
-    const randomIndexes = getRandomIndexes(51, 20);
+    const randomIndexes = getRandomIndexes(51, 15);
 
     stageRef.current.children.forEach((layer) => {
       if (layer.attrs.id === 'initial-cubes') {
@@ -67,8 +67,10 @@ function IcePlate() {
             cube.show();
           }
 
-          if (level === 3 && cube === randomIndexes[i]) {
-            cube.fill = 'red';
+          if (level === 1 && randomIndexes.has(i)) {
+            cube.fill('black');
+            cube.on('click', null);
+            cube.strokeWidth(0);
           }
         });
       }
@@ -87,11 +89,7 @@ function IcePlate() {
       y: ev.target.y(),
     };
 
-    if (level === 2) {
-      setNewCubes([...newCubes, pos]);
-    }
-
-    if (level === 2) {
+    if (level === 3) {
       setNewCubes([...newCubes, pos]);
     }
 
@@ -125,18 +123,10 @@ function IcePlate() {
           shadowBlur={10}
           shadowOffset={{ x: 0, y: 10 }}
           shadowOpacity={0.4}
-          draggable="true"
         />
       </Layer>
       <Layer>
-        <Image
-          x={90}
-          y={100}
-          image={image}
-          width={200}
-          height={200}
-          draggable="true"
-        />
+        <Image x={90} y={100} image={image} width={200} height={200} />
       </Layer>
       <Layer id="initial-cubes" x={-4} y={-3}>
         {initialPositions?.map((pos, i) => (
@@ -156,7 +146,6 @@ function IcePlate() {
             shadowBlur={1}
             shadowOffset={{ x: 6, y: 5 }}
             shadowOpacity={0.7}
-            draggable="true"
             onMouseEnter={displayCursorPointer}
             onClick={hideCube}
           />
