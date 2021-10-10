@@ -1,4 +1,3 @@
-export const INITIAL_CUBES = 'initial-cubes';
 export const CUBES_LENGTH = 51;
 
 export const CUBE_ROWS = [
@@ -15,7 +14,7 @@ export const CUBE_ROWS = [
 
 export const UNBREAKABLE_ICE = {
   Lv4: 10,
-  Lv5: 15,
+  Lv5: 10,
   Lv6: 15,
-  Lv7: 20,
+  Lv7: 15,
 };

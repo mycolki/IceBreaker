@@ -29,7 +29,6 @@ function Breaking() {
 
   const goToNextLevel = () => {
     if (level === QUIZ_LENGTH) {
-      console.log(level);
       return history.push(ROUTE.GAME_OVER);
     }
 

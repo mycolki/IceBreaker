@@ -4,16 +4,11 @@ import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 
 import { activateSubmit } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
-import {
-  INITIAL_CUBES,
-  CUBE_ROWS,
-  CUBES_LENGTH,
-  UNBREAKABLE_ICE,
-} from '../../constants/ice';
+import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
 
 function IcePlate() {
   const dispatch = useDispatch();
-  const stageRef = useRef();
+  const initialCubesRef = useRef(null);
   const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
@@ -59,19 +54,15 @@ function IcePlate() {
       randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
     }
 
-    stageRef.current.children.forEach((layer) => {
-      if (layer.attrs.id === INITIAL_CUBES) {
-        layer.children.forEach((cube, i) => {
-          if (!cube.isVisible()) {
-            cube.show();
-          }
+    initialCubesRef.current.children.forEach((cube, i) => {
+      if (!cube.isVisible()) {
+        cube.show();
+      }
 
-          if (level >= 4 && randomIndexes.has(i)) {
-            cube.on('click', () => cube.off('click'));
-            cube.fill('white');
-            cube.strokeWidth(0);
-          }
-        });
+      if (level >= 4 && randomIndexes.has(i)) {
+        cube.on('click', () => cube.off('click'));
+        cube.fill('white');
+        cube.strokeWidth(0);
       }
     });
   }, [currentQuestion, level]);
@@ -101,7 +92,7 @@ function IcePlate() {
   };
 
   return (
-    <Stage style={{ height: '50%' }} width={375} height={400} ref={stageRef}>
+    <Stage style={{ height: '50%' }} width={375} height={400}>
       <Layer>
         <Line
           points={[
@@ -127,7 +118,7 @@ function IcePlate() {
       <Layer>
         <Image x={90} y={100} image={image} width={200} height={200} />
       </Layer>
-      <Layer id="initial-cubes" x={-4} y={-3}>
+      <Layer id="initial-cubes" x={-4} y={-3} ref={initialCubesRef}>
         {initialPositions?.map((pos, i) => (
           <RegularPolygon
             key={String(pos.x) + String(pos.y) + i}
@@ -161,7 +152,7 @@ function IcePlate() {
             rotation={90}
             fillLinearGradientStartPoint={{ x: 0, y: 30 }}
             fillLinearGradientEndPoint={{ x: 0, y: -20 }}
-            fillLinearGradientColorStops={[0, '#fba85c', 1, '#CFDAFF']}
+            fillLinearGradientColorStops={[0, '#8ba5ff', 1, '#f178b6']}
             stroke="#ffffff"
             strokeWidth={2}
             shadowColor="#54BEFA"

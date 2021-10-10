@@ -16,9 +16,9 @@ export const SECONDS_PER_LEVEL = {
   Lv2: 7,
   Lv3: 10,
   Lv4: 7,
-  Lv5: 5,
-  Lv6: 5,
-  Lv7: 5,
+  Lv5: 7,
+  Lv6: 7,
+  Lv7: 7,
 };
 
 export const ROUTE = {
