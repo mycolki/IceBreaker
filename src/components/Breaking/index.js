@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,7 +7,7 @@ import {
   toggleAnswer,
   passNextLevel,
 } from '../../store/quizSlice';
-import { ROUTE } from '../../constants/quiz';
+import { QUIZ_LENGTH, ROUTE } from '../../constants/quiz';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
@@ -26,12 +25,11 @@ function Breaking() {
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isEnd = useSelector((state) => state.quiz?.isEnd);
-
   const isAnswer = userInput ? answer === userInput : null;
-  const LAST_LEVEL = 5;
 
   const goToNextLevel = () => {
-    if (level === LAST_LEVEL) {
+    if (level === QUIZ_LENGTH) {
+      console.log(level);
       return history.push(ROUTE.GAME_OVER);
     }
 
@@ -47,7 +45,7 @@ function Breaking() {
       {isEnd && (
         <Answer>
           <div className="result">
-            <span className="result-text">{isAnswer ? '정답' : '얼음땡!'}</span>
+            <span className="result-text">{isAnswer ? '정답' : '얼음땡'}</span>
             <img
               className="img"
               src={imgUrl}
@@ -104,11 +102,11 @@ const Answer = styled.div`
     }
 
     .result-text {
-      font-size: 45px;
+      font-size: 50px;
     }
 
     .img {
-      margin: 20px;
+      margin: 40px;
       box-shadow: ${({ theme }) => theme.boxShadow};
     }
   }

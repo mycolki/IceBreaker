@@ -4,6 +4,12 @@ import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 
 import { activateSubmit } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
+import {
+  INITIAL_CUBES,
+  CUBE_ROWS,
+  CUBES_LENGTH,
+  UNBREAKABLE_ICE,
+} from '../../constants/ice';
 
 function IcePlate() {
   const dispatch = useDispatch();
@@ -29,18 +35,6 @@ function IcePlate() {
   }, [imgUrl, dispatch]);
 
   useEffect(() => {
-    const cubeRows = [
-      [3, 239, 80],
-      [5, 179, 80],
-      [8, 111, 80],
-      [7, 111, 120],
-      [8, 79, 140],
-      [7, 79, 180],
-      [8, 47, 200],
-      [4, 79, 260],
-      [1, 111, 320],
-    ];
-
     const makePositions = (rows) => {
       const positions = [];
 
@@ -56,26 +50,31 @@ function IcePlate() {
       return positions;
     };
 
-    setInitialPositions(makePositions(cubeRows));
+    setInitialPositions(makePositions(CUBE_ROWS));
 
-    const randomIndexes = getRandomIndexes(51, 15);
+    let randomIndexes;
+
+    if (level >= 4) {
+      const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
+      randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
+    }
 
     stageRef.current.children.forEach((layer) => {
-      if (layer.attrs.id === 'initial-cubes') {
+      if (layer.attrs.id === INITIAL_CUBES) {
         layer.children.forEach((cube, i) => {
           if (!cube.isVisible()) {
             cube.show();
           }
 
-          if (level === 1 && randomIndexes.has(i)) {
-            cube.fill('black');
-            cube.on('click', null);
+          if (level >= 4 && randomIndexes.has(i)) {
+            cube.on('click', () => cube.off('click'));
+            cube.fill('white');
             cube.strokeWidth(0);
           }
         });
       }
     });
-  }, [currentQuestion]);
+  }, [currentQuestion, level]);
 
   const hideStrongCube = (ev) => {
     ev.target.hide();
@@ -89,7 +88,7 @@ function IcePlate() {
       y: ev.target.y(),
     };
 
-    if (level === 3) {
+    if (level >= 3) {
       setNewCubes([...newCubes, pos]);
     }
 
