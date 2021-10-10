@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
+import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 
 import { activateSubmit } from '../../store/quizSlice';
 
 function IcePlate() {
   const dispatch = useDispatch();
   const stageRef = useRef();
-  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
+  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
+  const enableSubmit = useSelector((state) => state.quiz?.enableSubmit);
+
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
   const [image, setImage] = useState(null);
   const [newCubes, setNewCubes] = useState([]);
@@ -70,13 +72,14 @@ function IcePlate() {
   };
 
   const hideCube = (ev) => {
+    if (enableSubmit) return;
+
     const pos = {
       x: ev.target.x(),
       y: ev.target.y(),
     };
 
     setNewCubes([...newCubes, pos]);
-
     ev.target.visible(false);
   };
 
