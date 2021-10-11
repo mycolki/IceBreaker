@@ -32,7 +32,7 @@ function Breaking() {
       return history.push(ROUTE.GAME_OVER);
     }
 
-    dispatch(toggleAnswer());
+    dispatch(toggleAnswer(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
   };

@@ -6,7 +6,3 @@ const SPC = /[~!@#$%^&*()_+|<>?:{}]/;
 export const inspectKorean = (str) => {
   return KOR.test(str) && !ENG.test(str) && !NUM.test(str) && !SPC.test(str);
 };
-
-export const inspectNumber = (str) => {
-  return NUM.test(str) && !ENG.test(str) && !KOR.test(str) && !SPC.test(str);
-};

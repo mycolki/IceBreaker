@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 
+import bearSrc from '../../asset/bear.png';
 import { activateBreaking } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
 import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
-import bearSrc from '../../asset/bear.png';
 
 function IcePlate() {
   const dispatch = useDispatch();
@@ -133,7 +133,7 @@ function IcePlate() {
           draggable
         />
       </Layer>
-      <Layer id="initial-cubes" x={-4} y={-3} ref={initialCubesRef}>
+      <Layer id="initial-cubes" x={-13} y={0} ref={initialCubesRef}>
         {initialPositions?.map((pos, i) => {
           if (colorIndexes.has(i)) {
             return (
@@ -193,8 +193,8 @@ function IcePlate() {
         {newCubes.map((pos, i) => (
           <RegularPolygon
             key={String(pos.x) + String(pos.y) + i}
-            x={pos.x - 4}
-            y={pos.y - 3}
+            x={pos.x - 13}
+            y={pos.y - 0}
             sides={6}
             radius={17}
             rotation={90}

@@ -34,11 +34,11 @@ const quizSlice = createSlice({
     activateBreaking(state) {
       state.isImageLoaded = true;
     },
-    toggleForm(state) {
-      state.isNotBreaking = !state.isNotBreaking;
+    toggleForm(state, action) {
+      state.isNotBreaking = action.payload;
     },
-    toggleAnswer(state) {
-      state.isTimeOver = !state.isTimeOver;
+    toggleAnswer(state, action) {
+      state.isTimeOver = action.payload;
     },
     showMessage(state, action) {
       const { type, text } = action.payload;

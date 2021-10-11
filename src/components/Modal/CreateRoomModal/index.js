@@ -54,7 +54,7 @@ function CreateRoomModal({ closeModal }) {
   return (
     <Container>
       <MessageArea>
-        <Message height="15" />
+        <Message height="10" />
       </MessageArea>
       <Title className="title">{title}</Title>
       <Form onSubmit={makeRoom}>

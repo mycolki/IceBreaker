@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -22,9 +22,11 @@ function InputBox() {
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const [input, setInput] = useState('');
 
-  if (isTimeOver) {
-    setInput('');
-  }
+  useEffect(() => {
+    if (isTimeOver) {
+      setInput('');
+    }
+  }, [isTimeOver]);
 
   const submitInput = (ev) => {
     ev.preventDefault();
@@ -33,7 +35,7 @@ function InputBox() {
       setInput('');
       dispatch(addScore());
       dispatch(showAnswerBoxByInput(input));
-      return dispatch(toggleAnswer());
+      return dispatch(toggleAnswer(true));
     }
 
     if (input.length === 0) {

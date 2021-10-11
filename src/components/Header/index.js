@@ -44,10 +44,10 @@ function Header() {
     };
 
     (async () => {
-      // if (!isImageLoaded) return;
+      if (!isImageLoaded) return;
 
       if (isTimeOver) {
-        dispatch(toggleForm());
+        dispatch(toggleForm(false));
         document.querySelector('.second').classList.remove('answer');
         return clearTimeout(timer);
       }
@@ -57,23 +57,21 @@ function Header() {
         await countToZero(TIME_LIMIT_BREAK);
 
         dispatch(showMessage(ANSWER[`Lv${level}`]));
-        dispatch(toggleForm());
+        dispatch(toggleForm(true));
 
         document.querySelector('.second').classList.add('answer');
         await waitForOneSecond();
         await countToZero(TIME_LIMIT_ANSWER);
-        dispatch(toggleAnswer());
+
+        dispatch(toggleAnswer(true));
       } catch (err) {
-        console.log(err);
         dispatch(onError(err.message));
         history.push(ROUTE.ERROR);
       }
     })();
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [dispatch, level, isTimeOver, isImageLoaded, TIME_LIMIT_BREAK]);
+    return () => clearTimeout(timer);
+  }, [dispatch, level, isTimeOver, isImageLoaded]);
 
   return (
     <Wrapper>
