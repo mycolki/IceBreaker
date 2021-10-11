@@ -1,7 +1,15 @@
 export const ENTER_ROOM = {
+  FILL_BLANK: {
+    type: 'enterRoom',
+    text: 'ID가 입력되지 않았습니다',
+  },
   INVALID_ID: {
     type: 'enterRoom',
-    text: '존재하지 않는 ID입니다',
+    text: '존재하지 않는 ID입니다. 다시 확인해주세요!',
+  },
+  ONLY_NUMBER: {
+    type: 'enterRoom',
+    text: 'ID는 모두 숫자입니다',
   },
 };
 

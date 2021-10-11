@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { getDatabase, ref, set } from '@firebase/database';
+
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import { MAKE_ROOM } from '../../../constants/messages';
@@ -37,12 +39,15 @@ function CreateRoomModal({ closeModal }) {
     dispatch(showMessage(MAKE_ROOM.URL_COPIED));
     inputRef.current.setAttribute('readOnly', true);
     setTitle('친구에게 방ID를 전달해주세요😀');
+
+    set(ref(getDatabase(), `room/${roomId}`), {
+      host: name,
+    });
   };
 
   const handleInput = ({ target }) => {
     const { value } = target;
     const inputValue = value.trim();
-
     setName(inputValue);
   };
 

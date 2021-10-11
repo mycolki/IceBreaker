@@ -16,9 +16,8 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const quizRef = ref(getDatabase());
       onValue(
-        quizRef,
+        ref(getDatabase()),
         async (snapshot) => {
           try {
             if (!snapshot.exists()) {
@@ -26,7 +25,6 @@ function App() {
             }
 
             const data = snapshot.val();
-
             await dispatch(saveQuizData(data));
           } catch (err) {
             console.error(err);

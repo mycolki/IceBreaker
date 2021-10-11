@@ -9,7 +9,7 @@ import {
   addScore,
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
-import { inspectKorean } from '../../utils/inspectKorean';
+import { inspectKorean } from '../../utils/inspectInputType';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
 import Button from '../share/Button';
