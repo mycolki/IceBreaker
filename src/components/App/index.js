@@ -1,35 +1,38 @@
 import { useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveQuizData } from '../../store/quizSlice';
+import { saveQuizData, onError } from '../../store/quizSlice';
+import { ERROR } from '../../constants/error';
+import { ROUTE } from '../../constants/quiz';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
 import Breaking from '../Breaking';
 import GameOver from '../GameOver';
+import ErrorBox from '../ErrorBox';
 
 function App() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
-      const quizRef = ref(getDatabase());
       onValue(
-        quizRef,
+        ref(getDatabase()),
         async (snapshot) => {
           try {
             if (!snapshot.exists()) {
-              throw Error('게임에 필요한 데이터를 받아오지 못했습니다');
+              throw Error(ERROR.FETCH_DATA);
             }
 
             const data = snapshot.val();
-
             await dispatch(saveQuizData(data));
           } catch (err) {
-            console.error(err);
+            dispatch(onError(err.message));
+            history.push(ROUTE.ERROR);
           }
         },
         { onlyOnce: true },
@@ -41,17 +44,20 @@ function App() {
 
   return (
     <AppContainer>
-      <Route exact path="/">
+      <Route exact path={ROUTE.MENU}>
         <Menu />
       </Route>
-      <Route path="/ready">
+      <Route path={ROUTE.READY}>
         <Ready />
       </Route>
-      <Route path="/breaking">
+      <Route path={ROUTE.BREAKING}>
         <Breaking />
       </Route>
-      <Route path="/gameover">
+      <Route path={ROUTE.GAME_OVER}>
         <GameOver />
+      </Route>
+      <Route path={ROUTE.ERROR}>
+        <ErrorBox />
       </Route>
     </AppContainer>
   );

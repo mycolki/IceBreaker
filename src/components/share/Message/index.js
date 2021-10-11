@@ -3,6 +3,13 @@ import styled, { css } from 'styled-components';
 import theme from '../../../styles/theme';
 
 const STYLES = {
+  enterRoom: css`
+    background-color: ${theme.deepGray};
+  `,
+  makeRoom: css`
+    background-color: ${theme.purple};
+    color: ${theme.deepGray};
+  `,
   break: css`
     background-color: ${theme.purple};
   `,
@@ -17,13 +24,13 @@ const STYLES = {
   `,
 };
 
-function Message() {
+function Message({ height }) {
   const type = useSelector((state) => state.quiz?.message?.type);
   const text = useSelector((state) => state.quiz?.message?.text);
   const messageStyle = type ? STYLES[type] : null;
 
   return (
-    <Wrapper>
+    <Wrapper height={height}>
       <Text isMessage={!!text} className="text" messageStyle={messageStyle}>
         {text}
       </Text>
@@ -34,7 +41,8 @@ function Message() {
 export default Message;
 
 const Wrapper = styled.div`
-  height: 5%;
+  width: 100%;
+  height: ${({ height }) => (height ? height : '5%')};
   text-align: center;
 `;
 
@@ -43,8 +51,6 @@ const Text = styled.p`
   font-size: 1em;
   font-family: 'Do Hyeon';
   line-height: 2.3em;
-  /* background-color: ${({ theme, isMessage }) =>
-    isMessage ? theme.deepBlue : 'transparent'}; */
   box-shadow: inset
     ${({ theme, isMessage }) => (isMessage ? theme.boxShadow : null)};
   color: ${({ theme }) => theme.white};

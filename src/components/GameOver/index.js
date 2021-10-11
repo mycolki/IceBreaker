@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { ROUTE } from '../../constants/quiz';
+
 import Button from '../share/Button';
 
 function GameOver() {
@@ -15,20 +17,14 @@ function GameOver() {
       </TitleWrapper>
       <MenuButtons>
         <li className="button">
-          <Button size="large" color="pink">
-            친구에게 공유하기
-          </Button>
+          <Button text="친구에게 공유하기" size="large" color="pink" />
         </li>
         <li className="button">
-          <Button size="large" color="purple">
-            랭킹 등록
-          </Button>
+          <Button text="랭킹 등록" size="large" color="purple" />
         </li>
         <li className="button">
-          <Link to="/">
-            <Button size="large" color="skyBlue">
-              처음으로
-            </Button>
+          <Link to={ROUTE.MENU}>
+            <Button text="처음으로" size="large" color="skyBlue" />
           </Link>
         </li>
       </MenuButtons>

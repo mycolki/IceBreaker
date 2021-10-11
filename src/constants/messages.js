@@ -1,8 +1,34 @@
+export const ENTER_ROOM = {
+  FILL_BLANK: {
+    type: 'enterRoom',
+    text: 'ID가 입력되지 않았습니다',
+  },
+  INVALID_ID: {
+    type: 'enterRoom',
+    text: '존재하지 않는 ID입니다. 다시 확인해주세요!',
+  },
+  ONLY_NUMBER: {
+    type: 'enterRoom',
+    text: 'ID는 모두 숫자입니다',
+  },
+};
+
+export const MAKE_ROOM = {
+  FILL_BLANK: {
+    type: 'makeRoom',
+    text: '닉네임은 공백으로 설정할 수 없습니다',
+  },
+  URL_COPIED: {
+    type: 'makeRoom',
+    text: '방ID가 클립보드에 복사되었습니다',
+  },
+};
+
 export const VALIDATION_INPUT = {
   TYPE: 'validationInput',
   FILL_BLANK: {
     type: 'validationInput',
-    text: '아무 것도 입력되지 않았습니다',
+    text: '아무 글자도 입력되지 않았습니다',
   },
   ONLY_KOREAN: {
     type: 'validationInput',

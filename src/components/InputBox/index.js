@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ import {
   addScore,
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
-import { inspectKorean } from '../../utils/inspectKorean';
+import { inspectKorean } from '../../utils/inspectInputType';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
 import Button from '../share/Button';
@@ -19,7 +19,14 @@ function InputBox() {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
+  const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const [input, setInput] = useState('');
+
+  useEffect(() => {
+    if (isTimeOver) {
+      setInput('');
+    }
+  }, [isTimeOver]);
 
   const submitInput = (ev) => {
     ev.preventDefault();
@@ -28,7 +35,7 @@ function InputBox() {
       setInput('');
       dispatch(addScore());
       dispatch(showAnswerBoxByInput(input));
-      return dispatch(toggleAnswer());
+      return dispatch(toggleAnswer(true));
     }
 
     if (input.length === 0) {
@@ -110,13 +117,12 @@ function InputBox() {
             onChange={handleInput}
           />
           <Button
+            text="Break"
             color="lightPurple"
             size="small"
             type="submit"
             disabled={!isImageLoaded}
-          >
-            Break
-          </Button>
+          />
         </Form>
       )}
     </Wrapper>

@@ -16,6 +16,7 @@ const initialState = {
     text: '',
   },
   score: 0,
+  error: null,
 };
 
 const quizSlice = createSlice({
@@ -33,11 +34,11 @@ const quizSlice = createSlice({
     activateBreaking(state) {
       state.isImageLoaded = true;
     },
-    toggleForm(state) {
-      state.isNotBreaking = !state.isNotBreaking;
+    toggleForm(state, action) {
+      state.isNotBreaking = action.payload;
     },
-    toggleAnswer(state) {
-      state.isTimeOver = !state.isTimeOver;
+    toggleAnswer(state, action) {
+      state.isTimeOver = action.payload;
     },
     showMessage(state, action) {
       const { type, text } = action.payload;
@@ -57,6 +58,9 @@ const quizSlice = createSlice({
       const currentLevel = state.currentQuestion.level;
       state.score += SCORES[`Lv${currentLevel}`];
     },
+    onError(state, action) {
+      state.error = action.payload;
+    },
   },
 });
 
@@ -69,6 +73,7 @@ export const {
   showAnswerBoxByInput,
   passNextLevel,
   addScore,
+  onError,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

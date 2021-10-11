@@ -51,7 +51,7 @@ function Footer() {
         </Layer>
       </Stage>
       <Nav coke={coke}>
-        <Link to="/">
+        <Link to={ROUTE.MENU}>
           <span className="menu">MENU</span>
         </Link>
         <span className="hint">

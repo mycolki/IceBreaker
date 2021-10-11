@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,6 +7,7 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
+  showMessage,
 } from '../../store/quizSlice';
 import { QUIZ_LENGTH, ROUTE } from '../../constants/quiz';
 
@@ -27,12 +29,22 @@ function Breaking() {
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
 
+  useEffect(() => {
+    return () =>
+      dispatch(
+        showMessage({
+          type: '',
+          text: '',
+        }),
+      );
+  });
+
   const goToNextLevel = () => {
     if (level === QUIZ_LENGTH) {
       return history.push(ROUTE.GAME_OVER);
     }
 
-    dispatch(toggleAnswer());
+    dispatch(toggleAnswer(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
   };
@@ -53,13 +65,12 @@ function Breaking() {
               height="130"
             />
             <Button
+              text="NEXT"
               className="button"
               size="medium"
               color="lightPurple"
               onClick={goToNextLevel}
-            >
-              NEXT
-            </Button>
+            />
           </div>
         </Answer>
       )}

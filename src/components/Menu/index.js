@@ -1,9 +1,50 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { showMessage } from '../../store/quizSlice';
+import { ROUTE } from '../../constants/quiz';
+
 import Button from '../share/Button';
+import Portal from '../Portal';
+import Modal from '../Modal';
+import EnterRoomModal from '../Modal/EnterRoomModal';
+import CreateRoomModal from '../Modal/CreateRoomModal';
 
 function Menu() {
+  const dispatch = useDispatch();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [enterModalOpen, setEnterModalOpen] = useState(false);
+
+  const openCreateModal = () => {
+    setCreateModalOpen(true);
+  };
+
+  const closeCreateModal = () => {
+    setCreateModalOpen(false);
+    dispatch(
+      showMessage({
+        type: '',
+        text: '',
+      }),
+    );
+  };
+
+  const openEnterModal = () => {
+    setEnterModalOpen(true);
+  };
+
+  const closeEnterModal = () => {
+    setEnterModalOpen(false);
+    dispatch(
+      showMessage({
+        type: '',
+        text: '',
+      }),
+    );
+  };
+
   return (
     <Container>
       <TitleWrapper>
@@ -14,33 +55,45 @@ function Menu() {
       </TitleWrapper>
       <MenuButtons>
         <li className="button">
-          <Link to="/ready">
-            <Button size="large" color="skyBlue">
-              혼자 얼음깨기
-            </Button>
+          <Link to={ROUTE.READY}>
+            <Button text="혼자 얼음깨기" size="large" color="skyBlue" />
           </Link>
         </li>
         <li className="button">
-          <Link to="/together">
-            <Button size="large" color="skyBlue">
-              같이 얼음깨기
-            </Button>
-          </Link>
+          <Button
+            text="같이 얼음깨기"
+            size="large"
+            color="skyBlue"
+            onClick={openEnterModal}
+          />
+        </li>
+        {enterModalOpen && (
+          <Portal>
+            <Modal onClose={closeEnterModal} dimmed={true}>
+              <EnterRoomModal closeModal={closeEnterModal} />
+            </Modal>
+          </Portal>
+        )}
+        <li className="button">
+          <Button
+            text="방 만들기"
+            size="large"
+            color="skyBlue"
+            onClick={openCreateModal}
+          />
+        </li>
+        {createModalOpen && (
+          <Portal>
+            <Modal onClose={closeCreateModal} dimmed={true}>
+              <CreateRoomModal closeModal={closeCreateModal} />
+            </Modal>
+          </Portal>
+        )}
+        <li className="button">
+          <Button text="랭킹보기" size="large" color="purple" />
         </li>
         <li className="button">
-          <Button size="large" color="skyBlue">
-            방 만들기
-          </Button>
-        </li>
-        <li className="button">
-          <Button size="large" color="purple">
-            랭킹보기
-          </Button>
-        </li>
-        <li className="button">
-          <Button size="large" color="purple">
-            게임 방법
-          </Button>
+          <Button text="게임 방법" size="large" color="purple" />
         </li>
       </MenuButtons>
     </Container>

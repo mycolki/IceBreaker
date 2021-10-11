@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-import { toggleForm, toggleAnswer, showMessage } from '../../store/quizSlice';
+import {
+  toggleForm,
+  toggleAnswer,
+  showMessage,
+  onError,
+} from '../../store/quizSlice';
 import { ANSWER, BREAK } from '../../constants/messages';
 import { SECONDS_PER_LEVEL, TIME_LIMIT_ANSWER } from '../../constants/quiz';
+import { ROUTE } from '../../constants/quiz';
 
 function Header() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
@@ -39,27 +47,31 @@ function Header() {
       if (!isImageLoaded) return;
 
       if (isTimeOver) {
-        dispatch(toggleForm());
+        dispatch(toggleForm(false));
         document.querySelector('.second').classList.remove('answer');
         return clearTimeout(timer);
       }
 
-      dispatch(showMessage(BREAK[`Lv${level}`]));
-      await countToZero(TIME_LIMIT_BREAK);
+      try {
+        dispatch(showMessage(BREAK[`Lv${level}`]));
+        await countToZero(TIME_LIMIT_BREAK);
 
-      dispatch(showMessage(ANSWER[`Lv${level}`]));
-      dispatch(toggleForm());
+        dispatch(showMessage(ANSWER[`Lv${level}`]));
+        dispatch(toggleForm(true));
 
-      document.querySelector('.second').classList.add('answer');
-      await waitForOneSecond();
-      await countToZero(TIME_LIMIT_ANSWER);
-      dispatch(toggleAnswer());
+        document.querySelector('.second').classList.add('answer');
+        await waitForOneSecond();
+        await countToZero(TIME_LIMIT_ANSWER);
+
+        dispatch(toggleAnswer(true));
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
     })();
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [dispatch, level, isTimeOver, isImageLoaded, TIME_LIMIT_BREAK]);
+    return () => clearTimeout(timer);
+  }, [dispatch, level, isTimeOver, isImageLoaded]);
 
   return (
     <Wrapper>

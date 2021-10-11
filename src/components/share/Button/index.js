@@ -5,7 +5,7 @@ const SIZE_PRESET = {
   small: css`
     min-width: 70px;
     height: 50px;
-    font-size: 13px;
+    font-size: 14px;
   `,
   medium: css`
     min-width: 130px;
@@ -17,39 +17,39 @@ const SIZE_PRESET = {
     height: 40px;
     font-size: 20px;
     line-height: 16px;
+    border: ${({ theme }) => theme.buttonBorder};
   `,
 };
 
 const COLOR_PRESET = {
   skyBlue: css`
     background-color: ${({ theme }) => theme.skyBlue};
-    border: ${({ theme }) => theme.buttonBorder};
   `,
   purple: css`
     background-color: ${({ theme }) => theme.purple};
-    border: ${({ theme }) => theme.buttonBorder};
   `,
   pink: css`
     background-color: ${({ theme }) => theme.pink};
-    border: ${({ theme }) => theme.buttonBorder};
   `,
   lightPurple: css`
     background-color: ${({ theme }) => theme.lightPurple};
   `,
 };
 
-function Button({ children, type, disabled, size, color, onClick }) {
+function Button({ children, text, type, disabled, size, color, onClick }) {
   const sizePreset = SIZE_PRESET[size];
   const colorPreset = COLOR_PRESET[color];
 
   return (
     <StyledButton
+      className="styled-button"
       type={type}
       disabled={disabled}
       sizePreset={sizePreset}
       colorPreset={colorPreset}
       onClick={onClick}
     >
+      {text}
       {children}
     </StyledButton>
   );
@@ -58,26 +58,28 @@ function Button({ children, type, disabled, size, color, onClick }) {
 export default Button;
 
 Button.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
+  text: PropTypes.string,
   type: PropTypes.string,
   disabled: PropTypes.bool,
   size: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   onClick: PropTypes.func,
 };
 
 Button.defaultProps = {
+  text: '',
   type: 'button',
   disabled: false,
+  color: 'transparent',
 };
 
 const StyledButton = styled.button`
   margin: 0;
-  padding: 10px 10px;
+  padding: 10px 15px;
   outline: none;
   cursor: pointer;
   text-align: center;
-  border: none;
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.boxShadow};
   color: ${({ theme }) => theme.white};
@@ -87,10 +89,10 @@ const StyledButton = styled.button`
   ${({ colorPreset }) => colorPreset}
 
   &:active,
-  &:hover,
-  &:focus {
+  &:hover {
+    box-shadow: inset ${({ theme }) => theme.boxShadow};
+    transform: scaleX(0.97);
     opacity: 0.9;
-    transform: scaleX(0.98);
   }
 
   &:disabled {
