@@ -81,7 +81,6 @@ const StyledButton = styled.button`
   outline: none;
   cursor: pointer;
   text-align: center;
-  border: none;
   border-radius: 20px;
   box-shadow: ${({ theme }) => theme.boxShadow};
   color: ${({ theme }) => theme.white};

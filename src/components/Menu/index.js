@@ -1,9 +1,23 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import RoomModal from '../RoomModal';
 
 import Button from '../share/Button';
+import Portal from '../Portal';
+import Modal from '../share/Modal';
 
 function Menu() {
+  const [roomModalOpen, setRoomModalOpen] = useState(false);
+
+  const openRoomModal = () => {
+    setRoomModalOpen(true);
+  };
+
+  const closeRoomModal = () => {
+    setRoomModalOpen(false);
+  };
+
   return (
     <Container>
       <TitleWrapper>
@@ -21,16 +35,21 @@ function Menu() {
           </Link>
         </li>
         <li className="button">
-          <Link to="/together">
-            <Button size="large" color="skyBlue">
-              같이 얼음깨기
-            </Button>
-          </Link>
+          <Button size="large" color="skyBlue">
+            같이 얼음깨기
+          </Button>
         </li>
         <li className="button">
-          <Button size="large" color="skyBlue">
+          <Button size="large" color="skyBlue" onClick={openRoomModal}>
             방 만들기
           </Button>
+          {roomModalOpen && (
+            <Portal>
+              <Modal onClose={closeRoomModal} dimmed={true}>
+                <RoomModal closeModal={closeRoomModal} />
+              </Modal>
+            </Portal>
+          )}
         </li>
         <li className="button">
           <Button size="large" color="purple">

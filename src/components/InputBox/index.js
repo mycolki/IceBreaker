@@ -19,7 +19,12 @@ function InputBox() {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
+  const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const [input, setInput] = useState('');
+
+  if (isTimeOver) {
+    setInput('');
+  }
 
   const submitInput = (ev) => {
     ev.preventDefault();

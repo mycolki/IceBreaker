@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../../styles/theme';
 
-import Button from '../Button';
-
 export default function Modal({
   children,
   dimmed,
@@ -21,9 +19,9 @@ export default function Modal({
         background={background}
       >
         {children}
-        <Button className="close" onClick={onClose} size="small">
+        <CloseButton className="close" onClick={onClose}>
           x
-        </Button>
+        </CloseButton>
       </StyledModal>
     </Wrapper>
   );
@@ -62,4 +60,13 @@ const StyledModal = styled.div`
   background-color: ${({ background }) =>
     background ? background : `${theme.lightPurple}95`};
   box-shadow: ${({ theme }) => theme.boxShadow};
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  text-shadow: 0px 6px 2px ${({ theme }) => theme.purple};
+  background-color: transparent;
+  color: ${({ theme }) => theme.white};
 `;

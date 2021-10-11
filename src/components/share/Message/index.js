@@ -3,6 +3,10 @@ import styled, { css } from 'styled-components';
 import theme from '../../../styles/theme';
 
 const STYLES = {
+  makeRoom: css`
+    background-color: ${theme.purple};
+    color: ${theme.deepGray};
+  `,
   break: css`
     background-color: ${theme.purple};
   `,
@@ -34,6 +38,7 @@ function Message({ height }) {
 export default Message;
 
 const Wrapper = styled.div`
+  width: 100%;
   height: ${({ height }) => (height ? height : '5%')};
   text-align: center;
 `;
