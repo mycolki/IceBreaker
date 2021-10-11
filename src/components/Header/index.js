@@ -5,16 +5,22 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 import { toggleForm, toggleAnswer, showMessage } from '../../store/quizSlice';
-import { GAME } from '../../constants/messages';
+import { ANSWER, BREAK } from '../../constants/messages';
+import { SECONDS_PER_LEVEL, TIME_LIMIT_ANSWER } from '../../constants/quiz';
 
 function Header() {
   const dispatch = useDispatch();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
-  const isEnd = useSelector((state) => state.quiz?.isEnd);
-  const [second, setSecond] = useState(4);
+  const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
+  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+
+  const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
+  const [second, setSecond] = useState(TIME_LIMIT_BREAK);
 
   useEffect(() => {
+    if (!level) return;
+
     let timer;
     const waitForOneSecond = () => {
       return new Promise((resolve) => {
@@ -30,27 +36,30 @@ function Header() {
     };
 
     (async () => {
-      if (isEnd) {
+      if (!isImageLoaded) return;
+
+      if (isTimeOver) {
         dispatch(toggleForm());
         document.querySelector('.second').classList.remove('answer');
         return clearTimeout(timer);
       }
 
-      dispatch(showMessage(GAME.BREAK_ICE));
-      await countToZero(4);
+      dispatch(showMessage(BREAK[`Lv${level}`]));
+      await countToZero(TIME_LIMIT_BREAK);
+
+      dispatch(showMessage(ANSWER[`Lv${level}`]));
       dispatch(toggleForm());
 
-      dispatch(showMessage(GAME.START));
       document.querySelector('.second').classList.add('answer');
       await waitForOneSecond();
-      await countToZero(10);
+      await countToZero(TIME_LIMIT_ANSWER);
       dispatch(toggleAnswer());
     })();
 
     return () => {
       clearTimeout(timer);
     };
-  }, [dispatch, isEnd]);
+  }, [dispatch, level, isTimeOver, isImageLoaded, TIME_LIMIT_BREAK]);
 
   return (
     <Wrapper>

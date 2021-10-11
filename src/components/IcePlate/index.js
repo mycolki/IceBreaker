@@ -1,62 +1,96 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Stage, Layer, Group, Line, RegularPolygon, Image } from 'react-konva';
+import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
 
-import { activateSubmit } from '../../store/quizSlice';
+import { activateBreaking } from '../../store/quizSlice';
+import { getRandomIndexes } from '../../utils/getRandomIndexes';
+import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
+import bearSrc from '../../asset/bear.png';
 
 function IcePlate() {
   const dispatch = useDispatch();
-  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const currentQuestion = useSelector((state) => state.quiz?.currentQuestion);
+  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
+  const level = useSelector((state) => state.quiz?.currentQuestion?.level);
+  const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
+  const initialCubesRef = useRef(null);
+  const bearRef = useRef();
 
-  const [cubeCoordinates, setCubeCoordinates] = useState([{ x: 0, y: 0 }]);
+  const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
+  const [newCubes, setNewCubes] = useState([]);
   const [image, setImage] = useState(null);
+  const [bearImage, setBearImage] = useState(null);
+  const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
 
   useEffect(() => {
     const questionImage = new window.Image();
-
     questionImage.src = imgUrl;
     questionImage.onload = () => {
-      dispatch(activateSubmit());
+      dispatch(activateBreaking());
     };
 
     setImage(questionImage);
   }, [imgUrl, dispatch]);
 
   useEffect(() => {
-    const standards = [
-      [3, 239, 80],
-      [5, 179, 80],
-      [8, 111, 80],
-      [7, 111, 120],
-      [8, 79, 140],
-      [7, 79, 180],
-      [8, 47, 200],
-      [4, 79, 260],
-      [1, 111, 320],
-    ];
+    const bear = new window.Image();
+    bear.src = bearSrc;
+    setBearImage(bear);
+  }, []);
 
-    const makeCoordinates = (standards) => {
-      const coordinates = [];
-
-      standards.forEach((standard) => {
-        for (let i = 0; i < standard[0]; i++) {
-          coordinates.push({
-            x: standard[1] + i * 32,
-            y: standard[2] + i * 19,
+  useEffect(() => {
+    const makePositions = (rows) => {
+      const positions = [];
+      rows.forEach((row) => {
+        for (let i = 0; i < row[0]; i++) {
+          positions.push({
+            x: row[1] + i * 32,
+            y: row[2] + i * 19,
           });
         }
       });
 
-      return coordinates;
+      return positions;
     };
 
-    setCubeCoordinates(makeCoordinates(standards));
-  }, [currentQuestion]);
+    setInitialPositions(makePositions(CUBE_ROWS));
 
-  const removeCube = (ev) => {
-    // ev.target.visible(false);
-    ev.target.remove();
+    let randomIndexes;
+
+    if (level >= 4) {
+      const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
+      randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
+    }
+
+    initialCubesRef.current.children.forEach((cube, i) => {
+      if (!cube.isVisible()) {
+        cube.show();
+      }
+
+      if (level >= 4 && randomIndexes.has(i)) {
+        cube.strokeWidth(0);
+        cube.on('click', () => cube.off('click'));
+      }
+    });
+  }, [currentQuestion, level]);
+
+  const hideStrongCube = (ev) => {
+    ev.target.hide();
+  };
+
+  const hideCube = (ev) => {
+    if (isNotBreaking) return;
+
+    const pos = {
+      x: ev.target.x(),
+      y: ev.target.y(),
+    };
+
+    if (level >= 3) {
+      setNewCubes([...newCubes, pos]);
+    }
+
+    ev.target.visible(false);
   };
 
   const displayCursorPointer = (ev) => {
@@ -69,7 +103,7 @@ function IcePlate() {
       <Layer>
         <Line
           points={[
-            15, 192, 73, 60, 230, 20, 340, 102, 360, 230, 293, 350, 90, 350,
+            15, 192, 73, 60, 230, 20, 340, 102, 360, 230, 293, 355, 90, 355,
           ]}
           closed="true"
           fillLinearGradientStartPoint={{ x: 100, y: -80, z: 0 }}
@@ -86,7 +120,7 @@ function IcePlate() {
           shadowBlur={10}
           shadowOffset={{ x: 0, y: 10 }}
           shadowOpacity={0.4}
-          draggable="true"
+          draggable
         />
       </Layer>
       <Layer>
@@ -96,34 +130,106 @@ function IcePlate() {
           image={image}
           width={200}
           height={200}
-          draggable="true"
+          draggable
         />
       </Layer>
-      <Layer>
-        <Group x={5} y={-7}>
-          {cubeCoordinates?.map((coord) => (
+      <Layer id="initial-cubes" x={-4} y={-3} ref={initialCubesRef}>
+        {initialPositions?.map((pos, i) => {
+          if (colorIndexes.has(i)) {
+            return (
+              <RegularPolygon
+                key={String(pos.x) + String(pos.y) + i}
+                x={pos.x}
+                y={pos.y}
+                sides={6}
+                radius={17}
+                rotation={90}
+                fillLinearGradientStartPoint={{ x: -20, y: 0 }}
+                fillLinearGradientEndPoint={{ x: 20, y: -30 }}
+                fillLinearGradientColorStops={[
+                  0,
+                  '#ffffff',
+                  0.5,
+                  '#8ba5ff',
+                  1,
+                  '#7879f1',
+                ]}
+                stroke="#ffffff"
+                strokeWidth={2}
+                shadowColor="#7879f1"
+                shadowBlur={1}
+                shadowOffset={{ x: 6, y: 5 }}
+                onMouseEnter={displayCursorPointer}
+                onClick={hideCube}
+                draggable
+                fillEnabled="true"
+              />
+            );
+          }
+          return (
             <RegularPolygon
-              onClick={removeCube}
-              key={String(coord.x) + String(coord.y)}
-              x={coord.x}
-              y={coord.y}
+              key={String(pos.x) + String(pos.y) + i}
+              x={pos.x}
+              y={pos.y}
               sides={6}
               radius={17}
               rotation={90}
-              fillLinearGradientStartPoint={{ x: 0, y: 30 }}
-              fillLinearGradientEndPoint={{ x: 0, y: -20 }}
-              fillLinearGradientColorStops={[0, '#3d9fff', 1, '#CFDAFF']}
+              fillLinearGradientStartPoint={{ x: -10, y: -5 }}
+              fillLinearGradientEndPoint={{ x: 0, y: -15 }}
+              fillLinearGradientColorStops={[0, '#8EC7FF', 1, '#ffffff']}
               stroke="#ffffff"
               strokeWidth={2}
-              shadowColor="#54BEFA"
+              shadowColor="#2AA0ED"
               shadowBlur={1}
               shadowOffset={{ x: 6, y: 5 }}
-              shadowOpacity={0.7}
               onMouseEnter={displayCursorPointer}
-              draggable="true"
+              onClick={hideCube}
+              draggable
             />
-          ))}
-        </Group>
+          );
+        })}
+      </Layer>
+      <Layer>
+        {newCubes.map((pos, i) => (
+          <RegularPolygon
+            key={String(pos.x) + String(pos.y) + i}
+            x={pos.x - 4}
+            y={pos.y - 3}
+            sides={6}
+            radius={17}
+            rotation={90}
+            fillLinearGradientStartPoint={{ x: 10, y: 5 }}
+            fillLinearGradientEndPoint={{ x: 0, y: -10 }}
+            fillLinearGradientColorStops={[
+              0,
+              '#fba85c',
+              0.8,
+              '#f178b6',
+              1,
+              '#e95353',
+            ]}
+            stroke="#F8E8D3"
+            strokeWidth={2}
+            shadowColor="#B4457E"
+            shadowBlur={1}
+            shadowOpacity={0.8}
+            shadowOffset={{ x: 5, y: 4 }}
+            onMouseEnter={displayCursorPointer}
+            onClick={hideStrongCube}
+            draggable
+          />
+        ))}
+      </Layer>
+      <Layer>
+        <Image
+          ref={bearRef}
+          x={90}
+          y={100}
+          image={bearImage}
+          width={100}
+          height={60}
+          draggable
+        />
       </Layer>
     </Stage>
   );

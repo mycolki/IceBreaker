@@ -93,6 +93,7 @@ const Nav = styled.div`
 
   .hint {
     transform: translateX(25px);
+
     img {
       position: absolute;
       transform: translate(5px, -30px) rotate(20deg);

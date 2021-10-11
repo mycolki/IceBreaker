@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getRandomList } from '../utils/getRandomList';
+import { getRandomQuestions } from '../utils/getRandomQuestions';
 import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/quiz';
 
 const name = QUIZ;
@@ -8,8 +8,8 @@ const initialState = {
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
-  enableSubmit: false,
-  isEnd: false,
+  isNotBreaking: false,
+  isTimeOver: false,
   userInput: '',
   message: {
     type: '',
@@ -24,20 +24,20 @@ const quizSlice = createSlice({
   reducers: {
     saveQuizData(state, action) {
       const allQuestions = Object.values(action.payload);
-      const randomQuestions = getRandomList(allQuestions);
+      const randomQuestions = getRandomQuestions(allQuestions);
 
       state.questions = randomQuestions.slice(0, QUIZ_LENGTH);
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
-    activateSubmit(state) {
+    activateBreaking(state) {
       state.isImageLoaded = true;
     },
     toggleForm(state) {
-      state.enableSubmit = !state.enableSubmit;
+      state.isNotBreaking = !state.isNotBreaking;
     },
     toggleAnswer(state) {
-      state.isEnd = !state.isEnd;
+      state.isTimeOver = !state.isTimeOver;
     },
     showMessage(state, action) {
       const { type, text } = action.payload;
@@ -55,14 +55,14 @@ const quizSlice = createSlice({
     },
     addScore(state) {
       const currentLevel = state.currentQuestion.level;
-      state.score += SCORES[`lv${currentLevel}`];
+      state.score += SCORES[`Lv${currentLevel}`];
     },
   },
 });
 
 export const {
   saveQuizData,
-  activateSubmit,
+  activateBreaking,
   toggleForm,
   toggleAnswer,
   showMessage,

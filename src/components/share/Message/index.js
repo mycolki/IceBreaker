@@ -1,16 +1,12 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import theme from '../../../styles/theme';
-
-import gsap from 'gsap';
-import { MESSAGE } from '../../../styles/gsapStyle';
 
 const STYLES = {
   break: css`
     background-color: ${theme.purple};
   `,
-  start: css`
+  answer: css`
     background-color: ${theme.deepPink};
   `,
   validationInput: css`
@@ -24,15 +20,7 @@ const STYLES = {
 function Message() {
   const type = useSelector((state) => state.quiz?.message?.type);
   const text = useSelector((state) => state.quiz?.message?.text);
-  const userInput = useSelector((state) => state.quiz?.userInput);
   const messageStyle = type ? STYLES[type] : null;
-
-  // useEffect(() => {
-  //   if (!text) return;
-
-  //   gsap.from(MESSAGE.TEXT, MESSAGE.FADE_IN);
-  //   gsap.to(MESSAGE.TEXT, MESSAGE.FADE_OUT);
-  // }, [text, userInput]);
 
   return (
     <Wrapper>
