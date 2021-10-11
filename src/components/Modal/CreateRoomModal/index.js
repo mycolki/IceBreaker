@@ -5,6 +5,7 @@ import { getDatabase, ref, set } from '@firebase/database';
 
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
+import { MODAL_TITLE } from '../../../constants/quiz';
 import { MAKE_ROOM } from '../../../constants/messages';
 
 import Message from '../../share/Message';
@@ -19,7 +20,7 @@ import {
 function CreateRoomModal({ closeModal }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
-  const [title, setTitle] = useState('방에 참가할 닉네임을 입력해주세요');
+  const [title, setTitle] = useState(MODAL_TITLE.INPUT_HOST_NAME);
   const [isRoom, setIsRoom] = useState(false);
   const [name, setName] = useState('');
 
@@ -38,7 +39,7 @@ function CreateRoomModal({ closeModal }) {
 
     dispatch(showMessage(MAKE_ROOM.URL_COPIED));
     inputRef.current.setAttribute('readOnly', true);
-    setTitle('친구에게 방ID를 전달해주세요😀');
+    setTitle(MODAL_TITLE.PASS_ROOM_ID);
 
     set(ref(getDatabase(), `room/${roomId}`), {
       host: name,

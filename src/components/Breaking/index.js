@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,6 +7,7 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
+  showMessage,
 } from '../../store/quizSlice';
 import { QUIZ_LENGTH, ROUTE } from '../../constants/quiz';
 
@@ -26,6 +28,16 @@ function Breaking() {
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
+
+  useEffect(() => {
+    return () =>
+      dispatch(
+        showMessage({
+          type: '',
+          text: '',
+        }),
+      );
+  });
 
   const goToNextLevel = () => {
     if (level === QUIZ_LENGTH) {

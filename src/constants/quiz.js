@@ -1,5 +1,14 @@
 export const QUIZ = 'quiz';
+export const ROOM = 'room';
 export const QUIZ_LENGTH = 7;
+export const ROUTE = {
+  MENU: '/',
+  READY: '/ready',
+  BREAKING: '/breaking',
+  GAME_OVER: '/gameover',
+  ERROR: '/error',
+};
+
 export const SCORES = {
   Lv1: 20,
   Lv2: 30,
@@ -21,10 +30,7 @@ export const SECONDS_PER_LEVEL = {
   Lv7: 7,
 };
 
-export const ROUTE = {
-  MENU: '/',
-  READY: '/ready',
-  BREAKING: '/breaking',
-  GAME_OVER: '/gameover',
-  ERROR: '/error',
+export const MODAL_TITLE = {
+  INPUT_HOST_NAME: '방에 참가할 닉네임을 입력해주세요',
+  PASS_ROOM_ID: '친구에게 방ID를 전달해주세요😀',
 };
