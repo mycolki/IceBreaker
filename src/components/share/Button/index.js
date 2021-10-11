@@ -17,21 +17,23 @@ const SIZE_PRESET = {
     height: 40px;
     font-size: 20px;
     line-height: 16px;
+    border: ${({ theme }) => theme.buttonBorder};
   `,
 };
 
 const COLOR_PRESET = {
+  transparent: css`
+    background-color: transparent;
+    box-shadow: none;
+  `,
   skyBlue: css`
     background-color: ${({ theme }) => theme.skyBlue};
-    border: ${({ theme }) => theme.buttonBorder};
   `,
   purple: css`
     background-color: ${({ theme }) => theme.purple};
-    border: ${({ theme }) => theme.buttonBorder};
   `,
   pink: css`
     background-color: ${({ theme }) => theme.pink};
-    border: ${({ theme }) => theme.buttonBorder};
   `,
   lightPurple: css`
     background-color: ${({ theme }) => theme.lightPurple};
@@ -44,6 +46,7 @@ function Button({ children, type, disabled, size, color, onClick }) {
 
   return (
     <StyledButton
+      className="styled-button"
       type={type}
       disabled={disabled}
       sizePreset={sizePreset}
@@ -62,18 +65,19 @@ Button.propTypes = {
   type: PropTypes.string,
   disabled: PropTypes.bool,
   size: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   onClick: PropTypes.func,
 };
 
 Button.defaultProps = {
   type: 'button',
   disabled: false,
+  color: 'transparent',
 };
 
 const StyledButton = styled.button`
   margin: 0;
-  padding: 10px 10px;
+  padding: 10px 15px;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -87,10 +91,10 @@ const StyledButton = styled.button`
   ${({ colorPreset }) => colorPreset}
 
   &:active,
-  &:hover,
-  &:focus {
+  &:hover {
+    box-shadow: inset ${({ theme }) => theme.boxShadow};
+    transform: scaleX(0.97);
     opacity: 0.9;
-    transform: scaleX(0.98);
   }
 
   &:disabled {

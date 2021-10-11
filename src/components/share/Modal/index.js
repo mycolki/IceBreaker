@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import theme from '../../../styles/theme';
 
 import Button from '../Button';
@@ -21,7 +21,7 @@ export default function Modal({
         background={background}
       >
         {children}
-        <Button className="close" onClick={onClose}>
+        <Button className="close" onClick={onClose} size="small">
           x
         </Button>
       </StyledModal>
