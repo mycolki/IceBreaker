@@ -1,7 +1,14 @@
+export const ENTER_ROOM = {
+  INVALID_ID: {
+    type: 'enterRoom',
+    text: '존재하지 않는 ID입니다',
+  },
+};
+
 export const MAKE_ROOM = {
   FILL_BLANK: {
     type: 'makeRoom',
-    text: '닉네임은 공백으로 설정할 수  없습니다',
+    text: '닉네임은 공백으로 설정할 수 없습니다',
   },
   URL_COPIED: {
     type: 'makeRoom',

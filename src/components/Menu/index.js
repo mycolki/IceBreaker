@@ -1,21 +1,31 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import RoomModal from '../RoomModal';
 
 import Button from '../share/Button';
 import Portal from '../Portal';
-import Modal from '../share/Modal';
+import Modal from '../Modal';
+import EnterRoomModal from '../Modal/EnterRoomModal';
+import CreateRoomModal from '../Modal/CreateRoomModal';
 
 function Menu() {
-  const [roomModalOpen, setRoomModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [enterModalOpen, setEnterModalOpen] = useState(false);
 
-  const openRoomModal = () => {
-    setRoomModalOpen(true);
+  const openCreateModal = () => {
+    setCreateModalOpen(true);
   };
 
-  const closeRoomModal = () => {
-    setRoomModalOpen(false);
+  const closeCreateModal = () => {
+    setCreateModalOpen(false);
+  };
+
+  const openEnterModal = () => {
+    setEnterModalOpen(true);
+  };
+
+  const closeEnterModal = () => {
+    setEnterModalOpen(false);
   };
 
   return (
@@ -35,22 +45,29 @@ function Menu() {
           </Link>
         </li>
         <li className="button">
-          <Button size="large" color="skyBlue">
+          <Button size="large" color="skyBlue" onClick={openEnterModal}>
             같이 얼음깨기
           </Button>
         </li>
+        {enterModalOpen && (
+          <Portal>
+            <Modal onClose={closeEnterModal} dimmed={true}>
+              <EnterRoomModal closeModal={closeEnterModal} />
+            </Modal>
+          </Portal>
+        )}
         <li className="button">
-          <Button size="large" color="skyBlue" onClick={openRoomModal}>
+          <Button size="large" color="skyBlue" onClick={openCreateModal}>
             방 만들기
           </Button>
-          {roomModalOpen && (
-            <Portal>
-              <Modal onClose={closeRoomModal} dimmed={true}>
-                <RoomModal closeModal={closeRoomModal} />
-              </Modal>
-            </Portal>
-          )}
         </li>
+        {createModalOpen && (
+          <Portal>
+            <Modal onClose={closeCreateModal} dimmed={true}>
+              <CreateRoomModal closeModal={closeCreateModal} />
+            </Modal>
+          </Portal>
+        )}
         <li className="button">
           <Button size="large" color="purple">
             랭킹보기

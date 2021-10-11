@@ -3,6 +3,9 @@ import styled, { css } from 'styled-components';
 import theme from '../../../styles/theme';
 
 const STYLES = {
+  enterRoom: css`
+    background-color: ${theme.deepGray};
+  `,
   makeRoom: css`
     background-color: ${theme.purple};
     color: ${theme.deepGray};

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from '../../../styles/theme';
+import theme from '../../styles/theme';
 
 export default function Modal({
   children,
@@ -28,8 +28,13 @@ export default function Modal({
 }
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 375px;
+  height: 713px;
+  margin: auto;
+  transform: translate(-50%, -50%);
 `;
 
 const Dimmed = styled.div`
@@ -44,7 +49,7 @@ const Dimmed = styled.div`
   justify-content: center;
   align-items: center;
   background: ${({ theme, dimmed }) =>
-    dimmed ? `${theme.deepGray}80` : 'transparent'};
+    dimmed ? `${theme.white}99` : 'transparent'};
 `;
 
 const StyledModal = styled.div`
@@ -58,7 +63,7 @@ const StyledModal = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 25px;
   background-color: ${({ background }) =>
-    background ? background : `${theme.lightPurple}95`};
+    background ? background : `${theme.lightPurple}`};
   box-shadow: ${({ theme }) => theme.boxShadow};
 `;
 
@@ -66,7 +71,14 @@ const CloseButton = styled.button`
   position: absolute;
   top: 5px;
   right: 10px;
+  cursor: pointer;
   text-shadow: 0px 6px 2px ${({ theme }) => theme.purple};
   background-color: transparent;
   color: ${({ theme }) => theme.white};
+
+  &:active,
+  &:hover {
+    transform: scale(1.2);
+    color: ${({ theme }) => theme.deepGray};
+  }
 `;

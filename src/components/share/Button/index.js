@@ -5,7 +5,7 @@ const SIZE_PRESET = {
   small: css`
     min-width: 70px;
     height: 50px;
-    font-size: 13px;
+    font-size: 14px;
   `,
   medium: css`
     min-width: 130px;
@@ -22,10 +22,6 @@ const SIZE_PRESET = {
 };
 
 const COLOR_PRESET = {
-  transparent: css`
-    background-color: transparent;
-    box-shadow: none;
-  `,
   skyBlue: css`
     background-color: ${({ theme }) => theme.skyBlue};
   `,
