@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { useHistory } from 'react-router-dom';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-import { showMessage } from '../../../store/quizSlice';
+import { showMessage, onError } from '../../../store/quizSlice';
 import { saveRoomData } from '../../../store/battleSlice';
 import { ENTER_ROOM } from '../../../constants/messages';
+import { ERROR } from '../../../constants/error';
+import { ROUTE } from '../../../constants/quiz';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
@@ -18,6 +20,7 @@ import {
 
 function EnterRoomModal({ closeModal }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const players = useSelector((state) => state.battle?.players);
   const [inputId, setInputId] = useState('');
 
@@ -28,13 +31,14 @@ function EnterRoomModal({ closeModal }) {
         async (snapshot) => {
           try {
             if (!snapshot.exists()) {
-              throw Error('게임에 필요한 데이터를 받아오지 못했습니다');
+              throw Error(ERROR.FETCH_DATA);
             }
 
             const data = snapshot.val();
             await dispatch(saveRoomData(data));
           } catch (err) {
-            console.error(err);
+            dispatch(onError(err.message));
+            history.push(ROUTE.ERROR);
           }
         },
         { onlyOnce: true },
@@ -78,12 +82,13 @@ function EnterRoomModal({ closeModal }) {
           onChange={handleInput}
         />
         <div className="button-area">
-          <Button size="small" color="purple" onClick={closeModal}>
-            뒤로가기
-          </Button>
-          <Button type="submit" size="small" color="purple">
-            들어가기
-          </Button>
+          <Button
+            text="뒤로가기"
+            size="small"
+            color="purple"
+            onClick={closeModal}
+          />
+          <Button text="들어가기" type="submit" size="small" color="purple" />
         </div>
       </Form>
     </Container>

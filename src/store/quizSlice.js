@@ -16,6 +16,7 @@ const initialState = {
     text: '',
   },
   score: 0,
+  error: null,
 };
 
 const quizSlice = createSlice({
@@ -57,6 +58,9 @@ const quizSlice = createSlice({
       const currentLevel = state.currentQuestion.level;
       state.score += SCORES[`Lv${currentLevel}`];
     },
+    onError(state, action) {
+      state.error = action.payload;
+    },
   },
 });
 
@@ -69,6 +73,7 @@ export const {
   showAnswerBoxByInput,
   passNextLevel,
   addScore,
+  onError,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

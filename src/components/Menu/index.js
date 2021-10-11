@@ -39,15 +39,16 @@ function Menu() {
       <MenuButtons>
         <li className="button">
           <Link to="/ready">
-            <Button size="large" color="skyBlue">
-              혼자 얼음깨기
-            </Button>
+            <Button text="혼자 얼음깨기" size="large" color="skyBlue" />
           </Link>
         </li>
         <li className="button">
-          <Button size="large" color="skyBlue" onClick={openEnterModal}>
-            같이 얼음깨기
-          </Button>
+          <Button
+            text="같이 얼음깨기"
+            size="large"
+            color="skyBlue"
+            onClick={openEnterModal}
+          />
         </li>
         {enterModalOpen && (
           <Portal>
@@ -57,9 +58,12 @@ function Menu() {
           </Portal>
         )}
         <li className="button">
-          <Button size="large" color="skyBlue" onClick={openCreateModal}>
-            방 만들기
-          </Button>
+          <Button
+            text="방 만들기"
+            size="large"
+            color="skyBlue"
+            onClick={openCreateModal}
+          />
         </li>
         {createModalOpen && (
           <Portal>
@@ -69,14 +73,10 @@ function Menu() {
           </Portal>
         )}
         <li className="button">
-          <Button size="large" color="purple">
-            랭킹보기
-          </Button>
+          <Button text="랭킹보기" size="large" color="purple" />
         </li>
         <li className="button">
-          <Button size="large" color="purple">
-            게임 방법
-          </Button>
+          <Button text="게임 방법" size="large" color="purple" />
         </li>
       </MenuButtons>
     </Container>

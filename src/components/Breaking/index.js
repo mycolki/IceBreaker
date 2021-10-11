@@ -53,13 +53,12 @@ function Breaking() {
               height="130"
             />
             <Button
+              text="NEXT"
               className="button"
               size="medium"
               color="lightPurple"
               onClick={goToNextLevel}
-            >
-              NEXT
-            </Button>
+            />
           </div>
         </Answer>
       )}

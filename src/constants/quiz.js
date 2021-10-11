@@ -23,6 +23,8 @@ export const SECONDS_PER_LEVEL = {
 
 export const ROUTE = {
   MENU: '/',
+  READY: '/ready',
   BREAKING: '/breaking',
   GAME_OVER: '/gameover',
+  ERROR: '/error',
 };
