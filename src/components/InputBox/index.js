@@ -115,13 +115,12 @@ function InputBox() {
             onChange={handleInput}
           />
           <Button
+            text="Break"
             color="lightPurple"
             size="small"
             type="submit"
             disabled={!isImageLoaded}
-          >
-            Break
-          </Button>
+          />
         </Form>
       )}
     </Wrapper>

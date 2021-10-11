@@ -66,13 +66,19 @@ function CreateRoomModal({ closeModal }) {
           ref={inputRef}
         />
         <div className="button-area">
-          <Button size="small" color="purple" onClick={closeModal}>
-            {!isRoom ? '뒤로 가기' : '메뉴로 돌아가기'}
-          </Button>
+          <Button
+            text={!isRoom ? '뒤로 가기' : '메뉴로 돌아가기'}
+            size="small"
+            color="purple"
+            onClick={closeModal}
+          />
           {!isRoom && (
-            <Button type="submit" size="small" color="purple">
-              방 만들기
-            </Button>
+            <Button
+              text="방 만들기"
+              type="submit"
+              size="small"
+              color="purple"
+            />
           )}
         </div>
       </Form>

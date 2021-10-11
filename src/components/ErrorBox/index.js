@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { ROUTE } from '../../constants/quiz';
+
 import Button from '../share/Button';
 
 function ErrorBox() {
@@ -10,7 +12,7 @@ function ErrorBox() {
   return (
     <Container>
       <h1 className="message">🙈{error}</h1>
-      <Link to="/">
+      <Link to={ROUTE.MENU}>
         <Button text="메뉴로 돌아가기" size="large" color="pink" />
       </Link>
     </Container>

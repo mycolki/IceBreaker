@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { showMessage } from '../../store/quizSlice';
+import { ROUTE } from '../../constants/quiz';
 
 import Button from '../share/Button';
 import Portal from '../Portal';
@@ -9,6 +13,7 @@ import EnterRoomModal from '../Modal/EnterRoomModal';
 import CreateRoomModal from '../Modal/CreateRoomModal';
 
 function Menu() {
+  const dispatch = useDispatch();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
 
@@ -18,6 +23,12 @@ function Menu() {
 
   const closeCreateModal = () => {
     setCreateModalOpen(false);
+    dispatch(
+      showMessage({
+        type: '',
+        text: '',
+      }),
+    );
   };
 
   const openEnterModal = () => {
@@ -26,6 +37,12 @@ function Menu() {
 
   const closeEnterModal = () => {
     setEnterModalOpen(false);
+    dispatch(
+      showMessage({
+        type: '',
+        text: '',
+      }),
+    );
   };
 
   return (
@@ -38,7 +55,7 @@ function Menu() {
       </TitleWrapper>
       <MenuButtons>
         <li className="button">
-          <Link to="/ready">
+          <Link to={ROUTE.READY}>
             <Button text="혼자 얼음깨기" size="large" color="skyBlue" />
           </Link>
         </li>
