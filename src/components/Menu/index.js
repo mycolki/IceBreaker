@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { getDatabase, ref, set } from '@firebase/database';
 import { showMessage } from '../../store/quizSlice';
 import { ROUTE, ROOM } from '../../constants/game';
+import { RESET } from '../../constants/messages';
 
 import Button from '../share/Button';
 import Portal from '../Portal';
@@ -30,12 +31,7 @@ function Menu() {
     }
 
     setCreateModalOpen(false);
-    dispatch(
-      showMessage({
-        type: '',
-        text: '',
-      }),
-    );
+    dispatch(showMessage(RESET));
   };
 
   const openEnterModal = () => {
@@ -44,12 +40,7 @@ function Menu() {
 
   const closeEnterModal = () => {
     setEnterModalOpen(false);
-    dispatch(
-      showMessage({
-        type: '',
-        text: '',
-      }),
-    );
+    dispatch(RESET);
   };
 
   return (

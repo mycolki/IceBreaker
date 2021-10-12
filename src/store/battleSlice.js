@@ -2,9 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const name = 'battle';
 const initialState = {
-  rooms: [],
+  rooms: {},
   createdRoom: false,
   roomId: '',
+  breakers: null,
 };
 
 const battleSlice = createSlice({
@@ -12,7 +13,7 @@ const battleSlice = createSlice({
   initialState,
   reducers: {
     saveRoomData(state, action) {
-      state.rooms = Object.values(action.payload);
+      state.rooms = action.payload;
     },
     createRoom(state, action) {
       state.isRoom = action.payload;
@@ -20,9 +21,14 @@ const battleSlice = createSlice({
     saveRoomId(state, action) {
       state.roomId = action.payload;
     },
+    getBattle(state, action) {
+      const roomId = action.payload;
+      state.breakers = state.rooms[roomId];
+    },
   },
 });
 
-export const { saveRoomData, createRoom, saveRoomId } = battleSlice.actions;
+export const { saveRoomData, createRoom, saveRoomId, getBattle } =
+  battleSlice.actions;
 
 export default battleSlice.reducer;

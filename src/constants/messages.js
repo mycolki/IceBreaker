@@ -1,3 +1,8 @@
+export const RESET = {
+  type: '',
+  text: '',
+};
+
 export const BATTLE = {
   WAITING: {
     type: 'battle',

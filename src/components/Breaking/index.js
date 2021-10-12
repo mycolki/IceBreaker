@@ -10,6 +10,7 @@ import {
   showMessage,
 } from '../../store/quizSlice';
 import { QUIZ_LENGTH, ROUTE } from '../../constants/game';
+import { RESET } from '../../constants/messages';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
@@ -30,13 +31,7 @@ function Breaking() {
   const isAnswer = userInput ? answer === userInput : null;
 
   useEffect(() => {
-    return () =>
-      dispatch(
-        showMessage({
-          type: '',
-          text: '',
-        }),
-      );
+    return () => dispatch(showMessage(RESET));
   });
 
   const goToNextLevel = () => {

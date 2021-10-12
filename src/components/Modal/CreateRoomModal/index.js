@@ -7,7 +7,7 @@ import { createRoom, saveRoomId } from '../../../store/battleSlice';
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import { MODAL_TITLE, ROOM, ROUTE } from '../../../constants/game';
-import { MAKE_ROOM } from '../../../constants/messages';
+import { MAKE_ROOM, RESET } from '../../../constants/messages';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
@@ -29,6 +29,7 @@ function CreateRoomModal({ closeModal }) {
     return () => {
       dispatch(createRoom(false));
       dispatch(saveRoomId(''));
+      dispatch(showMessage(RESET));
     };
   }, [dispatch]);
 
@@ -41,6 +42,7 @@ function CreateRoomModal({ closeModal }) {
     }
 
     const roomId = Date.now();
+    const name = input;
     copyToClipboard(roomId);
     setInput(roomId);
 
@@ -52,7 +54,10 @@ function CreateRoomModal({ closeModal }) {
     setTitle(MODAL_TITLE.PASS_ROOM_ID);
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
       id: roomId,
-      host: input,
+      battler1: {
+        name,
+        score: 0,
+      },
     });
   };
 
@@ -84,11 +89,16 @@ function CreateRoomModal({ closeModal }) {
             onClick={closeModal}
           />
           {isRoom ? (
-            <Button text="입장하기" type="submit" size="small" color="purple" />
-          ) : (
             <Link to={`${ROUTE.ROOM}/${input}`}>
-              <Button text="방만들기" size="small" color="purple" />
+              <Button text="입장하기" size="small" color="purple" />
             </Link>
+          ) : (
+            <Button
+              text="방 만들기"
+              type="submit"
+              size="small"
+              color="purple"
+            />
           )}
         </div>
       </Form>

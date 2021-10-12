@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveQuizData, showMessage, onError } from '../../store/quizSlice';
+import { saveQuizData, onError } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
 import { ROUTE, QUIZ, ROOM } from '../../constants/game';
-import { BATTLE } from '../../constants/messages';
 import { ERROR } from '../../constants/error';
 
 import Menu from '../Menu';
@@ -33,6 +32,9 @@ function App() {
             }
 
             const data = snapshot.val();
+
+            if (!data) return;
+
             await dispatch(saveQuizData(data));
           },
           { onlyOnce: true },
@@ -41,11 +43,10 @@ function App() {
         onValue(
           ref(getDatabase(), ROOM),
           async (snapshot) => {
-            if (!snapshot.exists()) {
-              throw Error(ERROR.FETCH_DATA);
-            }
-
             const data = snapshot.val();
+
+            if (!data) return;
+
             await dispatch(saveRoomData(data));
           },
           { onlyOnce: true },
@@ -61,13 +62,15 @@ function App() {
 
   return (
     <AppContainer>
-      <Route exact path={ROUTE.MENU} component={Menu} />
-      <Route path={ROUTE.READY} component={Ready} />
-      <Route path={ROUTE.BREAKING} component={Breaking} />
-      <Route path={ROUTE.ROOMS} component={Rooms} />
-      <Route path={ROUTE.ROOM_ID} component={Room} />
-      <Route path={ROUTE.GAME_OVER} component={GameOver} />
-      <Route path={ROUTE.ERROR} component={ErrorBox} />
+      <Switch>
+        <Route exact path={ROUTE.MENU} component={Menu} />
+        <Route path={ROUTE.READY} component={Ready} />
+        <Route path={ROUTE.BREAKING} component={Breaking} />
+        <Route path={ROUTE.ROOMS} component={Rooms} />
+        <Route path={ROUTE.ROOM_ID} component={Room} />
+        <Route path={ROUTE.GAME_OVER} component={GameOver} />
+        <Route path={ROUTE.ERROR} component={ErrorBox} />
+      </Switch>
     </AppContainer>
   );
 }

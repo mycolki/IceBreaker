@@ -5,7 +5,9 @@ import styled from 'styled-components';
 
 import { showMessage } from '../../store/quizSlice';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
+import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE } from '../../constants/game';
+import { BATTLE, RESET } from '../../constants/messages';
 
 import Message from '../share/Message';
 import Button from '../share/Button';
@@ -15,13 +17,9 @@ function Rooms() {
   const rooms = useSelector((state) => state.battle?.rooms);
 
   useEffect(() => {
-    return () =>
-      dispatch(
-        showMessage({
-          type: '',
-          text: '',
-        }),
-      );
+    dispatch(showMessage(BATTLE.WAITING));
+
+    return () => dispatch(showMessage(RESET));
   });
 
   return (
@@ -35,26 +33,28 @@ function Rooms() {
       <Message />
       <RoomList>
         {rooms &&
-          rooms.map((room) => (
-            <RoomItem key={room.id}>
-              <div className="breaker-box">
-                <span className="breaker-order">BREAKER1</span>
-                <span className="breaker-name">{room.host}</span>
-              </div>
-              <div className="vs">vs</div>
-              <div className="breaker-box">
-                <span className="breaker-order">BREAKER2</span>
-                <span className="breaker-name">
-                  {room.battler ? room.battler : '?'}
-                </span>
-              </div>
-            </RoomItem>
+          Object.values(rooms).map((room) => (
+            <Link to={`${ROUTE.ROOM}/${room.id}`}>
+              <RoomItem key={room.id}>
+                <div className="breaker-box">
+                  <span className="breaker-order">BREAKER1</span>
+                  <span className="breaker-name">{room.battler1.name}</span>
+                </div>
+                <div className="vs">vs</div>
+                <div className="breaker-box">
+                  <span className="breaker-order">BREAKER2</span>
+                  <span className="breaker-name">
+                    {room.battler2 ? room.battler2.name : '?'}
+                  </span>
+                </div>
+              </RoomItem>
+            </Link>
           ))}
       </RoomList>
       <RoomFooter>
         <Button text="방 ID로 입장" size="large" color="skyBlue" />
         <Link to={ROUTE.MENU}>
-          <Button text="처음으로" size="large" color="pink" />
+          <Button text="나가기" size="large" color="pink" />
         </Link>
       </RoomFooter>
     </Container>
@@ -63,25 +63,8 @@ function Rooms() {
 
 export default Rooms;
 
-const Container = styled.div`
-  height: 100%;
-  background: ${({ theme }) => theme.roomBg};
-  text-align: center;
-`;
-
-const RoomHeader = styled.ul`
-  ${flexCenter}
-  height: 20%;
-
-  .title {
-    font-size: 36px;
-    color: ${({ theme }) => theme.white};
-  }
-`;
-
 const RoomList = styled.div`
-  height: 55%;
-  box-sizing: border-box;
+  height: 50%;
   padding: 30px;
   overflow-y: auto;
 
@@ -142,10 +125,10 @@ const RoomItem = styled.li`
 
 const RoomFooter = styled.div`
   ${flexCenterColumn}
-  height: 20%;
+  height: 25%;
 
   button {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-family: 'Do hyeon';
   }
 `;
