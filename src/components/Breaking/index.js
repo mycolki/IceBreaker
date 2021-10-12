@@ -9,7 +9,7 @@ import {
   passNextLevel,
   showMessage,
 } from '../../store/quizSlice';
-import { QUIZ_LENGTH, ROUTE } from '../../constants/quiz';
+import { QUIZ_LENGTH, ROUTE } from '../../constants/game';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';

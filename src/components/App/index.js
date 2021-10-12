@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { saveQuizData, onError } from '../../store/quizSlice';
 import { ERROR } from '../../constants/error';
-import { ROUTE, QUIZ } from '../../constants/quiz';
+import { ROUTE, QUIZ } from '../../constants/game';
 
 import Menu from '../Menu';
 import Ready from '../Ready';

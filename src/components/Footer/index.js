@@ -5,7 +5,7 @@ import theme from '../../styles/theme';
 
 import coke from '../../asset/coke.png';
 import { flexCenter } from '../../styles/share/common';
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE } from '../../constants/game';
 
 function Footer() {
   const history = useHistory();

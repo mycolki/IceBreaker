@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, set } from '@firebase/database';
 import { showMessage } from '../../store/quizSlice';
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE, ROOM } from '../../constants/game';
 
 import Button from '../share/Button';
 import Portal from '../Portal';
@@ -14,6 +15,8 @@ import CreateRoomModal from '../Modal/CreateRoomModal';
 
 function Menu() {
   const dispatch = useDispatch();
+  const isRoom = useSelector((state) => state.battle?.isRoom);
+  const roomId = useSelector((state) => state.battle?.roomId);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
 
@@ -22,6 +25,11 @@ function Menu() {
   };
 
   const closeCreateModal = () => {
+    console.log(roomId);
+    if (isRoom && roomId) {
+      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    }
+
     setCreateModalOpen(false);
     dispatch(
       showMessage({

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE } from '../../constants/game';
 import { flexCenterColumn } from '../../styles/share/common';
 
 import Button from '../share/Button';

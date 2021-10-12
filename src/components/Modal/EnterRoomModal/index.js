@@ -7,7 +7,7 @@ import { showMessage, onError } from '../../../store/quizSlice';
 import { saveRoomData } from '../../../store/battleSlice';
 import { ENTER_ROOM } from '../../../constants/messages';
 import { ERROR } from '../../../constants/error';
-import { ROUTE } from '../../../constants/quiz';
+import { ROUTE } from '../../../constants/game';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';

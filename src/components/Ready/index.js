@@ -7,7 +7,7 @@ import { TextPlugin } from 'gsap/TextPlugin.js';
 
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE } from '../../constants/game';
 
 gsap.registerPlugin(TextPlugin);
 

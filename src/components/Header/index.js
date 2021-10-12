@@ -12,8 +12,11 @@ import {
   onError,
 } from '../../store/quizSlice';
 import { ANSWER, BREAK } from '../../constants/messages';
-import { SECONDS_PER_LEVEL, TIME_LIMIT_ANSWER } from '../../constants/quiz';
-import { ROUTE } from '../../constants/quiz';
+import {
+  ROUTE,
+  SECONDS_PER_LEVEL,
+  TIME_LIMIT_ANSWER,
+} from '../../constants/game';
 
 function Header() {
   const dispatch = useDispatch();
