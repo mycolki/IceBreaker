@@ -15,6 +15,10 @@ export const BATTLE = {
 };
 
 export const ENTER_ROOM = {
+  FILL_NAME: {
+    type: 'enterRoom',
+    text: '닉네임은 공백으로 설정할 수 없습니다',
+  },
   FILL_BLANK: {
     type: 'enterRoom',
     text: 'ID가 입력되지 않았습니다',
