@@ -25,7 +25,6 @@ function Menu() {
   };
 
   const closeCreateModal = () => {
-    console.log(roomId);
     if (isRoom && roomId) {
       set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
     }
@@ -68,7 +67,7 @@ function Menu() {
           </Link>
         </li>
         <li className="button">
-          <Link to={ROUTE.ROOM}>
+          <Link to={ROUTE.ROOMS}>
             <Button text="같이 얼음깨기" size="large" color="skyBlue" />
           </Link>
         </li>

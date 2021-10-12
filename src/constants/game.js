@@ -5,7 +5,9 @@ export const ROUTE = {
   MENU: '/',
   READY: '/ready',
   BREAKING: '/breaking',
-  ROOM: '/rooms',
+  ROOMS: '/rooms',
+  ROOM: '/room',
+  ROOM_ID: '/room/:roomId',
   GAME_OVER: '/gameover',
   ERROR: '/error',
 };

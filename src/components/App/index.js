@@ -4,16 +4,19 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveQuizData, onError } from '../../store/quizSlice';
+import { saveQuizData, showMessage, onError } from '../../store/quizSlice';
+import { saveRoomData } from '../../store/battleSlice';
+import { ROUTE, QUIZ, ROOM } from '../../constants/game';
+import { BATTLE } from '../../constants/messages';
 import { ERROR } from '../../constants/error';
-import { ROUTE, QUIZ } from '../../constants/game';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
 import Breaking from '../Breaking';
+import Rooms from '../Rooms';
+import Room from '../Room';
 import GameOver from '../GameOver';
 import ErrorBox from '../ErrorBox';
-import Rooms from '../Rooms';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,48 +24,50 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      onValue(
-        ref(getDatabase(), QUIZ),
-        async (snapshot) => {
-          try {
+      try {
+        onValue(
+          ref(getDatabase(), QUIZ),
+          async (snapshot) => {
             if (!snapshot.exists()) {
               throw Error(ERROR.FETCH_DATA);
             }
 
             const data = snapshot.val();
             await dispatch(saveQuizData(data));
-          } catch (err) {
-            dispatch(onError(err.message));
-            history.push(ROUTE.ERROR);
-          }
-        },
-        { onlyOnce: true },
-      );
+          },
+          { onlyOnce: true },
+        );
+
+        onValue(
+          ref(getDatabase(), ROOM),
+          async (snapshot) => {
+            if (!snapshot.exists()) {
+              throw Error(ERROR.FETCH_DATA);
+            }
+
+            const data = snapshot.val();
+            await dispatch(saveRoomData(data));
+          },
+          { onlyOnce: true },
+        );
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <AppContainer>
-      <Route exact path={ROUTE.MENU}>
-        <Menu />
-      </Route>
-      <Route path={ROUTE.READY}>
-        <Ready />
-      </Route>
-      <Route path={ROUTE.BREAKING}>
-        <Breaking />
-      </Route>
-      <Route path={ROUTE.ROOM}>
-        <Rooms />
-      </Route>
-      <Route path={ROUTE.GAME_OVER}>
-        <GameOver />
-      </Route>
-      <Route path={ROUTE.ERROR}>
-        <ErrorBox />
-      </Route>
+      <Route exact path={ROUTE.MENU} component={Menu} />
+      <Route path={ROUTE.READY} component={Ready} />
+      <Route path={ROUTE.BREAKING} component={Breaking} />
+      <Route path={ROUTE.ROOMS} component={Rooms} />
+      <Route path={ROUTE.ROOM_ID} component={Room} />
+      <Route path={ROUTE.GAME_OVER} component={GameOver} />
+      <Route path={ROUTE.ERROR} component={ErrorBox} />
     </AppContainer>
   );
 }

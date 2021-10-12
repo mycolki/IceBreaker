@@ -13,13 +13,7 @@ export default function Modal({
   return (
     <Wrapper>
       <Dimmed dimmed={dimmed} onClick={onClose} />
-      <StyledModal
-        className="modal"
-        tabIndex="-1"
-        onClose={onClose}
-        isClosed={isClosed}
-        background={background}
-      >
+      <StyledModal className="modal" tabIndex="-1" background={background}>
         {children}
         <CloseButton className="close" onClick={onClose}>
           x

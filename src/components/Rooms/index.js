@@ -1,49 +1,20 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveRoomData } from '../../store/battleSlice';
-import { showMessage, onError } from '../../store/quizSlice';
+import { showMessage } from '../../store/quizSlice';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
-import { BATTLE } from '../../constants/messages';
-import { ERROR } from '../../constants/error';
-import { ROUTE, ROOM } from '../../constants/game';
+import { ROUTE } from '../../constants/game';
 
 import Message from '../share/Message';
 import Button from '../share/Button';
 
 function Rooms() {
   const dispatch = useDispatch();
-  const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
 
   useEffect(() => {
-    const fetchData = async () => {
-      onValue(
-        ref(getDatabase(), ROOM),
-        async (snapshot) => {
-          try {
-            if (!snapshot.exists()) {
-              throw Error(ERROR.FETCH_DATA);
-            }
-
-            const data = snapshot.val();
-            console.log(data);
-            await dispatch(saveRoomData(data));
-          } catch (err) {
-            dispatch(onError(err.message));
-            history.push(ROUTE.ERROR);
-          }
-        },
-        { onlyOnce: true },
-      );
-    };
-
-    fetchData();
-    dispatch(showMessage(dispatch(BATTLE.WAITING)));
-
     return () =>
       dispatch(
         showMessage({
@@ -51,7 +22,7 @@ function Rooms() {
           text: '',
         }),
       );
-  }, [dispatch]);
+  });
 
   return (
     <Container>

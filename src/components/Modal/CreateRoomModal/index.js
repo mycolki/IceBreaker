@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { getDatabase, ref, set } from '@firebase/database';
-
 import { createRoom, saveRoomId } from '../../../store/battleSlice';
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
-import { MODAL_TITLE, ROOM } from '../../../constants/game';
+import { MODAL_TITLE, ROOM, ROUTE } from '../../../constants/game';
 import { MAKE_ROOM } from '../../../constants/messages';
 
 import Message from '../../share/Message';
@@ -83,12 +83,13 @@ function CreateRoomModal({ closeModal }) {
             color="purple"
             onClick={closeModal}
           />
-          <Button
-            text={isRoom ? '입장하기' : '방 만들기'}
-            type="submit"
-            size="small"
-            color="purple"
-          />
+          {isRoom ? (
+            <Button text="입장하기" type="submit" size="small" color="purple" />
+          ) : (
+            <Link to={`${ROUTE.ROOM}/${input}`}>
+              <Button text="방만들기" size="small" color="purple" />
+            </Link>
+          )}
         </div>
       </Form>
     </Container>
