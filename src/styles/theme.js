@@ -4,6 +4,7 @@ const theme = {
   green: '#358765',
   yellow: '#f6ca2c',
   orange: '#fba85c',
+  lightPink: '#ff9cce',
   pink: '#f178b6',
   deepPink: '#f54379',
   skyBlue: '#6bcdff',

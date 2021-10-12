@@ -37,6 +37,10 @@ const GlobalStyle = createGlobalStyle`
     button {
       border: none;
     }
+
+    li {
+      list-style: none;
+    }
   }
 `;
 

@@ -1,3 +1,10 @@
+export const BATTLE = {
+  PLEASE_READY: {
+    type: 'battle',
+    text: '모두 READY를 누르면 3초후 게임이 시작됩니다',
+  },
+};
+
 export const ENTER_ROOM = {
   FILL_BLANK: {
     type: 'enterRoom',

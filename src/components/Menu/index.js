@@ -60,10 +60,15 @@ function Menu() {
           </Link>
         </li>
         <li className="button">
+          <Link to={ROUTE.ROOM}>
+            <Button text="같이 얼음깨기" size="large" color="skyBlue" />
+          </Link>
+        </li>
+        <li className="button">
           <Button
-            text="같이 얼음깨기"
+            text="방 입장하기"
             size="large"
-            color="skyBlue"
+            color="pink"
             onClick={openEnterModal}
           />
         </li>
@@ -78,7 +83,7 @@ function Menu() {
           <Button
             text="방 만들기"
             size="large"
-            color="skyBlue"
+            color="pink"
             onClick={openCreateModal}
           />
         </li>
@@ -89,6 +94,7 @@ function Menu() {
             </Modal>
           </Portal>
         )}
+
         <li className="button">
           <Button text="랭킹보기" size="large" color="purple" />
         </li>

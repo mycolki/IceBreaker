@@ -6,13 +6,14 @@ import styled from 'styled-components';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { saveQuizData, onError } from '../../store/quizSlice';
 import { ERROR } from '../../constants/error';
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE, QUIZ } from '../../constants/quiz';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
 import Breaking from '../Breaking';
 import GameOver from '../GameOver';
 import ErrorBox from '../ErrorBox';
+import Room from '../Room';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       onValue(
-        ref(getDatabase()),
+        ref(getDatabase(), QUIZ),
         async (snapshot) => {
           try {
             if (!snapshot.exists()) {
@@ -40,7 +41,7 @@ function App() {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, []);
 
   return (
     <AppContainer>
@@ -52,6 +53,9 @@ function App() {
       </Route>
       <Route path={ROUTE.BREAKING}>
         <Breaking />
+      </Route>
+      <Route path={ROUTE.ROOM}>
+        <Room />
       </Route>
       <Route path={ROUTE.GAME_OVER}>
         <GameOver />
