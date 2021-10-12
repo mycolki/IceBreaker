@@ -4,7 +4,11 @@ import { useHistory } from 'react-router-dom';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
 import { showMessage, onError } from '../../../store/quizSlice';
-import { saveRoomData } from '../../../store/battleSlice';
+import {
+  saveRoomData,
+  checkRoom,
+  saveRoomId,
+} from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
 import { ROUTE, ROOM } from '../../../constants/game';
 
@@ -21,9 +25,10 @@ function EnterRoomModal({ closeModal }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
+  const roomId = useSelector((state) => state.battle?.roomId);
+  const isCheckedRoom = useSelector((state) => state.battle?.isCheckedRoom);
   const [name, setName] = useState('');
-  const [isRoom, setIsRoom] = useState(false);
-  const [roomId, setRoomId] = useState('');
+  const [inputId, setInputId] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,10 +52,14 @@ function EnterRoomModal({ closeModal }) {
 
     fetchData();
 
-    return () => dispatch(showMessage(RESET));
+    return () => {
+      dispatch(showMessage(RESET));
+      dispatch(checkRoom(false));
+    };
   }, [dispatch, history]);
 
   const enterRoom = async (ev) => {
+    debugger;
     ev.preventDefault();
 
     if (name.length === 0) {
@@ -73,17 +82,18 @@ function EnterRoomModal({ closeModal }) {
   const checkRoomId = (ev) => {
     ev.preventDefault();
 
-    if (roomId === 0) {
+    if (inputId === 0) {
       return dispatch(showMessage(ENTER_ROOM.FILL_BLANK));
     }
 
-    if (!rooms[roomId]) {
-      setRoomId('');
+    if (!rooms[inputId]) {
+      setInputId('');
       return dispatch(showMessage(ENTER_ROOM.INVALID_ID));
     }
 
-    setIsRoom(true);
-    setName('');
+    dispatch(checkRoom(true));
+    dispatch(saveRoomId(inputId));
+    setInputId('');
   };
 
   const handleNameInput = ({ target }) => {
@@ -95,7 +105,7 @@ function EnterRoomModal({ closeModal }) {
   const handleRoomIdInput = ({ target }) => {
     const { value } = target;
     const inputId = value.trim();
-    setRoomId(inputId);
+    setInputId(inputId);
   };
 
   return (
@@ -104,12 +114,12 @@ function EnterRoomModal({ closeModal }) {
         <Message height="15" />
       </MessageArea>
       <Title className="title">
-        {isRoom
+        {isCheckedRoom
           ? '입장할 닉네임을 입력해주세요'
           : '전달받은 방 ID를 입력해주세요'}
       </Title>
-      <Form onSubmit={isRoom ? enterRoom : checkRoomId}>
-        {isRoom ? (
+      <Form onSubmit={isCheckedRoom ? enterRoom : checkRoomId}>
+        {isCheckedRoom ? (
           <input
             className="input"
             type="text"
@@ -121,7 +131,7 @@ function EnterRoomModal({ closeModal }) {
             className="input"
             type="number"
             pattern="[0-9]*"
-            value={roomId}
+            value={inputId}
             onChange={handleRoomIdInput}
           />
         )}
@@ -133,7 +143,7 @@ function EnterRoomModal({ closeModal }) {
             color="purple"
             onClick={closeModal}
           />
-          {isRoom ? (
+          {isCheckedRoom ? (
             <Button text="입장하기" type="submit" size="small" color="purple" />
           ) : (
             <Button text="ID확인" type="submit" size="small" color="purple" />

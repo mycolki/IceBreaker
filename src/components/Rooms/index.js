@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { showMessage, onError } from '../../store/quizSlice';
-import { saveRoomData } from '../../store/battleSlice';
+import { saveRoomData, checkRoom, saveRoomId } from '../../store/battleSlice';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -49,6 +49,13 @@ function Rooms() {
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history]);
 
+  const enterRoom = (roomId) => {
+    console.log(roomId);
+    dispatch(saveRoomId(roomId));
+    dispatch(checkRoom(true));
+    openEnterModal();
+  };
+
   const openEnterModal = () => {
     setEnterModalOpen(true);
     dispatch(showMessage(RESET));
@@ -56,7 +63,7 @@ function Rooms() {
 
   const closeEnterModal = () => {
     setEnterModalOpen(false);
-    dispatch(RESET);
+    dispatch(showMessage(RESET));
   };
 
   return (
@@ -70,22 +77,20 @@ function Rooms() {
       <Message />
       <RoomList>
         {rooms &&
-          Object.values(rooms).map((room) => (
-            <Link to={`${ROUTE.ROOM}/${room.id}`}>
-              <RoomItem key={room.id}>
-                <div className="breaker-box">
-                  <span className="breaker-order">BREAKER1</span>
-                  <span className="breaker-name">{room.battler1.name}</span>
-                </div>
-                <div className="vs">vs</div>
-                <div className="breaker-box">
-                  <span className="breaker-order">BREAKER2</span>
-                  <span className="breaker-name">
-                    {room.battler2 ? room.battler2.name : '?'}
-                  </span>
-                </div>
-              </RoomItem>
-            </Link>
+          Object.entries(rooms).map(([id, room]) => (
+            <RoomItem key={id} onClick={() => enterRoom(id)}>
+              <div className="breaker-box">
+                <span className="breaker-order">BREAKER1</span>
+                <span className="breaker-name">{room.battler1.name}</span>
+              </div>
+              <div className="vs">vs</div>
+              <div className="breaker-box">
+                <span className="breaker-order">BREAKER2</span>
+                <span className="breaker-name">
+                  {room.battler2 ? room.battler2.name : '?'}
+                </span>
+              </div>
+            </RoomItem>
           ))}
       </RoomList>
       <RoomFooter>

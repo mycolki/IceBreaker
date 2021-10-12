@@ -5,6 +5,7 @@ const initialState = {
   rooms: {},
   createdRoom: false,
   roomId: '',
+  isCheckedRoom: false,
 };
 
 const battleSlice = createSlice({
@@ -20,9 +21,13 @@ const battleSlice = createSlice({
     saveRoomId(state, action) {
       state.roomId = action.payload;
     },
+    checkRoom(state, action) {
+      state.isCheckedRoom = action.payload;
+    },
   },
 });
 
-export const { saveRoomData, createRoom, saveRoomId } = battleSlice.actions;
+export const { saveRoomData, createRoom, saveRoomId, checkRoom } =
+  battleSlice.actions;
 
 export default battleSlice.reducer;
