@@ -10,6 +10,7 @@ import {
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectInputType';
+import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
 import Button from '../share/Button';
@@ -132,15 +133,12 @@ function InputBox() {
 export default InputBox;
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  ${flexCenterColumn}
   height: 16%;
 `;
 
 const Form = styled.form`
-  display: flex;
-  justify-content: center;
+  ${flexCenter}
   text-align: center;
 
   .input {

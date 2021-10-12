@@ -5,7 +5,7 @@ import { getDatabase, ref, set } from '@firebase/database';
 
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
-import { MODAL_TITLE } from '../../../constants/quiz';
+import { MODAL_TITLE, ROOM } from '../../../constants/quiz';
 import { MAKE_ROOM } from '../../../constants/messages';
 
 import Message from '../../share/Message';
@@ -41,7 +41,7 @@ function CreateRoomModal({ closeModal }) {
     inputRef.current.setAttribute('readOnly', true);
     setTitle(MODAL_TITLE.PASS_ROOM_ID);
 
-    set(ref(getDatabase(), `room/${roomId}`), {
+    set(ref(getDatabase(), `${ROOM}/${roomId}`), {
       host: name,
     });
   };
