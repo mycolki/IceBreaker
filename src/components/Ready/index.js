@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
-import { READY } from '../../styles/gsapStyle';
 
-import { ROUTE } from '../../constants/quiz';
+import { READY } from '../../styles/gsapStyle';
+import { flexCenterColumn } from '../../styles/share/common';
+import { ROUTE } from '../../constants/game';
 
 gsap.registerPlugin(TextPlugin);
 
@@ -60,13 +61,10 @@ const Container = styled.div`
   background: ${({ theme }) => theme.readyGameBg};
 
   .circle {
+    ${flexCenterColumn}
     position: absolute;
     top: 50%;
     left: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 200px;
     height: 200px;
     border-radius: 50%;

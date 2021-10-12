@@ -18,6 +18,10 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   html,
   body {
     overflow: hidden;
@@ -36,6 +40,10 @@ const GlobalStyle = createGlobalStyle`
 
     button {
       border: none;
+    }
+
+    li {
+      list-style: none;
     }
   }
 `;

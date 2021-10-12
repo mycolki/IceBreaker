@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 import coke from '../../asset/coke.png';
-import { ROUTE } from '../../constants/quiz';
+import { flexCenter } from '../../styles/share/common';
+import { ROUTE } from '../../constants/game';
 
 function Footer() {
   const history = useHistory();
@@ -73,9 +74,8 @@ function Footer() {
 export default Footer;
 
 const Wrapper = styled.div`
-  display: flex;
+  ${flexCenter}
   justify-content: space-between;
-  align-items: center;
   height: 9%;
   padding-right: 10px;
 `;

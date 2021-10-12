@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { flexCenter } from './common';
+
 export const Container = styled.div`
   height: 100%;
   font-family: 'Do Hyeon';
@@ -34,8 +36,7 @@ export const Form = styled.form`
   }
 
   .button-area {
-    display: flex;
-    justify-content: center;
+    ${flexCenter}
     margin-top: 23px;
 
     button {

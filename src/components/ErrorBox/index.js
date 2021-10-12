@@ -2,7 +2,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE } from '../../constants/game';
+import { flexCenterColumn } from '../../styles/share/common';
 
 import Button from '../share/Button';
 
@@ -22,13 +23,11 @@ function ErrorBox() {
 export default ErrorBox;
 
 const Container = styled.div`
+  ${flexCenterColumn}
+
   z-index: 999;
   position: absolute;
   top: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
   box-sizing: border-box;

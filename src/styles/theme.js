@@ -4,9 +4,10 @@ const theme = {
   green: '#358765',
   yellow: '#f6ca2c',
   orange: '#fba85c',
+  lightPink: '#ff9cce',
   pink: '#f178b6',
   deepPink: '#f54379',
-  skyBlue: '#7cd0ff',
+  skyBlue: '#6bcdff',
   deepBlue: '#0285cf',
   purple: '#7879f1',
   lightPurple: '#8ba5ff',
@@ -29,6 +30,7 @@ const theme = {
   loseGameBg:
     'linear-gradient(180deg, #f54379 0%, rgba(76, 95, 174, 0.67) 100%)',
   makingIceBg: 'linear-gradient(180deg, #fafdff 0%, #33b6ff 100%)',
+  roomBg: 'linear-gradient(180deg, #fc92d8 0%, #f54379 100%)',
   rankingBg:
     'linear-gradient(180deg, rgba(252, 139, 35, 0.65) 0%, rgba(120, 121, 241, 0.79) 100%)',
   buttonBorder: '2px solid #ffffff',

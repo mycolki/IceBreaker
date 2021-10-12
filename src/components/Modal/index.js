@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
+import { flexCenterColumn } from '../../styles/share/common';
+
 export default function Modal({
   children,
   dimmed,
@@ -11,13 +13,7 @@ export default function Modal({
   return (
     <Wrapper>
       <Dimmed dimmed={dimmed} onClick={onClose} />
-      <StyledModal
-        className="modal"
-        tabIndex="-1"
-        onClose={onClose}
-        isClosed={isClosed}
-        background={background}
-      >
+      <StyledModal className="modal" tabIndex="-1" background={background}>
         {children}
         <CloseButton className="close" onClick={onClose}>
           x
@@ -38,16 +34,13 @@ const Wrapper = styled.div`
 `;
 
 const Dimmed = styled.div`
+  ${flexCenterColumn}
   z-index: 99;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background: ${({ theme, dimmed }) =>
     dimmed ? `${theme.white}99` : 'transparent'};
 `;

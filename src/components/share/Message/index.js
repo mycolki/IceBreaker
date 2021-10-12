@@ -3,6 +3,9 @@ import styled, { css } from 'styled-components';
 import theme from '../../../styles/theme';
 
 const STYLES = {
+  battle: css`
+    background-color: ${theme.deepBlue};
+  `,
   enterRoom: css`
     background-color: ${theme.deepGray};
   `,

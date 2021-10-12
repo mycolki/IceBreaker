@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { getRandomQuestions } from '../utils/getRandomQuestions';
-import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/quiz';
+import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/game';
 
 const name = QUIZ;
 const initialState = {

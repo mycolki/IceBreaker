@@ -1,19 +1,23 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, set } from '@firebase/database';
 import { showMessage } from '../../store/quizSlice';
-import { ROUTE } from '../../constants/quiz';
+import { ROUTE, ROOM } from '../../constants/game';
+import { RESET } from '../../constants/messages';
 
-import Button from '../share/Button';
 import Portal from '../Portal';
 import Modal from '../Modal';
 import EnterRoomModal from '../Modal/EnterRoomModal';
 import CreateRoomModal from '../Modal/CreateRoomModal';
+import Button from '../share/Button';
 
 function Menu() {
   const dispatch = useDispatch();
+  const isRoom = useSelector((state) => state.battle?.isRoom);
+  const roomId = useSelector((state) => state.battle?.roomId);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
 
@@ -22,13 +26,12 @@ function Menu() {
   };
 
   const closeCreateModal = () => {
+    if (isRoom && roomId) {
+      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    }
+
     setCreateModalOpen(false);
-    dispatch(
-      showMessage({
-        type: '',
-        text: '',
-      }),
-    );
+    dispatch(showMessage(RESET));
   };
 
   const openEnterModal = () => {
@@ -37,12 +40,7 @@ function Menu() {
 
   const closeEnterModal = () => {
     setEnterModalOpen(false);
-    dispatch(
-      showMessage({
-        type: '',
-        text: '',
-      }),
-    );
+    dispatch(RESET);
   };
 
   return (
@@ -60,10 +58,15 @@ function Menu() {
           </Link>
         </li>
         <li className="button">
+          <Link to={ROUTE.ROOMS}>
+            <Button text="같이 얼음깨기" size="large" color="skyBlue" />
+          </Link>
+        </li>
+        <li className="button">
           <Button
-            text="같이 얼음깨기"
+            text="방 입장하기"
             size="large"
-            color="skyBlue"
+            color="pink"
             onClick={openEnterModal}
           />
         </li>
@@ -78,7 +81,7 @@ function Menu() {
           <Button
             text="방 만들기"
             size="large"
-            color="skyBlue"
+            color="pink"
             onClick={openCreateModal}
           />
         </li>
@@ -89,6 +92,7 @@ function Menu() {
             </Modal>
           </Portal>
         )}
+
         <li className="button">
           <Button text="랭킹보기" size="large" color="purple" />
         </li>

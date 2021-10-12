@@ -1,6 +1,8 @@
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { flexCenter } from '../../styles/share/common';
+
 function AnswerDisplayBox() {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const userInput = useSelector((state) => state.quiz?.userInput);
@@ -24,9 +26,8 @@ function AnswerDisplayBox() {
 export default AnswerDisplayBox;
 
 const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  ${flexCenter}
+
   height: 11%;
 
   .answer {
