@@ -1,4 +1,8 @@
 export const BATTLE = {
+  WAITING: {
+    type: 'battle',
+    text: '빈 방에 입장하거나, 전달받은 ID로 들어갈 수 있습니다',
+  },
   PLEASE_READY: {
     type: 'battle',
     text: '모두 READY를 누르면 3초후 게임이 시작됩니다',

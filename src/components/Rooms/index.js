@@ -14,11 +14,10 @@ import { ROUTE, ROOM } from '../../constants/game';
 import Message from '../share/Message';
 import Button from '../share/Button';
 
-function Room() {
+function Rooms() {
   const dispatch = useDispatch();
   const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
-  console.log(rooms);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +30,7 @@ function Room() {
             }
 
             const data = snapshot.val();
+            console.log(data);
             await dispatch(saveRoomData(data));
           } catch (err) {
             dispatch(onError(err.message));
@@ -42,7 +42,7 @@ function Room() {
     };
 
     fetchData();
-    dispatch(showMessage(dispatch(BATTLE.PLEASE_READY)));
+    dispatch(showMessage(dispatch(BATTLE.WAITING)));
 
     return () =>
       dispatch(
@@ -63,17 +63,22 @@ function Room() {
       </RoomHeader>
       <Message />
       <RoomList>
-        <RoomItem>
-          <div className="breaker-box">
-            <span className="breaker-order">BREAKER1</span>
-            <span className="breaker-name">떡잎쌍잎</span>
-          </div>
-          <div className="vs">vs</div>
-          <div className="breaker-box">
-            <span className="breaker-order">BREAKER2</span>
-            <span className="breaker-name">김치볶음</span>
-          </div>
-        </RoomItem>
+        {rooms &&
+          rooms.map((room) => (
+            <RoomItem key={room.id}>
+              <div className="breaker-box">
+                <span className="breaker-order">BREAKER1</span>
+                <span className="breaker-name">{room.host}</span>
+              </div>
+              <div className="vs">vs</div>
+              <div className="breaker-box">
+                <span className="breaker-order">BREAKER2</span>
+                <span className="breaker-name">
+                  {room.battler ? room.battler : '?'}
+                </span>
+              </div>
+            </RoomItem>
+          ))}
       </RoomList>
       <RoomFooter>
         <Button text="방 ID로 입장" size="large" color="skyBlue" />
@@ -85,7 +90,7 @@ function Room() {
   );
 }
 
-export default Room;
+export default Rooms;
 
 const Container = styled.div`
   height: 100%;

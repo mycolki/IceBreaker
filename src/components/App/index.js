@@ -13,7 +13,7 @@ import Ready from '../Ready';
 import Breaking from '../Breaking';
 import GameOver from '../GameOver';
 import ErrorBox from '../ErrorBox';
-import Room from '../Room';
+import Rooms from '../Rooms';
 
 function App() {
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function App() {
         <Breaking />
       </Route>
       <Route path={ROUTE.ROOM}>
-        <Room />
+        <Rooms />
       </Route>
       <Route path={ROUTE.GAME_OVER}>
         <GameOver />

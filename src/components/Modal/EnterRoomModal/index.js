@@ -88,7 +88,7 @@ function EnterRoomModal({ closeModal }) {
             color="purple"
             onClick={closeModal}
           />
-          <Button text="들어가기" type="submit" size="small" color="purple" />
+          <Button text="입장하기" type="submit" size="small" color="purple" />
         </div>
       </Form>
     </Container>
