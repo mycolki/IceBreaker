@@ -58,7 +58,7 @@ function App() {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   return (
     <AppContainer>

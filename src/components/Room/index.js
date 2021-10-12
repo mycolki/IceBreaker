@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { showMessage } from '../../store/quizSlice';
-import { getBattle } from '../../store/battleSlice';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { showMessage, onError } from '../../store/quizSlice';
+import { saveRoomData, getBattle } from '../../store/battleSlice';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
-import { flexCenter, flexCenterColumn } from '../../styles/share/common';
-import { ROUTE } from '../../constants/game';
+import { flexCenterColumn } from '../../styles/share/common';
+import { ROUTE, ROOM } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
 import iceBear from '../../asset/iceBear.png';
 
@@ -16,17 +17,36 @@ import Button from '../share/Button';
 
 function Room() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { roomId } = useParams();
   const breakers = useSelector((state) => state.battle?.breakers);
 
   useEffect(() => {
-    dispatch(showMessage(BATTLE.PLEASE_READY));
-    dispatch(getBattle(roomId));
+    const fetchData = async () => {
+      try {
+        onValue(
+          ref(getDatabase(), ROOM),
+          async (snapshot) => {
+            const data = snapshot.val();
 
-    return () => {
-      dispatch(showMessage(RESET));
+            if (!data) return;
+
+            await dispatch(saveRoomData(data));
+            await dispatch(getBattle(roomId));
+          },
+          { onlyOnce: true },
+        );
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
     };
-  }, [dispatch, roomId]);
+
+    fetchData();
+    dispatch(showMessage(BATTLE.PLEASE_READY));
+
+    return () => dispatch(showMessage(RESET));
+  }, [dispatch, history, roomId]);
 
   return (
     <Container>
@@ -40,8 +60,8 @@ function Room() {
       <BattleGround>
         <div className="vs">VS</div>
         {breakers &&
-          Object.values(breakers).map((breaker) => (
-            <Battler>
+          Object.values(breakers).map((breaker, i) => (
+            <Battler key={breaker.name + i}>
               <span className="name">{breaker.name}지워야함</span>
               <img src={iceBear} alt="bear" width="160" height="auto" />
               <span className="ready">READY</span>

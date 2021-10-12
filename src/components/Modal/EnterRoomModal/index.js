@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getDatabase, ref, onValue } from 'firebase/database';
 
+import { getDatabase, ref, onValue } from 'firebase/database';
 import { showMessage, onError } from '../../../store/quizSlice';
 import { saveRoomData } from '../../../store/battleSlice';
 import { ENTER_ROOM } from '../../../constants/messages';
-import { ERROR } from '../../../constants/error';
-import { ROUTE } from '../../../constants/game';
+import { ROUTE, ROOM } from '../../../constants/game';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
@@ -21,50 +20,51 @@ import {
 function EnterRoomModal({ closeModal }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const players = useSelector((state) => state.battle?.players);
-  const [inputId, setInputId] = useState('');
+  const rooms = useSelector((state) => state.battle?.rooms);
+  const [roomId, setRoomId] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      onValue(
-        ref(getDatabase(), 'room'),
-        async (snapshot) => {
-          try {
-            if (!snapshot.exists()) {
-              throw Error(ERROR.FETCH_DATA);
-            }
-
+      try {
+        onValue(
+          ref(getDatabase(), ROOM),
+          async (snapshot) => {
             const data = snapshot.val();
+
+            if (!data) return;
+
             await dispatch(saveRoomData(data));
-          } catch (err) {
-            dispatch(onError(err.message));
-            history.push(ROUTE.ERROR);
-          }
-        },
-        { onlyOnce: true },
-      );
+          },
+          { onlyOnce: true },
+        );
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   const enterRoom = (ev) => {
     ev.preventDefault();
 
-    if (inputId === 0) {
+    if (roomId === 0) {
       return dispatch(showMessage(ENTER_ROOM.FILL_BLANK));
     }
 
-    if (!players[inputId]) {
-      setInputId('');
+    if (!rooms[roomId]) {
+      setRoomId('');
       return dispatch(showMessage(ENTER_ROOM.INVALID_ID));
     }
+
+    history.push(`${ROUTE.ROOM}/${roomId}`);
   };
 
   const handleInput = ({ target }) => {
     const { value } = target;
     const inputId = value.trim();
-    setInputId(inputId);
+    setRoomId(inputId);
   };
 
   return (
@@ -78,7 +78,7 @@ function EnterRoomModal({ closeModal }) {
           className="input"
           type="number"
           pattern="[0-9]*"
-          value={inputId}
+          value={roomId}
           onChange={handleInput}
         />
         <div className="button-area">

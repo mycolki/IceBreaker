@@ -8,11 +8,11 @@ import { showMessage } from '../../store/quizSlice';
 import { ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
-import Button from '../share/Button';
 import Portal from '../Portal';
 import Modal from '../Modal';
 import EnterRoomModal from '../Modal/EnterRoomModal';
 import CreateRoomModal from '../Modal/CreateRoomModal';
+import Button from '../share/Button';
 
 function Menu() {
   const dispatch = useDispatch();

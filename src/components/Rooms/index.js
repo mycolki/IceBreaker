@@ -1,26 +1,63 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { showMessage } from '../../store/quizSlice';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { showMessage, onError } from '../../store/quizSlice';
+import { saveRoomData } from '../../store/battleSlice';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
-import { ROUTE } from '../../constants/game';
+import { ROUTE, ROOM } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
 
+import Portal from '../Portal';
+import Modal from '../Modal';
+import EnterRoomModal from '../Modal/EnterRoomModal';
 import Message from '../share/Message';
 import Button from '../share/Button';
 
 function Rooms() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
+  const [enterModalOpen, setEnterModalOpen] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        onValue(
+          ref(getDatabase(), ROOM),
+          async (snapshot) => {
+            const data = snapshot.val();
+
+            if (!data) return;
+
+            await dispatch(saveRoomData(data));
+          },
+          { onlyOnce: true },
+        );
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
+    };
+
+    fetchData();
     dispatch(showMessage(BATTLE.WAITING));
 
     return () => dispatch(showMessage(RESET));
-  });
+  }, [dispatch, history]);
+
+  const openEnterModal = () => {
+    setEnterModalOpen(true);
+    dispatch(showMessage(RESET));
+  };
+
+  const closeEnterModal = () => {
+    setEnterModalOpen(false);
+    dispatch(RESET);
+  };
 
   return (
     <Container>
@@ -52,7 +89,19 @@ function Rooms() {
           ))}
       </RoomList>
       <RoomFooter>
-        <Button text="방 ID로 입장" size="large" color="skyBlue" />
+        <Button
+          text="방 ID로 입장"
+          size="large"
+          color="skyBlue"
+          onClick={openEnterModal}
+        />
+        {enterModalOpen && (
+          <Portal>
+            <Modal onClose={closeEnterModal} dimmed={true}>
+              <EnterRoomModal closeModal={closeEnterModal} />
+            </Modal>
+          </Portal>
+        )}
         <Link to={ROUTE.MENU}>
           <Button text="나가기" size="large" color="pink" />
         </Link>
