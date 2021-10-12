@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { showMessage, onError } from '../../store/quizSlice';
-import { saveRoomData, getBattle } from '../../store/battleSlice';
+import { saveRoomData } from '../../store/battleSlice';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -19,7 +19,7 @@ function Room() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { roomId } = useParams();
-  const breakers = useSelector((state) => state.battle?.breakers);
+  const rooms = useSelector((state) => state.battle?.rooms);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +32,6 @@ function Room() {
             if (!data) return;
 
             await dispatch(saveRoomData(data));
-            await dispatch(getBattle(roomId));
           },
           { onlyOnce: true },
         );
@@ -59,14 +58,16 @@ function Room() {
       <Message />
       <BattleGround>
         <div className="vs">VS</div>
-        {breakers &&
-          Object.values(breakers).map((breaker, i) => (
-            <Battler key={breaker.name + i}>
-              <span className="name">{breaker.name}지워야함</span>
-              <img src={iceBear} alt="bear" width="160" height="auto" />
-              <span className="ready">READY</span>
-            </Battler>
-          ))}
+        {rooms[roomId] &&
+          Object.values(rooms[roomId]).map((breaker, i) => {
+            return (
+              <Battler key={breaker.name + i}>
+                <span className="name">{breaker ? breaker.name : ''}</span>
+                <img src={iceBear} alt="bear" width="160" height="auto" />
+                <span className="ready">READY</span>
+              </Battler>
+            );
+          })}
       </BattleGround>
       <RoomFooter>
         <Button text="READY" size="large" color="skyBlue" />

@@ -53,9 +53,12 @@ function CreateRoomModal({ closeModal }) {
     inputRef.current.setAttribute('readOnly', true);
     setTitle(MODAL_TITLE.PASS_ROOM_ID);
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
-      id: roomId,
       battler1: {
         name,
+        score: 0,
+      },
+      battler2: {
+        name: '',
         score: 0,
       },
     });
