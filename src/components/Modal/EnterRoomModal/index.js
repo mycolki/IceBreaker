@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
-import { showMessage, onError } from '../../../store/quizSlice';
+import { showMessage } from '../../../store/quizSlice';
 import {
   saveRoomData,
   checkRoom,
@@ -31,26 +31,13 @@ function EnterRoomModal({ closeModal }) {
   const [inputId, setInputId] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onValue(
-          ref(getDatabase(), ROOM),
-          async (snapshot) => {
-            const data = snapshot.val();
+    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+      const data = snapshot.val();
 
-            if (!data) return;
+      if (!data) return;
 
-            await dispatch(saveRoomData(data));
-          },
-          { onlyOnce: true },
-        );
-      } catch (err) {
-        dispatch(onError(err.message));
-        history.push(ROUTE.ERROR);
-      }
-    };
-
-    fetchData();
+      dispatch(saveRoomData(data));
+    });
 
     return () => {
       dispatch(showMessage(RESET));
@@ -58,8 +45,7 @@ function EnterRoomModal({ closeModal }) {
     };
   }, [dispatch, history]);
 
-  const enterRoom = async (ev) => {
-    debugger;
+  const enterRoom = (ev) => {
     ev.preventDefault();
 
     if (name.length === 0) {

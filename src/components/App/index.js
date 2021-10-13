@@ -4,10 +4,9 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveQuizData, onError } from '../../store/quizSlice';
+import { saveQuizData } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
 import { ROUTE, QUIZ, ROOM } from '../../constants/game';
-import { ERROR } from '../../constants/error';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
@@ -22,42 +21,21 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onValue(
-          ref(getDatabase(), QUIZ),
-          async (snapshot) => {
-            if (!snapshot.exists()) {
-              throw Error(ERROR.FETCH_DATA);
-            }
+    onValue(ref(getDatabase(), QUIZ), (snapshot) => {
+      const data = snapshot.val();
 
-            const data = snapshot.val();
+      if (!data) return;
 
-            if (!data) return;
+      dispatch(saveQuizData(data));
+    });
 
-            await dispatch(saveQuizData(data));
-          },
-          { onlyOnce: true },
-        );
+    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+      const data = snapshot.val();
 
-        onValue(
-          ref(getDatabase(), ROOM),
-          async (snapshot) => {
-            const data = snapshot.val();
+      if (!data) return;
 
-            if (!data) return;
-
-            await dispatch(saveRoomData(data));
-          },
-          { onlyOnce: true },
-        );
-      } catch (err) {
-        dispatch(onError(err.message));
-        history.push(ROUTE.ERROR);
-      }
-    };
-
-    fetchData();
+      dispatch(saveRoomData(data));
+    });
   }, [dispatch, history]);
 
   return (

@@ -4,13 +4,13 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { showMessage, onError } from '../../store/quizSlice';
+import { showMessage } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
+import iceBear from '../../asset/iceBear.png';
 import { ROUTE, ROOM } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
-import iceBear from '../../asset/iceBear.png';
 
 import Message from '../share/Message';
 import Button from '../share/Button';
@@ -22,27 +22,15 @@ function Room() {
   const rooms = useSelector((state) => state.battle?.rooms);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onValue(
-          ref(getDatabase(), ROOM),
-          async (snapshot) => {
-            const data = snapshot.val();
-
-            if (!data) return;
-
-            await dispatch(saveRoomData(data));
-          },
-          { onlyOnce: true },
-        );
-      } catch (err) {
-        dispatch(onError(err.message));
-        history.push(ROUTE.ERROR);
-      }
-    };
-
-    fetchData();
     dispatch(showMessage(BATTLE.PLEASE_READY));
+
+    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+      const data = snapshot.val();
+
+      if (!data) return;
+
+      dispatch(saveRoomData(data));
+    });
 
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history, roomId]);

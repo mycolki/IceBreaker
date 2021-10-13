@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { showMessage, onError } from '../../store/quizSlice';
+import { showMessage } from '../../store/quizSlice';
 import { saveRoomData, checkRoom, saveRoomId } from '../../store/battleSlice';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -24,33 +24,23 @@ function Rooms() {
   const [enterModalOpen, setEnterModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onValue(
-          ref(getDatabase(), ROOM),
-          async (snapshot) => {
-            const data = snapshot.val();
-
-            if (!data) return;
-
-            await dispatch(saveRoomData(data));
-          },
-          { onlyOnce: true },
-        );
-      } catch (err) {
-        dispatch(onError(err.message));
-        history.push(ROUTE.ERROR);
-      }
-    };
-
-    fetchData();
     dispatch(showMessage(BATTLE.WAITING));
 
-    return () => dispatch(showMessage(RESET));
+    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+      const data = snapshot.val();
+
+      if (!data) return;
+
+      dispatch(saveRoomData(data));
+    });
+
+    return () => {
+      dispatch(showMessage(RESET));
+      dispatch(checkRoom(false));
+    };
   }, [dispatch, history]);
 
   const enterRoom = (roomId) => {
-    console.log(roomId);
     dispatch(saveRoomId(roomId));
     dispatch(checkRoom(true));
     openEnterModal();
@@ -87,7 +77,7 @@ function Rooms() {
               <div className="breaker-box">
                 <span className="breaker-order">BREAKER2</span>
                 <span className="breaker-name">
-                  {room.battler2 ? room.battler2.name : '?'}
+                  {room.battler2.name ? room.battler2.name : '?'}
                 </span>
               </div>
             </RoomItem>
