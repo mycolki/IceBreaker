@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { showMessage } from '../../store/quizSlice';
-import { saveRoomData, checkRoom, saveRoomId } from '../../store/battleSlice';
+import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -36,13 +36,12 @@ function Rooms() {
 
     return () => {
       dispatch(showMessage(RESET));
-      dispatch(checkRoom(false));
+      dispatch(saveRoomId(''));
     };
   }, [dispatch, history]);
 
   const enterRoom = (roomId) => {
     dispatch(saveRoomId(roomId));
-    dispatch(checkRoom(true));
     openEnterModal();
   };
 

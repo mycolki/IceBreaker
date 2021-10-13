@@ -74,7 +74,7 @@ function Header() {
     })();
 
     return () => clearTimeout(timer);
-  }, [dispatch, level, isTimeOver, isImageLoaded]);
+  }, [dispatch, level, isTimeOver, isImageLoaded, history, TIME_LIMIT_BREAK]);
 
   return (
     <Wrapper>

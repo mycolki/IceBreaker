@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { getDatabase, ref, set } from '@firebase/database';
-import { createRoom, saveRoomId } from '../../../store/battleSlice';
+import { saveRoomId } from '../../../store/battleSlice';
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import { MODAL_TITLE, ROOM, ROUTE } from '../../../constants/game';
@@ -20,38 +20,24 @@ import {
 
 function CreateRoomModal({ closeModal }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const inputRef = useRef();
-  const isRoom = useSelector((state) => state.battle?.isRoom);
+  const roomId = useSelector((state) => state.battle?.roomId);
   const [title, setTitle] = useState(MODAL_TITLE.INPUT_HOST_NAME);
   const [input, setInput] = useState('');
+  const [name, setName] = useState('');
 
   useEffect(() => {
     return () => {
-      dispatch(createRoom(false));
       dispatch(saveRoomId(''));
       dispatch(showMessage(RESET));
     };
   }, [dispatch]);
 
-  const makeRoom = (ev) => {
+  const enterRoom = (ev) => {
     ev.preventDefault();
 
-    if (input.length === 0) {
-      setInput('');
-      return dispatch(showMessage(MAKE_ROOM.FILL_BLANK));
-    }
-
-    const roomId = Date.now();
-    const name = input;
-    copyToClipboard(roomId);
-    setInput(roomId);
-
-    dispatch(saveRoomId(roomId));
-    dispatch(createRoom(true));
-    dispatch(showMessage(MAKE_ROOM.URL_COPIED));
-
-    inputRef.current.setAttribute('readOnly', true);
-    setTitle(MODAL_TITLE.PASS_ROOM_ID);
+    const roomId = input;
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
       battler1: {
         name,
@@ -62,12 +48,32 @@ function CreateRoomModal({ closeModal }) {
         score: 0,
       },
     });
+
+    history.push(`${ROUTE.ROOM}/${roomId}`);
   };
 
-  const handleInput = ({ target }) => {
-    const { value } = target;
-    const inputValue = value.trim();
-    setInput(inputValue);
+  const makeRoom = (ev) => {
+    ev.preventDefault();
+
+    if (input.length === 0) {
+      setInput('');
+      return dispatch(showMessage(MAKE_ROOM.FILL_BLANK));
+    }
+
+    const roomId = Date.now();
+    setName(input);
+    setInput(roomId);
+    copyToClipboard(roomId);
+
+    dispatch(saveRoomId(roomId));
+    dispatch(showMessage(MAKE_ROOM.URL_COPIED));
+
+    inputRef.current.setAttribute('readOnly', true);
+    setTitle(MODAL_TITLE.PASS_ROOM_ID);
+  };
+
+  const handleInput = (ev) => {
+    setInput(ev.target.value.trim());
   };
 
   return (
@@ -76,7 +82,7 @@ function CreateRoomModal({ closeModal }) {
         <Message height="10" />
       </MessageArea>
       <Title className="title">{title}</Title>
-      <Form onSubmit={makeRoom}>
+      <Form onSubmit={roomId ? enterRoom : makeRoom}>
         <input
           className="input"
           type="text"
@@ -86,23 +92,17 @@ function CreateRoomModal({ closeModal }) {
         />
         <div className="button-area">
           <Button
-            text={isRoom ? '방 삭제하기' : '뒤로 가기'}
+            text={roomId ? '방 삭제하기' : '뒤로 가기'}
             size="small"
             color="purple"
             onClick={closeModal}
           />
-          {isRoom ? (
-            <Link to={`${ROUTE.ROOM}/${input}`}>
-              <Button text="입장하기" size="small" color="purple" />
-            </Link>
-          ) : (
-            <Button
-              text="방 만들기"
-              type="submit"
-              size="small"
-              color="purple"
-            />
-          )}
+          <Button
+            text={roomId ? '입장하기' : '방 만들기'}
+            type="submit"
+            size="small"
+            color="purple"
+          />
         </div>
       </Form>
     </Container>
