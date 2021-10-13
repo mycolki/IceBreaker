@@ -57,14 +57,7 @@ function Room() {
   useEffect(() => {
     if (rooms[roomId].isAllReady) {
       dispatch(showMessage(BATTLE.START));
-
-      setTimeout(() => {
-        history.push(`${ROUTE.READY}`);
-      }, 3000);
     }
-    // setTimeout(() => {
-    //   history.push(`${ROUTE}/${roomId}`);
-    // }, 3000);
   });
 
   const exitRoom = () => {
@@ -156,14 +149,14 @@ function Room() {
       <RoomFooter isAllReady={rooms[roomId].isAllReady}>
         <Button
           text="READY"
-          size="large"
-          color="skyBlue"
+          size="medium"
+          color="purple"
           disabled={rooms[roomId].isAllReady}
           onClick={readyBattle}
         />
         <Button
           text="나가기"
-          size="large"
+          size="medium"
           color="pink"
           disabled={rooms[roomId].isAllReady}
           onClick={exitRoom}
@@ -178,7 +171,7 @@ export default Room;
 const BattleGround = styled.div`
   position: relative;
   height: 50%;
-  padding-top: 20px;
+  padding-top: 22px;
 
   .vs {
     position: absolute;
@@ -243,13 +236,21 @@ const RoomFooter = styled.div`
 
   button {
     font-family: 'Do hyeon';
-    margin-bottom: 15px;
     pointer-events: ${({ isAllReady }) => (isAllReady ? 'none' : 'auto')};
 
     &:first-child {
-      height: 55px;
-      border-radius: 20px;
-      font-size: 24px;
+      height: 60px;
+      margin-bottom: 10px;
+      font-size: 31px;
+      -webkit-text-stroke: 1px ${({ theme }) => theme.white};
+      color: ${({ theme }) => theme.white};
+    }
+
+    &:last-child {
+      height: 45px;
+      font-size: 20px;
+      color: ${({ theme }) => theme.white};
+      animation: none;
     }
   }
 `;

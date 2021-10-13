@@ -11,6 +11,8 @@ import {
   showMessage,
   onError,
 } from '../../store/quizSlice';
+
+import { pounding } from '../../styles/share/animation';
 import {
   ROUTE,
   SECONDS_PER_LEVEL,
@@ -148,6 +150,7 @@ const Time = styled.div`
     position: absolute;
     font-size: 1.7em;
     color: ${({ theme }) => theme.purple};
+    animation: ${pounding} 1.1s infinite linear;
   }
 
   .answer {

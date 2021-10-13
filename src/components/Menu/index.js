@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { smallPounding } from '../../styles/share/animation';
 import { ROUTE } from '../../constants/game';
 
 import Button from '../share/Button';
@@ -54,7 +55,7 @@ const TitleWrapper = styled.div`
     left: 50%;
     width: 100%;
     line-height: 1.6em;
-    font-size: 2em;
+    font-size: 40px;
     color: white;
     -webkit-text-stroke: 2px ${({ theme }) => theme.deepBlue};
     transform: translate(-50%, -50%);
@@ -67,5 +68,9 @@ const MenuButtons = styled.ul`
 
   .button {
     margin-bottom: 0.7em;
+  }
+
+  button {
+    animation: ${smallPounding} 1.2s infinite;
   }
 `;

@@ -10,6 +10,7 @@ import { IoCaretBack } from 'react-icons/io5';
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 
+import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -121,7 +122,7 @@ function Rooms() {
       <RoomFooter>
         <Button
           text="방 ID로 입장"
-          size="large"
+          size="medium"
           color="skyBlue"
           onClick={openEnterModal}
         />
@@ -134,7 +135,7 @@ function Rooms() {
         )}
         <Button
           text="방 만들기"
-          size="large"
+          size="medium"
           color="pink"
           onClick={openCreateModal}
         />
@@ -156,9 +157,17 @@ const BackButton = styled.button`
   position: absolute;
   top: 5px;
   left: 0;
-  background-color: transparent;
   font-size: 30px;
-  color: white;
+  cursor: pointer;
+  background-color: transparent;
+  color: ${({ theme }) => theme.purple};
+  transition: all 100ms ease-out;
+  animation: ${pounding} 1.2s infinite;
+
+  &:hover {
+    transform: scale(1.2);
+    color: ${({ theme }) => theme.deepPink};
+  }
 `;
 
 const RoomList = styled.div`
@@ -226,7 +235,7 @@ const RoomItem = styled.li`
 
   .on-battle {
     position: absolute;
-    top: -13px;
+    top: -10px;
     left: -17px;
     width: 38px;
     height: 28px;
@@ -236,15 +245,24 @@ const RoomItem = styled.li`
     background-color: ${({ theme }) => theme.deepGray};
     color: ${({ theme }) => theme.skyBlue};
     transform: rotate(180deg);
+    animation: ${bounce} 1.3s infinite;
   }
 `;
 
 const RoomFooter = styled.div`
-  ${flexCenterColumn}
+  ${flexCenter}
   height: 25%;
 
   button {
-    margin-bottom: 15px;
+    margin: 10px;
     font-family: 'Do hyeon';
+
+    &:first-child {
+      animation: ${pounding} 1.2s 600ms infinite ease-in;
+    }
+
+    &:last-child {
+      animation: ${pounding} 1.2s infinite ease-in;
+    }
   }
 `;

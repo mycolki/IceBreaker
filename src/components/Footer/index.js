@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 import coke from '../../asset/coke.png';
+import { rightAndLeft } from '../../styles/share/animation';
 import { flexCenter } from '../../styles/share/common';
 import { ROUTE } from '../../constants/game';
 
@@ -106,5 +107,6 @@ const Cokes = styled.div`
 
   img {
     transform: rotate(20deg);
+    animation: ${rightAndLeft} 1.1s infinite ease-in;
   }
 `;
