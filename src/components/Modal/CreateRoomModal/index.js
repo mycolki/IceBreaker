@@ -38,6 +38,10 @@ function CreateRoomModal({ closeModal }) {
     ev.preventDefault();
 
     const roomId = input;
+    window.sessionStorage.setItem(
+      'userName',
+      JSON.stringify({ userName: name }),
+    );
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
       active: true,
       breakers: [

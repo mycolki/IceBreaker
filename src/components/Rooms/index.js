@@ -111,7 +111,7 @@ function Rooms() {
                 <div className="breaker-box">
                   <span className="breaker-order">BREAKER2</span>
                   <span className="breaker-name">
-                    {room.breakers[1] ? room.breakers[1].name : '?'}
+                    {room.breakers[1].name ? room.breakers[1].name : '?'}
                   </span>
                 </div>
               </RoomItem>
@@ -186,7 +186,8 @@ const RoomItem = styled.li`
   position: relative;
   height: 70px;
   margin-bottom: 15px;
-  border: 3px solid ${({ theme }) => theme.white};
+  border: 3px solid
+    ${({ theme, active }) => (active ? theme.white : theme.lightGray)};
   border-radius: 20px;
   border-style: dashed;
   pointer-events: ${({ active }) => (active ? 'auto' : 'none')};
@@ -205,7 +206,7 @@ const RoomItem = styled.li`
 
   .vs {
     font-size: 24px;
-    color: ${({ theme }) => theme.skyBlue};
+    color: ${({ active, theme }) => (active ? theme.deepBlue : theme.skyBlue)};
   }
 
   .breaker-order {
@@ -215,7 +216,7 @@ const RoomItem = styled.li`
   .breaker-name {
     margin-top: 5px;
     font-size: 20px;
-    color: ${({ theme }) => theme.white};
+    color: ${({ active, theme }) => (active ? theme.white : theme.lightGray)};
   }
 
   &:hover {
