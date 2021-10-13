@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
+import { pounding } from '../../../styles/share/animation';
+
 const SIZE_PRESET = {
   small: css`
     min-width: 70px;
@@ -14,8 +16,8 @@ const SIZE_PRESET = {
   `,
   large: css`
     min-width: 190px;
-    height: 40px;
-    font-size: 20px;
+    height: 45px;
+    font-size: 22px;
     line-height: 16px;
     border: ${({ theme }) => theme.buttonBorder};
   `,
@@ -80,10 +82,11 @@ const StyledButton = styled.button`
   outline: none;
   cursor: pointer;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: ${({ theme }) => theme.boxShadow};
   color: ${({ theme }) => theme.white};
   transition: all 100ms ease-out;
+  animation: ${pounding} 1.2s infinite;
 
   ${({ sizePreset }) => sizePreset}
   ${({ colorPreset }) => colorPreset}

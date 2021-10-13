@@ -11,12 +11,14 @@ import {
   showMessage,
   onError,
 } from '../../store/quizSlice';
-import { ANSWER, BREAK } from '../../constants/messages';
+
+import { pounding } from '../../styles/share/animation';
 import {
   ROUTE,
   SECONDS_PER_LEVEL,
   TIME_LIMIT_ANSWER,
 } from '../../constants/game';
+import { ANSWER, BREAK } from '../../constants/messages';
 
 function Header() {
   const dispatch = useDispatch();
@@ -74,7 +76,7 @@ function Header() {
     })();
 
     return () => clearTimeout(timer);
-  }, [dispatch, level, isTimeOver, isImageLoaded]);
+  }, [dispatch, level, isTimeOver, isImageLoaded, history, TIME_LIMIT_BREAK]);
 
   return (
     <Wrapper>
@@ -148,6 +150,7 @@ const Time = styled.div`
     position: absolute;
     font-size: 1.7em;
     color: ${({ theme }) => theme.purple};
+    animation: ${pounding} 1.1s infinite linear;
   }
 
   .answer {

@@ -3,9 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { showMessage, onError } from '../../store/quizSlice';
-import { saveRoomData } from '../../store/battleSlice';
+import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
+import { IoCaretBack } from 'react-icons/io5';
+
+import { showMessage } from '../../store/quizSlice';
+import { saveRoomData, saveRoomId } from '../../store/battleSlice';
+
+import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -13,6 +18,7 @@ import { BATTLE, RESET } from '../../constants/messages';
 
 import Portal from '../Portal';
 import Modal from '../Modal';
+import CreateRoomModal from '../Modal/CreateRoomModal';
 import EnterRoomModal from '../Modal/EnterRoomModal';
 import Message from '../share/Message';
 import Button from '../share/Button';
@@ -21,33 +27,31 @@ function Rooms() {
   const dispatch = useDispatch();
   const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
+  const roomId = useSelector((state) => state.battle?.roomId);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onValue(
-          ref(getDatabase(), ROOM),
-          async (snapshot) => {
-            const data = snapshot.val();
-
-            if (!data) return;
-
-            await dispatch(saveRoomData(data));
-          },
-          { onlyOnce: true },
-        );
-      } catch (err) {
-        dispatch(onError(err.message));
-        history.push(ROUTE.ERROR);
-      }
-    };
-
-    fetchData();
     dispatch(showMessage(BATTLE.WAITING));
 
-    return () => dispatch(showMessage(RESET));
+    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+      const data = snapshot.val();
+
+      if (!data) return;
+
+      dispatch(saveRoomData(data));
+    });
+
+    return () => {
+      dispatch(showMessage(RESET));
+      dispatch(saveRoomId(''));
+    };
   }, [dispatch, history]);
+
+  const enterRoom = (roomId) => {
+    dispatch(saveRoomId(roomId));
+    openEnterModal();
+  };
 
   const openEnterModal = () => {
     setEnterModalOpen(true);
@@ -56,7 +60,21 @@ function Rooms() {
 
   const closeEnterModal = () => {
     setEnterModalOpen(false);
-    dispatch(RESET);
+    dispatch(showMessage(RESET));
+  };
+
+  const openCreateModal = () => {
+    setCreateModalOpen(true);
+    dispatch(showMessage(RESET));
+  };
+
+  const closeCreateModal = () => {
+    if (roomId) {
+      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    }
+
+    setCreateModalOpen(false);
+    dispatch(showMessage(RESET));
   };
 
   return (
@@ -66,32 +84,45 @@ function Rooms() {
           BREAKER <br />
           BATTLE
         </h1>
+        <Link to={ROUTE.MENU}>
+          <BackButton type="button">
+            <IoCaretBack />
+          </BackButton>
+        </Link>
       </RoomHeader>
       <Message />
       <RoomList>
-        {rooms &&
-          Object.values(rooms).map((room) => (
-            <Link to={`${ROUTE.ROOM}/${room.id}`}>
-              <RoomItem key={room.id}>
+        {rooms
+          ? Object.entries(rooms).map(([id, room]) => (
+              <RoomItem
+                key={id}
+                onClick={() => enterRoom(id)}
+                active={room.active}
+              >
+                {room.active ? null : (
+                  <span className="on-battle">
+                    <RiGamepadFill />
+                  </span>
+                )}
                 <div className="breaker-box">
                   <span className="breaker-order">BREAKER1</span>
-                  <span className="breaker-name">{room.battler1.name}</span>
+                  <span className="breaker-name">{room.breakers[0].name}</span>
                 </div>
                 <div className="vs">vs</div>
                 <div className="breaker-box">
                   <span className="breaker-order">BREAKER2</span>
                   <span className="breaker-name">
-                    {room.battler2 ? room.battler2.name : '?'}
+                    {room.breakers[1].name ? room.breakers[1].name : '?'}
                   </span>
                 </div>
               </RoomItem>
-            </Link>
-          ))}
+            ))
+          : null}
       </RoomList>
       <RoomFooter>
         <Button
           text="방 ID로 입장"
-          size="large"
+          size="medium"
           color="skyBlue"
           onClick={openEnterModal}
         />
@@ -102,9 +133,19 @@ function Rooms() {
             </Modal>
           </Portal>
         )}
-        <Link to={ROUTE.MENU}>
-          <Button text="나가기" size="large" color="pink" />
-        </Link>
+        <Button
+          text="방 만들기"
+          size="medium"
+          color="pink"
+          onClick={openCreateModal}
+        />
+        {createModalOpen && (
+          <Portal>
+            <Modal onClose={closeCreateModal} dimmed={true}>
+              <CreateRoomModal closeModal={closeCreateModal} />
+            </Modal>
+          </Portal>
+        )}
       </RoomFooter>
     </Container>
   );
@@ -112,9 +153,26 @@ function Rooms() {
 
 export default Rooms;
 
+const BackButton = styled.button`
+  position: absolute;
+  top: 5px;
+  left: 0;
+  font-size: 30px;
+  cursor: pointer;
+  background-color: transparent;
+  color: ${({ theme }) => theme.purple};
+  transition: all 100ms ease-out;
+  animation: ${pounding} 1.2s infinite;
+
+  &:hover {
+    transform: scale(1.2);
+    color: ${({ theme }) => theme.deepPink};
+  }
+`;
+
 const RoomList = styled.div`
   height: 50%;
-  padding: 30px;
+  padding: 15px 30px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -134,15 +192,19 @@ const RoomList = styled.div`
 
 const RoomItem = styled.li`
   ${flexCenter}
+  position: relative;
   height: 70px;
   margin-bottom: 15px;
-  border: 3px solid ${({ theme }) => theme.white};
+  border: 3px solid
+    ${({ theme, active }) => (active ? theme.white : theme.lightGray)};
   border-radius: 20px;
   border-style: dashed;
   cursor: pointer;
+  pointer-events: ${({ active }) => (active ? 'auto' : 'none')};
   font-family: 'Do hyeon';
   box-shadow: ${({ theme }) => theme.boxShadow};
-  background-color: ${({ theme }) => theme.lightPink};
+  background-color: ${({ theme, active }) =>
+    active ? theme.lightPink : theme.purple};
   transition: transform 100ms ease-out;
 
   .breaker-box {
@@ -153,7 +215,7 @@ const RoomItem = styled.li`
 
   .vs {
     font-size: 24px;
-    color: ${({ theme }) => theme.deepBlue};
+    color: ${({ active, theme }) => (active ? theme.deepBlue : theme.skyBlue)};
   }
 
   .breaker-order {
@@ -163,21 +225,44 @@ const RoomItem = styled.li`
   .breaker-name {
     margin-top: 5px;
     font-size: 20px;
-    color: ${({ theme }) => theme.white};
+    color: ${({ active, theme }) => (active ? theme.white : theme.lightGray)};
   }
 
   &:hover {
     background-color: ${({ theme }) => theme.skyBlue};
     transform: scale(1.01);
   }
+
+  .on-battle {
+    position: absolute;
+    top: -10px;
+    left: -17px;
+    width: 38px;
+    height: 28px;
+    padding-bottom: 10px;
+    font-size: 34px;
+    border-radius: 30%;
+    background-color: ${({ theme }) => theme.deepGray};
+    color: ${({ theme }) => theme.skyBlue};
+    transform: rotate(180deg);
+    animation: ${bounce} 1.3s infinite;
+  }
 `;
 
 const RoomFooter = styled.div`
-  ${flexCenterColumn}
+  ${flexCenter}
   height: 25%;
 
   button {
-    margin-bottom: 15px;
+    margin: 10px;
     font-family: 'Do hyeon';
+
+    &:first-child {
+      animation: ${pounding} 1.2s 600ms infinite ease-in;
+    }
+
+    &:last-child {
+      animation: ${pounding} 1.2s infinite ease-in;
+    }
   }
 `;

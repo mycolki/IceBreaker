@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { showMessage, onError } from '../../../store/quizSlice';
-import { saveRoomData } from '../../../store/battleSlice';
-import { ENTER_ROOM } from '../../../constants/messages';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { showMessage } from '../../../store/quizSlice';
+import { saveRoomData, saveRoomId } from '../../../store/battleSlice';
+import { ENTER_ROOM, RESET } from '../../../constants/messages';
 import { ROUTE, ROOM } from '../../../constants/game';
 
 import Message from '../../share/Message';
@@ -21,50 +21,64 @@ function EnterRoomModal({ closeModal }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
-  const [roomId, setRoomId] = useState('');
+  const roomId = useSelector((state) => state.battle?.roomId);
+  const [input, setInput] = useState('');
+  const [name, setName] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        onValue(
-          ref(getDatabase(), ROOM),
-          async (snapshot) => {
-            const data = snapshot.val();
+    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+      const data = snapshot.val();
 
-            if (!data) return;
+      if (!data) return;
 
-            await dispatch(saveRoomData(data));
-          },
-          { onlyOnce: true },
-        );
-      } catch (err) {
-        dispatch(onError(err.message));
-        history.push(ROUTE.ERROR);
-      }
-    };
+      dispatch(saveRoomData(data));
+    });
 
-    fetchData();
+    return () => dispatch(showMessage(RESET));
   }, [dispatch, history]);
 
   const enterRoom = (ev) => {
     ev.preventDefault();
 
-    if (roomId === 0) {
-      return dispatch(showMessage(ENTER_ROOM.FILL_BLANK));
+    if (name.length === 0) {
+      setName('');
+      return dispatch(showMessage(ENTER_ROOM.FILL_NAME));
     }
 
-    if (!rooms[roomId]) {
-      setRoomId('');
-      return dispatch(showMessage(ENTER_ROOM.INVALID_ID));
-    }
+    window.sessionStorage.setItem(
+      'userName',
+      JSON.stringify({ userName: name }),
+    );
+
+    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), {
+      1: { name, score: 0, isReady: false },
+    });
 
     history.push(`${ROUTE.ROOM}/${roomId}`);
   };
 
-  const handleInput = ({ target }) => {
-    const { value } = target;
-    const inputId = value.trim();
-    setRoomId(inputId);
+  const checkRoomId = (ev) => {
+    ev.preventDefault();
+
+    if (input === 0) {
+      return dispatch(showMessage(ENTER_ROOM.FILL_BLANK));
+    }
+
+    if (!rooms[input]) {
+      setInput('');
+      return dispatch(showMessage(ENTER_ROOM.INVALID_ID));
+    }
+
+    dispatch(saveRoomId(input));
+    setInput('');
+  };
+
+  const handleNameInput = (ev) => {
+    setName(ev.target.value.trim());
+  };
+
+  const handleRoomIdInput = (ev) => {
+    setInput(ev.target.value.trim());
   };
 
   return (
@@ -72,14 +86,19 @@ function EnterRoomModal({ closeModal }) {
       <MessageArea>
         <Message height="15" />
       </MessageArea>
-      <Title className="title">전달받은 방 ID를 입력해주세요</Title>
-      <Form onSubmit={enterRoom}>
+      <Title className="title">
+        {roomId
+          ? '입장할 닉네임을 입력해주세요'
+          : '전달받은 방 ID를 입력해주세요'}
+      </Title>
+      <Form onSubmit={roomId ? enterRoom : checkRoomId}>
         <input
           className="input"
-          type="number"
-          pattern="[0-9]*"
-          value={roomId}
-          onChange={handleInput}
+          type={roomId ? 'text' : 'number'}
+          value={roomId ? name : input}
+          pattern={roomId ? null : '[0-9]*'}
+          onChange={roomId ? handleNameInput : handleRoomIdInput}
+          maxLength={roomId ? '7' : null}
         />
         <div className="button-area">
           <Button
@@ -88,7 +107,12 @@ function EnterRoomModal({ closeModal }) {
             color="purple"
             onClick={closeModal}
           />
-          <Button text="입장하기" type="submit" size="small" color="purple" />
+          <Button
+            text={roomId ? '입장하기' : 'ID확인'}
+            type="submit"
+            size="small"
+            color="purple"
+          />
         </div>
       </Form>
     </Container>

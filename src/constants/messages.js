@@ -12,9 +12,17 @@ export const BATTLE = {
     type: 'battle',
     text: '모두 READY를 누르면 3초후 게임이 시작됩니다',
   },
+  START: {
+    type: 'battle',
+    text: '곧 게임이 시작됩니다',
+  },
 };
 
 export const ENTER_ROOM = {
+  FILL_NAME: {
+    type: 'enterRoom',
+    text: '닉네임은 공백으로 설정할 수 없습니다',
+  },
   FILL_BLANK: {
     type: 'enterRoom',
     text: 'ID가 입력되지 않았습니다',

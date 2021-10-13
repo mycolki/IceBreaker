@@ -4,7 +4,7 @@ import theme from '../../../styles/theme';
 
 const STYLES = {
   battle: css`
-    background-color: ${theme.deepBlue};
+    background-color: ${theme.purple};
   `,
   enterRoom: css`
     background-color: ${theme.deepGray};

@@ -2,10 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const name = 'battle';
 const initialState = {
-  rooms: {},
-  createdRoom: false,
+  rooms: null,
   roomId: '',
-  breakers: null,
 };
 
 const battleSlice = createSlice({
@@ -15,20 +13,12 @@ const battleSlice = createSlice({
     saveRoomData(state, action) {
       state.rooms = action.payload;
     },
-    createRoom(state, action) {
-      state.isRoom = action.payload;
-    },
     saveRoomId(state, action) {
       state.roomId = action.payload;
-    },
-    getBattle(state, action) {
-      const roomId = action.payload;
-      state.breakers = state.rooms[roomId];
     },
   },
 });
 
-export const { saveRoomData, createRoom, saveRoomId, getBattle } =
-  battleSlice.actions;
+export const { saveRoomData, saveRoomId } = battleSlice.actions;
 
 export default battleSlice.reducer;
