@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
-import { IoCaretBack } from 'react-icons/io5';
-
 import styled from 'styled-components';
 
 import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
+import { IoCaretBack } from 'react-icons/io5';
+
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 
@@ -190,8 +190,8 @@ const RoomItem = styled.li`
     ${({ theme, active }) => (active ? theme.white : theme.lightGray)};
   border-radius: 20px;
   border-style: dashed;
+  cursor: pointer;
   pointer-events: ${({ active }) => (active ? 'auto' : 'none')};
-  cursor: ${({ active }) => (active ? 'pointer' : 'not-allowed')};
   font-family: 'Do hyeon';
   box-shadow: ${({ theme }) => theme.boxShadow};
   background-color: ${({ theme, active }) =>

@@ -51,7 +51,7 @@ function EnterRoomModal({ closeModal }) {
     );
 
     update(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), {
-      1: { name, score: 0 },
+      1: { name, score: 0, isReady: false },
     });
 
     history.push(`${ROUTE.ROOM}/${roomId}`);
@@ -98,6 +98,7 @@ function EnterRoomModal({ closeModal }) {
           value={roomId ? name : input}
           pattern={roomId ? null : '[0-9]*'}
           onChange={roomId ? handleNameInput : handleRoomIdInput}
+          maxLength={roomId ? '7' : null}
         />
         <div className="button-area">
           <Button

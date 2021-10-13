@@ -44,14 +44,17 @@ function CreateRoomModal({ closeModal }) {
     );
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
       active: true,
+      isAllReady: false,
       breakers: [
         {
           name,
           score: 0,
+          isReady: false,
         },
         {
           name: '',
           score: 0,
+          isReady: false,
         },
       ],
     });
@@ -96,6 +99,7 @@ function CreateRoomModal({ closeModal }) {
           value={input}
           onChange={handleInput}
           ref={inputRef}
+          maxLength={roomId ? null : '7'}
         />
         <div className="button-area">
           <Button

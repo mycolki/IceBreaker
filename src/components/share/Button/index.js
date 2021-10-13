@@ -14,7 +14,7 @@ const SIZE_PRESET = {
   `,
   large: css`
     min-width: 190px;
-    height: 40px;
+    height: 45px;
     font-size: 20px;
     line-height: 16px;
     border: ${({ theme }) => theme.buttonBorder};
@@ -80,7 +80,7 @@ const StyledButton = styled.button`
   outline: none;
   cursor: pointer;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: ${({ theme }) => theme.boxShadow};
   color: ${({ theme }) => theme.white};
   transition: all 100ms ease-out;
