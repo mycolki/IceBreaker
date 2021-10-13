@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
+import { IoCaretBack } from 'react-icons/io5';
 
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, set, onValue } from 'firebase/database';
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 
@@ -16,6 +17,7 @@ import { BATTLE, RESET } from '../../constants/messages';
 
 import Portal from '../Portal';
 import Modal from '../Modal';
+import CreateRoomModal from '../Modal/CreateRoomModal';
 import EnterRoomModal from '../Modal/EnterRoomModal';
 import Message from '../share/Message';
 import Button from '../share/Button';
@@ -24,6 +26,8 @@ function Rooms() {
   const dispatch = useDispatch();
   const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
+  const roomId = useSelector((state) => state.battle?.roomId);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
 
   useEffect(() => {
@@ -58,6 +62,20 @@ function Rooms() {
     dispatch(showMessage(RESET));
   };
 
+  const openCreateModal = () => {
+    setCreateModalOpen(true);
+    dispatch(showMessage(RESET));
+  };
+
+  const closeCreateModal = () => {
+    if (roomId) {
+      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    }
+
+    setCreateModalOpen(false);
+    dispatch(showMessage(RESET));
+  };
+
   return (
     <Container>
       <RoomHeader>
@@ -65,38 +83,40 @@ function Rooms() {
           BREAKER <br />
           BATTLE
         </h1>
+        <Link to={ROUTE.MENU}>
+          <BackButton type="button">
+            <IoCaretBack />
+          </BackButton>
+        </Link>
       </RoomHeader>
       <Message />
       <RoomList>
-        {rooms &&
-          Object.entries(rooms).map(([id, room]) => (
-            <RoomItem
-              key={id}
-              onClick={() => enterRoom(id)}
-              active={room.active}
-            >
-              {room.active ? null : (
-                <span className="on-battle">
-                  <RiGamepadFill />
-                </span>
-              )}
-              <div className="breaker-box">
-                <span className="breaker-order">BREAKER1</span>
-                <span className="breaker-name">
-                  {room.battlers.battler1.name}
-                </span>
-              </div>
-              <div className="vs">vs</div>
-              <div className="breaker-box">
-                <span className="breaker-order">BREAKER2</span>
-                <span className="breaker-name">
-                  {room.battlers.battler2.name
-                    ? room.battlers.battler2.name
-                    : '?'}
-                </span>
-              </div>
-            </RoomItem>
-          ))}
+        {rooms
+          ? Object.entries(rooms).map(([id, room]) => (
+              <RoomItem
+                key={id}
+                onClick={() => enterRoom(id)}
+                active={room.active}
+              >
+                {room.active ? null : (
+                  <span className="on-battle">
+                    <RiGamepadFill />
+                  </span>
+                )}
+                <div className="breaker-box">
+                  <span className="breaker-order">BREAKER1</span>
+                  <span className="breaker-name">{room.breakers[0].name}</span>
+                </div>
+                <div className="vs">vs</div>
+                <div className="breaker-box">
+                  <span className="breaker-order">BREAKER2</span>
+                  <span className="breaker-name">
+                    {room.breakers[1] ? room.breakers[1].name : '?'}
+                  </span>
+                </div>
+              </RoomItem>
+            ))
+          : null}
       </RoomList>
       <RoomFooter>
         <Button
@@ -112,9 +132,19 @@ function Rooms() {
             </Modal>
           </Portal>
         )}
-        <Link to={ROUTE.MENU}>
-          <Button text="나가기" size="large" color="pink" />
-        </Link>
+        <Button
+          text="방 만들기"
+          size="large"
+          color="pink"
+          onClick={openCreateModal}
+        />
+        {createModalOpen && (
+          <Portal>
+            <Modal onClose={closeCreateModal} dimmed={true}>
+              <CreateRoomModal closeModal={closeCreateModal} />
+            </Modal>
+          </Portal>
+        )}
       </RoomFooter>
     </Container>
   );
@@ -122,9 +152,18 @@ function Rooms() {
 
 export default Rooms;
 
+const BackButton = styled.button`
+  position: absolute;
+  top: 5px;
+  left: 0;
+  background-color: transparent;
+  font-size: 30px;
+  color: white;
+`;
+
 const RoomList = styled.div`
   height: 50%;
-  padding: 30px;
+  padding: 15px 30px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -150,8 +189,8 @@ const RoomItem = styled.li`
   border: 3px solid ${({ theme }) => theme.white};
   border-radius: 20px;
   border-style: dashed;
-  cursor: ${({ active }) => (active ? 'pointer' : 'not-allowed')};
   pointer-events: ${({ active }) => (active ? 'auto' : 'none')};
+  cursor: ${({ active }) => (active ? 'pointer' : 'not-allowed')};
   font-family: 'Do hyeon';
   box-shadow: ${({ theme }) => theme.boxShadow};
   background-color: ${({ theme, active }) =>
@@ -191,8 +230,8 @@ const RoomItem = styled.li`
     width: 38px;
     height: 28px;
     padding-bottom: 10px;
-    border-radius: 30%;
     font-size: 34px;
+    border-radius: 30%;
     background-color: ${({ theme }) => theme.deepGray};
     color: ${({ theme }) => theme.skyBlue};
     transform: rotate(180deg);

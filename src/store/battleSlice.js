@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const name = 'battle';
 const initialState = {
-  rooms: {},
+  rooms: null,
   roomId: '',
 };
 

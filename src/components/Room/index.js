@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
-import { checkTwoBattlers } from '../../utils/checkTwoBattlers';
+import { checkBreakerLength } from '../../utils/checkBreakerLength';
 
+import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
-import iceBear from '../../asset/iceBear.png';
-import { ROUTE, ROOM } from '../../constants/game';
+import { ROUTE, ROOM, BREAKER_LENGTH } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
 
 import Message from '../share/Message';
@@ -20,8 +20,14 @@ import Button from '../share/Button';
 function Room() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
   const { roomId } = useParams();
   const rooms = useSelector((state) => state.battle?.rooms);
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    setName(location.state);
+  }, [location]);
 
   useEffect(() => {
     onValue(ref(getDatabase(), ROOM), (snapshot) => {
@@ -33,8 +39,10 @@ function Room() {
     });
 
     dispatch(showMessage(BATTLE.PLEASE_READY));
-
-    if (checkTwoBattlers(rooms[roomId].battlers)) {
+    if (
+      rooms &&
+      checkBreakerLength(rooms[roomId]?.breakers) === BREAKER_LENGTH
+    ) {
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
         active: false,
       });
@@ -42,6 +50,14 @@ function Room() {
 
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history, roomId]);
+
+  const exitRoom = () => {
+    if (!checkBreakerLength(rooms[roomId].breakers)) {
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    }
+
+    history.push(ROUTE.ROOMS);
+  };
 
   return (
     <Container>
@@ -54,23 +70,19 @@ function Room() {
       <Message />
       <BattleGround>
         <div className="vs">VS</div>
-        {rooms[roomId].battlers &&
-          Object.values(rooms[roomId].battlers).map((breaker, i) => {
-            console.log(breaker);
-            return (
-              <Battler key={breaker.name + i}>
+        {rooms
+          ? rooms[roomId].breakers.map((breaker, i) => (
+              <Breaker key={breaker.name + i}>
                 <span className="name">{breaker.name ? breaker.name : ''}</span>
                 <img src={iceBear} alt="bear" width="160" height="auto" />
                 <span className="ready">READY</span>
-              </Battler>
-            );
-          })}
+              </Breaker>
+            ))
+          : null}
       </BattleGround>
       <RoomFooter>
         <Button text="READY" size="large" color="skyBlue" />
-        <Link to={ROUTE.ROOMS}>
-          <Button text="나가기" size="large" color="pink" />
-        </Link>
+        <Button text="나가기" size="large" color="pink" onClick={exitRoom} />
       </RoomFooter>
     </Container>
   );
@@ -89,11 +101,11 @@ const BattleGround = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 20px;
-    color: ${({ theme }) => theme.deepBlue};
+    color: ${({ theme }) => theme.skyBlue};
   }
 `;
 
-const Battler = styled.div`
+const Breaker = styled.div`
   width: 50%;
 
   .name {
@@ -110,6 +122,7 @@ const Battler = styled.div`
   }
 
   &:first-child {
+    margin-right: 50%;
   }
 
   &:last-child {

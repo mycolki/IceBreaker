@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  onValue,
+  update,
+  push,
+  child,
+} from 'firebase/database';
 import { showMessage } from '../../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
@@ -47,12 +54,14 @@ function EnterRoomModal({ closeModal }) {
       return dispatch(showMessage(ENTER_ROOM.FILL_NAME));
     }
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}/battlers/battler2/`), {
-      name,
-      score: 0,
+    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), {
+      1: { name, score: 0 },
     });
 
-    history.push(`${ROUTE.ROOM}/${roomId}`);
+    history.push({
+      pathname: `${ROUTE.ROOM}/${roomId}`,
+      state: name,
+    });
   };
 
   const checkRoomId = (ev) => {

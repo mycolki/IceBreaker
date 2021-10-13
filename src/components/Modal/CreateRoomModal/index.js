@@ -40,16 +40,16 @@ function CreateRoomModal({ closeModal }) {
     const roomId = input;
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
       active: true,
-      battlers: {
-        battler1: {
+      breakers: [
+        {
           name,
           score: 0,
         },
-        battler2: {
+        {
           name: '',
           score: 0,
         },
-      },
+      ],
     });
 
     history.push(`${ROUTE.ROOM}/${roomId}`);

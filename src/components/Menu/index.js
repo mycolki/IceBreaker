@@ -1,48 +1,11 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getDatabase, ref, set } from '@firebase/database';
-import { showMessage } from '../../store/quizSlice';
-import { ROUTE, ROOM } from '../../constants/game';
-import { RESET } from '../../constants/messages';
+import { ROUTE } from '../../constants/game';
 
-import Portal from '../Portal';
-import Modal from '../Modal';
-import EnterRoomModal from '../Modal/EnterRoomModal';
-import CreateRoomModal from '../Modal/CreateRoomModal';
 import Button from '../share/Button';
 
 function Menu() {
-  const dispatch = useDispatch();
-  const isRoom = useSelector((state) => state.battle?.isRoom);
-  const roomId = useSelector((state) => state.battle?.roomId);
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [enterModalOpen, setEnterModalOpen] = useState(false);
-
-  const openCreateModal = () => {
-    setCreateModalOpen(true);
-  };
-
-  const closeCreateModal = () => {
-    if (isRoom && roomId) {
-      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
-    }
-
-    setCreateModalOpen(false);
-    dispatch(showMessage(RESET));
-  };
-
-  const openEnterModal = () => {
-    setEnterModalOpen(true);
-  };
-
-  const closeEnterModal = () => {
-    setEnterModalOpen(false);
-    dispatch(RESET);
-  };
-
   return (
     <Container>
       <TitleWrapper>
@@ -62,37 +25,6 @@ function Menu() {
             <Button text="같이 얼음깨기" size="large" color="skyBlue" />
           </Link>
         </li>
-        <li className="button">
-          <Button
-            text="방 입장하기"
-            size="large"
-            color="pink"
-            onClick={openEnterModal}
-          />
-        </li>
-        {enterModalOpen && (
-          <Portal>
-            <Modal onClose={closeEnterModal} dimmed={true}>
-              <EnterRoomModal closeModal={closeEnterModal} />
-            </Modal>
-          </Portal>
-        )}
-        <li className="button">
-          <Button
-            text="방 만들기"
-            size="large"
-            color="pink"
-            onClick={openCreateModal}
-          />
-        </li>
-        {createModalOpen && (
-          <Portal>
-            <Modal onClose={closeCreateModal} dimmed={true}>
-              <CreateRoomModal closeModal={closeCreateModal} />
-            </Modal>
-          </Portal>
-        )}
-
         <li className="button">
           <Button text="랭킹보기" size="large" color="purple" />
         </li>
