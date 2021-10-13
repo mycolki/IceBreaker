@@ -47,13 +47,9 @@ function EnterRoomModal({ closeModal }) {
       return dispatch(showMessage(ENTER_ROOM.FILL_NAME));
     }
 
-    const roomData = rooms[roomId];
-    update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-      ...roomData,
-      battler2: {
-        name,
-        score: 0,
-      },
+    update(ref(getDatabase(), `${ROOM}/${roomId}/battlers/battler2/`), {
+      name,
+      score: 0,
     });
 
     history.push(`${ROUTE.ROOM}/${roomId}`);

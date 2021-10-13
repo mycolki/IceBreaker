@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
+
 import styled from 'styled-components';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
+
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -67,16 +70,29 @@ function Rooms() {
       <RoomList>
         {rooms &&
           Object.entries(rooms).map(([id, room]) => (
-            <RoomItem key={id} onClick={() => enterRoom(id)}>
+            <RoomItem
+              key={id}
+              onClick={() => enterRoom(id)}
+              active={room.active}
+            >
+              {room.active ? null : (
+                <span className="on-battle">
+                  <RiGamepadFill />
+                </span>
+              )}
               <div className="breaker-box">
                 <span className="breaker-order">BREAKER1</span>
-                <span className="breaker-name">{room.battler1.name}</span>
+                <span className="breaker-name">
+                  {room.battlers.battler1.name}
+                </span>
               </div>
               <div className="vs">vs</div>
               <div className="breaker-box">
                 <span className="breaker-order">BREAKER2</span>
                 <span className="breaker-name">
-                  {room.battler2.name ? room.battler2.name : '?'}
+                  {room.battlers.battler2.name
+                    ? room.battlers.battler2.name
+                    : '?'}
                 </span>
               </div>
             </RoomItem>
@@ -128,15 +144,18 @@ const RoomList = styled.div`
 
 const RoomItem = styled.li`
   ${flexCenter}
+  position: relative;
   height: 70px;
   margin-bottom: 15px;
   border: 3px solid ${({ theme }) => theme.white};
   border-radius: 20px;
   border-style: dashed;
-  cursor: pointer;
+  cursor: ${({ active }) => (active ? 'pointer' : 'not-allowed')};
+  pointer-events: ${({ active }) => (active ? 'auto' : 'none')};
   font-family: 'Do hyeon';
   box-shadow: ${({ theme }) => theme.boxShadow};
-  background-color: ${({ theme }) => theme.lightPink};
+  background-color: ${({ theme, active }) =>
+    active ? theme.lightPink : theme.purple};
   transition: transform 100ms ease-out;
 
   .breaker-box {
@@ -147,7 +166,7 @@ const RoomItem = styled.li`
 
   .vs {
     font-size: 24px;
-    color: ${({ theme }) => theme.deepBlue};
+    color: ${({ theme }) => theme.skyBlue};
   }
 
   .breaker-order {
@@ -163,6 +182,20 @@ const RoomItem = styled.li`
   &:hover {
     background-color: ${({ theme }) => theme.skyBlue};
     transform: scale(1.01);
+  }
+
+  .on-battle {
+    position: absolute;
+    top: -13px;
+    left: -17px;
+    width: 38px;
+    height: 28px;
+    padding-bottom: 10px;
+    border-radius: 30%;
+    font-size: 34px;
+    background-color: ${({ theme }) => theme.deepGray};
+    color: ${({ theme }) => theme.skyBlue};
+    transform: rotate(180deg);
   }
 `;
 

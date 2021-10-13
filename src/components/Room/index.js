@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
+import { checkTwoBattlers } from '../../utils/checkTwoBattlers';
+
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
 import iceBear from '../../asset/iceBear.png';
@@ -22,8 +24,6 @@ function Room() {
   const rooms = useSelector((state) => state.battle?.rooms);
 
   useEffect(() => {
-    dispatch(showMessage(BATTLE.PLEASE_READY));
-
     onValue(ref(getDatabase(), ROOM), (snapshot) => {
       const data = snapshot.val();
 
@@ -31,6 +31,14 @@ function Room() {
 
       dispatch(saveRoomData(data));
     });
+
+    dispatch(showMessage(BATTLE.PLEASE_READY));
+
+    if (checkTwoBattlers(rooms[roomId].battlers)) {
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        active: false,
+      });
+    }
 
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history, roomId]);
@@ -46,11 +54,12 @@ function Room() {
       <Message />
       <BattleGround>
         <div className="vs">VS</div>
-        {rooms[roomId] &&
-          Object.values(rooms[roomId]).map((breaker, i) => {
+        {rooms[roomId].battlers &&
+          Object.values(rooms[roomId].battlers).map((breaker, i) => {
+            console.log(breaker);
             return (
               <Battler key={breaker.name + i}>
-                <span className="name">{breaker ? breaker.name : ''}</span>
+                <span className="name">{breaker.name ? breaker.name : ''}</span>
                 <img src={iceBear} alt="bear" width="160" height="auto" />
                 <span className="ready">READY</span>
               </Battler>

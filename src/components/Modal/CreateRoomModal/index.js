@@ -39,13 +39,16 @@ function CreateRoomModal({ closeModal }) {
 
     const roomId = input;
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
-      battler1: {
-        name,
-        score: 0,
-      },
-      battler2: {
-        name: '',
-        score: 0,
+      active: true,
+      battlers: {
+        battler1: {
+          name,
+          score: 0,
+        },
+        battler2: {
+          name: '',
+          score: 0,
+        },
       },
     });
 
