@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -40,15 +40,15 @@ function App() {
 
   return (
     <AppContainer>
-      <Switch>
-        <Route exact path={ROUTE.MENU} component={Menu} />
-        <Route path={ROUTE.READY_ID} component={Ready} />
-        <Route path={ROUTE.BREAKING} component={Breaking} />
-        <Route path={ROUTE.ROOMS} component={Rooms} />
-        <Route path={ROUTE.ROOM_ID} component={Room} />
-        <Route path={ROUTE.GAME_OVER} component={GameOver} />
-        <Route path={ROUTE.ERROR} component={ErrorBox} />
-      </Switch>
+      <Route exact path={ROUTE.MENU} component={Menu} />
+      <Route path={ROUTE.READY} component={Ready} />
+      <Route path={ROUTE.READY_ID} component={Ready} />
+      <Route path={ROUTE.BREAKING} component={Breaking} />
+      <Route path={ROUTE.BREAKING_ID} component={Breaking} />
+      <Route path={ROUTE.ROOMS} component={Rooms} />
+      <Route path={ROUTE.ROOM_ID} component={Room} />
+      <Route path={ROUTE.GAME_OVER} component={GameOver} />
+      <Route path={ROUTE.ERROR} component={ErrorBox} />
     </AppContainer>
   );
 }

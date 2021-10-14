@@ -23,6 +23,7 @@ function CreateRoomModal({ closeModal }) {
   const history = useHistory();
   const inputRef = useRef();
   const roomId = useSelector((state) => state.battle?.roomId);
+  const questions = useSelector((state) => state.quiz?.questions);
   const [title, setTitle] = useState(MODAL_TITLE.INPUT_HOST_NAME);
   const [input, setInput] = useState('');
   const [name, setName] = useState('');
@@ -43,6 +44,7 @@ function CreateRoomModal({ closeModal }) {
       JSON.stringify({ userName: name }),
     );
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      questions,
       active: true,
       isAllReady: false,
       breakers: [

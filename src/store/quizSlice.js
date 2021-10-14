@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getRandomQuestions } from '../utils/getRandomQuestions';
+import _ from 'lodash';
 import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/game';
 
 const name = QUIZ;
 const initialState = {
+  quiz: {},
   questions: [],
   currentQuestion: null,
   isImageLoaded: false,
@@ -24,10 +25,14 @@ const quizSlice = createSlice({
   initialState,
   reducers: {
     saveQuizData(state, action) {
-      const allQuestions = Object.values(action.payload);
-      const randomQuestions = getRandomQuestions(allQuestions);
-
-      state.questions = randomQuestions.slice(0, QUIZ_LENGTH);
+      state.quiz = action.payload;
+      const allQuestions = Object.values(state.quiz);
+      state.questions = _.shuffle(allQuestions).slice(0, QUIZ_LENGTH);
+    },
+    replaceQuestions(state, action) {
+      state.questions = action.payload;
+    },
+    getFirstLevel(state) {
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
@@ -66,6 +71,8 @@ const quizSlice = createSlice({
 
 export const {
   saveQuizData,
+  replaceQuestions,
+  getFirstLevel,
   activateBreaking,
   toggleForm,
   toggleAnswer,

@@ -1,19 +1,37 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, onValue } from 'firebase/database';
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
 
+import { replaceQuestions } from '../../store/quizSlice';
+
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
-import { ROUTE } from '../../constants/game';
+import { ROUTE, ROOM } from '../../constants/game';
 
 gsap.registerPlugin(TextPlugin);
 
 function Ready() {
-  const [second, setSecond] = useState(3);
+  const { roomId } = useParams();
+  const dispatch = useDispatch();
   const history = useHistory();
+  const [second, setSecond] = useState(3);
+
+  useEffect(() => {
+    if (roomId) {
+      onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!data) return;
+
+        dispatch(replaceQuestions(data.questions));
+      });
+    }
+  }, [roomId]);
 
   useEffect(() => {
     if (second === 3) {
@@ -36,7 +54,7 @@ function Ready() {
         setSecond((prev) => prev - 1);
       }, 1000);
     } else {
-      history.push(ROUTE.BREAKING);
+      history.push(roomId ? `${ROUTE.BREAKING}/${roomId}` : ROUTE.BREAKING);
     }
 
     return () => clearTimeout(timer);

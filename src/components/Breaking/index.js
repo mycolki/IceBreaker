@@ -1,15 +1,19 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, onValue } from 'firebase/database';
+
 import {
+  replaceQuestions,
+  getFirstLevel,
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
   showMessage,
 } from '../../store/quizSlice';
-import { QUIZ_LENGTH, ROUTE } from '../../constants/game';
+import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
 import Header from '../Header';
@@ -21,8 +25,11 @@ import Footer from '../Footer';
 import Button from '../share/Button';
 
 function Breaking() {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+  const questions = useSelector((state) => state.quiz?.questions);
+
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
@@ -31,8 +38,19 @@ function Breaking() {
   const isAnswer = userInput ? answer === userInput : null;
 
   useEffect(() => {
+    if (roomId) {
+      onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+        const data = snapshot.val();
+
+        if (!data) return;
+
+        dispatch(replaceQuestions(data.questions));
+      });
+    }
+
+    dispatch(getFirstLevel());
     return () => dispatch(showMessage(RESET));
-  });
+  }, [roomId]);
 
   const goToNextLevel = () => {
     if (level === QUIZ_LENGTH) {

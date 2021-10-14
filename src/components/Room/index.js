@@ -9,7 +9,6 @@ import _ from 'lodash';
 
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
-import { checkBreakerLength } from '../../utils/battle/checkBreakerLength';
 
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -47,7 +46,7 @@ function Room() {
   useEffect(() => {
     if (!rooms) return;
 
-    const breakerLength = checkBreakerLength(rooms[roomId]?.breakers, 'name');
+    const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === BREAKER_LENGTH) {
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
@@ -63,19 +62,22 @@ function Room() {
   }, [rooms]);
 
   useEffect(() => {
+    let timer;
     if (!rooms) return;
 
     if (rooms[roomId].isAllReady) {
       dispatch(showMessage(BATTLE.START));
-      setTimeout(() => {
+      timer = setTimeout(() => {
         history.push(`${ROUTE.READY}/${roomId}`);
       }, 3000);
     }
+
+    return () => clearTimeout(timer);
   });
 
   const exitRoom = () => {
     if (!rooms) return;
-    const breakerLength = checkBreakerLength(rooms[roomId].breakers, 'name');
+    const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === 1) {
       set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
@@ -122,7 +124,7 @@ function Room() {
       breakers,
     });
 
-    const readyLength = checkBreakerLength(breakers, 'isReady');
+    const readyLength = _.filter(breakers, 'isReady').length;
 
     if (readyLength === BREAKER_LENGTH) {
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {

@@ -7,6 +7,7 @@ export const ROUTE = {
   READY: '/ready',
   READY_ID: '/ready/:roomId',
   BREAKING: '/breaking',
+  BREAKING_ID: '/breaking/:roomId',
   ROOMS: '/rooms',
   ROOM: '/room',
   ROOM_ID: '/room/:roomId',
