@@ -26,7 +26,7 @@ function Room() {
   const { roomId } = useParams();
   const rooms = useSelector((state) => state.battle?.rooms);
   const [name, setName] = useState('');
-  const [disabledReady, setDisabledReady] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     onValue(ref(getDatabase(), ROOM), (snapshot) => {
@@ -37,25 +37,35 @@ function Room() {
       dispatch(saveRoomData(data));
     });
 
-    if (
-      rooms &&
-      checkBreakerLength(rooms[roomId]?.breakers, 'name') === BREAKER_LENGTH
-    ) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        active: false,
-      });
-    }
-
-    setDisabledReady(false);
     dispatch(showMessage(BATTLE.PLEASE_READY));
     const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
     setName(userName);
 
     return () => dispatch(showMessage(RESET));
-  }, [dispatch, history, roomId]);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (rooms && rooms[roomId].isAllReady) {
+    if (!rooms) return;
+
+    const breakerLength = checkBreakerLength(rooms[roomId]?.breakers, 'name');
+
+    if (breakerLength === BREAKER_LENGTH) {
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        active: false,
+      });
+    }
+
+    for (const breaker of rooms[roomId].breakers) {
+      if (breaker.name === name && breaker.isReady) {
+        return setIsReady(true);
+      }
+    }
+  }, [rooms]);
+
+  useEffect(() => {
+    if (!rooms) return;
+
+    if (rooms[roomId].isAllReady) {
       dispatch(showMessage(BATTLE.START));
       setTimeout(() => {
         history.push(`${ROUTE.READY}/${roomId}`);
@@ -64,25 +74,28 @@ function Room() {
   });
 
   const exitRoom = () => {
-    if (rooms && checkBreakerLength(rooms[roomId].breakers, 'name') === 1) {
+    if (!rooms) return;
+    const breakerLength = checkBreakerLength(rooms[roomId].breakers, 'name');
+
+    if (breakerLength === 1) {
       set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
       return history.push(ROUTE.ROOMS);
     }
 
-    const breakers = [];
     const clone = _.cloneDeep([...rooms[roomId].breakers]);
 
-    clone.forEach((breaker, i) => {
+    if (clone[0].name === name) {
+      [clone[0], clone[1]] = [clone[1], clone[0]];
+    }
+
+    const breakers = clone.map((breaker) => {
+      breaker.isReady = false;
+
       if (breaker.name === name) {
         breaker.name = '';
-
-        if (breaker === clone[0]) {
-          const other = clone[1];
-          [breakers[0], breakers[1]] = [other, breaker];
-        }
       }
 
-      breaker.isReady = false;
+      return breaker;
     });
 
     update(ref(getDatabase(), `${ROOM}/${roomId}`), {
@@ -99,7 +112,7 @@ function Room() {
     const breakers = clone.map((breaker) => {
       if (breaker.name === name) {
         breaker.isReady = !breaker.isReady;
-        setDisabledReady((prev) => !prev);
+        setIsReady(false);
       }
 
       return breaker;
@@ -160,7 +173,7 @@ function Room() {
           text="나가기"
           size="medium"
           color="pink"
-          disabled={rooms && (rooms[roomId].isAllReady || disabledReady)}
+          disabled={rooms && (isReady || rooms[roomId].isAllReady)}
           onClick={exitRoom}
         />
       </RoomFooter>
@@ -192,9 +205,10 @@ const Breaker = styled.div`
     position: relative;
     display: block;
     font-family: 'Do hyeon';
-    font-size: ${({ isUser }) => (isUser ? '26px' : '20px')};
-    color: ${({ theme }) => theme.deepGray};
-    -webkit-text-stroke: 1px ${({ theme }) => theme.deepGray};
+    font-size: ${({ isUser }) => (isUser ? '27px' : '20px')};
+    color: ${({ theme, isUser }) => (isUser ? theme.white : theme.deepGray)};
+    -webkit-text-stroke: 1px
+      ${({ theme, isUser }) => (isUser ? theme.white : theme.deepGray)};
 
     &:last-child {
       display: block;

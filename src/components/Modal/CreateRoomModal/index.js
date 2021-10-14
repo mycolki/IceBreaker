@@ -100,6 +100,7 @@ function CreateRoomModal({ closeModal }) {
           onChange={handleInput}
           ref={inputRef}
           maxLength={roomId ? null : '7'}
+          autoFocus
         />
         <div className="button-area">
           <Button

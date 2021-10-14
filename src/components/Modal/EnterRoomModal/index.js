@@ -99,6 +99,7 @@ function EnterRoomModal({ closeModal }) {
           pattern={roomId ? null : '[0-9]*'}
           onChange={roomId ? handleNameInput : handleRoomIdInput}
           maxLength={roomId ? '7' : null}
+          autoFocus
         />
         <div className="button-area">
           <Button

@@ -116,6 +116,7 @@ function InputBox() {
             placeholder="Guess What"
             value={input}
             onChange={handleInput}
+            autoFocus
           />
           <Button
             text="Break"
