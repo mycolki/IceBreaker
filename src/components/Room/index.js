@@ -57,14 +57,14 @@ function Room() {
   useEffect(() => {
     if (rooms && rooms[roomId].isAllReady) {
       dispatch(showMessage(BATTLE.START));
-      // setTimeout(() => {
-      //   history.push(`${ROUTE}/${roomId}`);
-      // }, 3000);
+      setTimeout(() => {
+        history.push(`${ROUTE.READY}/${roomId}`);
+      }, 3000);
     }
   });
 
   const exitRoom = () => {
-    if (checkBreakerLength(rooms[roomId].breakers, 'name') === 1) {
+    if (rooms && checkBreakerLength(rooms[roomId].breakers, 'name') === 1) {
       set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
       return history.push(ROUTE.ROOMS);
     }

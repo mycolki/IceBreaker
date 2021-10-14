@@ -5,6 +5,7 @@ export const QUIZ_LENGTH = 7;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
+  READY_ID: '/ready/:roomId',
   BREAKING: '/breaking',
   ROOMS: '/rooms',
   ROOM: '/room',
