@@ -26,6 +26,7 @@ function Room() {
   const { roomId } = useParams();
   const rooms = useSelector((state) => state.battle?.rooms);
   const [name, setName] = useState('');
+  const [disabledReady, setDisabledReady] = useState(true);
 
   useEffect(() => {
     onValue(ref(getDatabase(), ROOM), (snapshot) => {
@@ -45,18 +46,20 @@ function Room() {
       });
     }
 
+    setDisabledReady(false);
     dispatch(showMessage(BATTLE.PLEASE_READY));
     const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
     setName(userName);
 
-    return () => {
-      dispatch(showMessage(RESET));
-    };
+    return () => dispatch(showMessage(RESET));
   }, [dispatch, history, roomId]);
 
   useEffect(() => {
-    if (rooms[roomId].isAllReady) {
+    if (rooms && rooms[roomId].isAllReady) {
       dispatch(showMessage(BATTLE.START));
+      // setTimeout(() => {
+      //   history.push(`${ROUTE}/${roomId}`);
+      // }, 3000);
     }
   });
 
@@ -68,6 +71,7 @@ function Room() {
 
     const breakers = [];
     const clone = _.cloneDeep([...rooms[roomId].breakers]);
+
     clone.forEach((breaker, i) => {
       if (breaker.name === name) {
         breaker.name = '';
@@ -90,22 +94,12 @@ function Room() {
     history.push(ROUTE.ROOMS);
   };
 
-  const readyBattle = () => {
-    const readyLength = checkBreakerLength(
-      [...rooms[roomId].breakers],
-      'isReady',
-    );
-
-    if (readyLength === 1) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        isAllReady: true,
-      });
-    }
-
+  const readyBattle = async () => {
     const clone = _.cloneDeep([...rooms[roomId].breakers]);
     const breakers = clone.map((breaker) => {
       if (breaker.name === name) {
         breaker.isReady = !breaker.isReady;
+        setDisabledReady((prev) => !prev);
       }
 
       return breaker;
@@ -114,6 +108,14 @@ function Room() {
     update(ref(getDatabase(), `${ROOM}/${roomId}`), {
       breakers,
     });
+
+    const readyLength = checkBreakerLength(breakers, 'isReady');
+
+    if (readyLength === BREAKER_LENGTH) {
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        isAllReady: true,
+      });
+    }
   };
 
   return (
@@ -146,19 +148,19 @@ function Room() {
             ))
           : null}
       </BattleGround>
-      <RoomFooter isAllReady={rooms[roomId].isAllReady}>
+      <RoomFooter isAllReady={rooms && rooms[roomId].isAllReady}>
         <Button
           text="READY"
           size="medium"
           color="purple"
-          disabled={rooms[roomId].isAllReady}
+          disabled={rooms && rooms[roomId].isAllReady}
           onClick={readyBattle}
         />
         <Button
           text="나가기"
           size="medium"
           color="pink"
-          disabled={rooms[roomId].isAllReady}
+          disabled={rooms && (rooms[roomId].isAllReady || disabledReady)}
           onClick={exitRoom}
         />
       </RoomFooter>
