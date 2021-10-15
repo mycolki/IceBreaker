@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import _ from 'lodash';
+
 import styled from 'styled-components';
+
+import { getDatabase, ref, update } from 'firebase/database';
 
 import {
   showMessage,
@@ -10,23 +15,33 @@ import {
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectInputType';
+
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
+import { ROOM } from '../../constants/game';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
 import Button from '../share/Button';
 
 function InputBox() {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
+  const score = useSelector((state) => state.quiz?.score);
   const [input, setInput] = useState('');
+
+  const breakers = useSelector((state) => state.battle?.breakers);
+  const [name, setName] = useState('');
 
   useEffect(() => {
     if (isTimeOver) {
       setInput('');
     }
+
+    const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
+    setName(userName);
   }, [isTimeOver]);
 
   const submitInput = (ev) => {
@@ -36,6 +51,21 @@ function InputBox() {
       setInput('');
       dispatch(addScore());
       dispatch(showAnswerBoxByInput(input));
+
+      if (breakers) {
+        const updatedScore = _.cloneDeep(breakers).map((breaker) => {
+          if (breaker.name === name) {
+            breaker.score = score;
+          }
+
+          return breaker;
+        });
+
+        update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+          breakers: updatedScore,
+        });
+      }
+
       return dispatch(toggleAnswer(true));
     }
 

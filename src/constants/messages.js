@@ -79,7 +79,7 @@ export const BREAK = {
   },
   Lv3: {
     type: 'break',
-    text: '이번엔 한 번에 꺠긴 어려울 거에요',
+    text: '이번엔 한 번에 깨기 어려울 거에요',
   },
   Lv4: {
     type: 'break',
