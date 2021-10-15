@@ -5,6 +5,7 @@ const initialState = {
   rooms: null,
   roomId: '',
   breakers: null,
+  name: '',
 };
 
 const battleSlice = createSlice({
@@ -20,9 +21,13 @@ const battleSlice = createSlice({
     saveBattle(state, action) {
       state.breakers = action.payload;
     },
+    saveName(state, action) {
+      state.name = action.payload;
+    },
   },
 });
 
-export const { saveRoomData, saveRoomId, saveBattle } = battleSlice.actions;
+export const { saveRoomData, saveRoomId, saveBattle, saveName } =
+  battleSlice.actions;
 
 export default battleSlice.reducer;

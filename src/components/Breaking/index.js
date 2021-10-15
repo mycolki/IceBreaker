@@ -13,6 +13,7 @@ import {
   passNextLevel,
   onError,
 } from '../../store/quizSlice';
+import { saveName } from '../../store/battleSlice';
 import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
@@ -37,15 +38,15 @@ function Breaking() {
   const isAnswer = userInput ? answer === userInput : null;
 
   const breakers = useSelector((state) => state.battle?.breakers);
+  const name = useSelector((state) => state.battle?.name);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [name, setName] = useState('');
 
   useEffect(() => {
     try {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
       );
-      setName(userName);
+      dispatch(saveName(userName));
     } catch (err) {
       dispatch(onError(err.message));
       history.push(ROUTE.ERROR);
@@ -58,27 +59,25 @@ function Breaking() {
     onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
       const data = snapshot.val();
 
-      if (!data) return;
-
       if (!data.isPlaying) {
         return history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
       }
     });
   }, [isGameOver]);
 
-  const goToNextLevel = () => {
-    if (level === 3) {
-      if (breakers) {
-        update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-          isPlaying: false,
-        });
+  const goToLastPage = () => {
+    if (breakers) {
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        isPlaying: false,
+      });
 
-        return setIsGameOver(true);
-      }
-
-      return history.push(ROUTE.GAME_OVER);
+      return setIsGameOver(true);
     }
 
+    return history.push(ROUTE.GAME_OVER);
+  };
+
+  const goToNextLevel = () => {
     if (breakers) {
       const updatedLevel = _.cloneDeep(breakers).map((breaker) => {
         if (breaker.name === name) {
@@ -118,7 +117,7 @@ function Breaking() {
               className="button"
               size="medium"
               color="lightPurple"
-              onClick={goToNextLevel}
+              onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
             />
           </div>
         </Answer>
