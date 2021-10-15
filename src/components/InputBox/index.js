@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import _ from 'lodash';
 
 import styled from 'styled-components';
@@ -12,12 +12,13 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   addScore,
+  onError,
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectInputType';
 
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
-import { ROOM } from '../../constants/game';
+import { ROUTE, ROOM } from '../../constants/game';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
 import Button from '../share/Button';
@@ -25,6 +26,7 @@ import Button from '../share/Button';
 function InputBox() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
@@ -40,8 +42,15 @@ function InputBox() {
       setInput('');
     }
 
-    const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
-    setName(userName);
+    try {
+      const { userName } = JSON.parse(
+        window.sessionStorage.getItem('userName'),
+      );
+      setName(userName);
+    } catch (err) {
+      dispatch(onError(err.message));
+      history.push(ROUTE.ERROR);
+    }
   }, [isTimeOver]);
 
   const submitInput = (ev) => {

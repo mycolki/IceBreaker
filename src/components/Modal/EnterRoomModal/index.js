@@ -51,7 +51,7 @@ function EnterRoomModal({ closeModal }) {
     );
 
     update(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), {
-      1: { name, isReady: false, level: 1, score: 0 },
+      1: { name, isReady: false, level: 1, score: 0, isWinner: false },
     });
 
     history.push(`${ROUTE.ROOM}/${roomId}`);

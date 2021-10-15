@@ -54,12 +54,14 @@ function CreateRoomModal({ closeModal }) {
           isReady: false,
           level: 1,
           score: 0,
+          isWinner: false,
         },
         {
           name: '',
           isReady: false,
           level: 1,
           score: 0,
+          isWinner: false,
         },
       ],
     });

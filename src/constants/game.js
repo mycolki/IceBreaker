@@ -12,7 +12,8 @@ export const ROUTE = {
   ROOM: '/room',
   ROOM_ID: '/room/:roomId',
   GAME_OVER: '/gameover',
-  GAME_OVER_ID: '/gameover/:roomId',
+  BATTLE_OVER: '/battleover',
+  BATTLE_OVER_ID: '/battleover/:roomId',
   ERROR: '/error',
 };
 

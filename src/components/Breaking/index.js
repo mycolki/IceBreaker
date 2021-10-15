@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import _ from 'lodash';
 
@@ -11,6 +11,7 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
+  onError,
 } from '../../store/quizSlice';
 import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
@@ -36,12 +37,19 @@ function Breaking() {
   const isAnswer = userInput ? answer === userInput : null;
 
   const breakers = useSelector((state) => state.battle?.breakers);
-  const [name, setName] = useState('');
   const [isGameOver, setIsGameOver] = useState(false);
+  const [name, setName] = useState('');
 
   useEffect(() => {
-    const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
-    setName(userName);
+    try {
+      const { userName } = JSON.parse(
+        window.sessionStorage.getItem('userName'),
+      );
+      setName(userName);
+    } catch (err) {
+      dispatch(onError(err.message));
+      history.push(ROUTE.ERROR);
+    }
 
     return () => dispatch(showMessage(RESET));
   }, [dispatch]);
@@ -53,7 +61,7 @@ function Breaking() {
       if (!data) return;
 
       if (!data.isPlaying) {
-        return history.push(`${ROUTE.GAME_OVER}/${roomId}`);
+        return history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
       }
     });
   }, [isGameOver]);

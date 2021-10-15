@@ -15,8 +15,8 @@ const SIZE_PRESET = {
     font-size: 22px;
   `,
   large: css`
-    min-width: 190px;
-    height: 45px;
+    min-width: 150px;
+    height: 50px;
     font-size: 22px;
     line-height: 16px;
     border: ${({ theme }) => theme.buttonBorder};

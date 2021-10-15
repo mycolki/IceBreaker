@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { ROUTE } from '../../constants/game';
 
 import Button from '../share/Button';
+import Message from '../share/Message';
 
 function GameOver() {
   const score = useSelector((state) => state.quiz?.score);
@@ -15,7 +16,7 @@ function GameOver() {
       <TitleWrapper isWin={isWin}>
         <h1 className="app-title">{isWin ? 'YOU WON' : 'YOU LOST'}</h1>
       </TitleWrapper>
-      <MenuButtons>
+      <Buttons>
         <li className="button">
           <Button text="친구에게 공유하기" size="large" color="pink" />
         </li>
@@ -27,7 +28,8 @@ function GameOver() {
             <Button text="처음으로" size="large" color="skyBlue" />
           </Link>
         </li>
-      </MenuButtons>
+      </Buttons>
+      <Message />
     </Container>
   );
 }
@@ -59,7 +61,7 @@ const TitleWrapper = styled.div`
   }
 `;
 
-const MenuButtons = styled.ul`
+const Buttons = styled.ul`
   height: 52%;
   text-align: center;
 

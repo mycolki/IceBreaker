@@ -7,7 +7,11 @@ import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-import { replaceQuestions, getFirstLevel } from '../../store/quizSlice';
+import {
+  replaceQuestions,
+  getFirstLevel,
+  onError,
+} from '../../store/quizSlice';
 import { saveBattle } from '../../store/battleSlice';
 
 import { READY } from '../../styles/gsapStyle';
@@ -52,8 +56,13 @@ function Ready() {
         return history.push(`${ROUTE.BREAKING}/${roomId}`);
       }
 
-      await waitForOneSecond();
-      setSecond((prev) => prev - 1);
+      try {
+        await waitForOneSecond();
+        setSecond((prev) => prev - 1);
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
     })();
 
     return () => clearTimeout(timer);

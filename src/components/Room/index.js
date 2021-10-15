@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
-import { showMessage } from '../../store/quizSlice';
+import { showMessage, onError } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';
 
 import iceBear from '../../asset/iceBear.png';
@@ -37,8 +37,15 @@ function Room() {
     });
 
     dispatch(showMessage(BATTLE.PLEASE_READY));
-    const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
-    setName(userName);
+    try {
+      const { userName } = JSON.parse(
+        window.sessionStorage.getItem('userName'),
+      );
+      setName(userName);
+    } catch (err) {
+      dispatch(onError(err.message));
+      history.push(ROUTE.ERROR);
+    }
 
     return () => dispatch(showMessage(RESET));
   }, [dispatch]);

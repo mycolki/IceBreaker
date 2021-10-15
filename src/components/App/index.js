@@ -14,6 +14,7 @@ import Breaking from '../Breaking';
 import Rooms from '../Rooms';
 import Room from '../Room';
 import GameOver from '../GameOver';
+import BattleOver from '../BattleOver';
 import ErrorBox from '../ErrorBox';
 
 function App() {
@@ -47,7 +48,8 @@ function App() {
         <Route path={ROUTE.BREAKING_ID} component={Breaking} />
         <Route path={ROUTE.ROOMS} component={Rooms} />
         <Route path={ROUTE.ROOM_ID} component={Room} />
-        <Route path={ROUTE.GAME_OVER_ID} component={GameOver} />
+        <Route path={ROUTE.GAME_OVER} component={GameOver} />
+        <Route path={ROUTE.BATTLE_OVER_ID} component={BattleOver} />
         <Route path={ROUTE.ERROR} component={ErrorBox} />
       </Switch>
     </AppContainer>
