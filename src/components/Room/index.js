@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import _ from 'lodash';
 
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
-import _ from 'lodash';
 
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData } from '../../store/battleSlice';

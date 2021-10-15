@@ -1,17 +1,16 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import _ from 'lodash';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, update } from 'firebase/database';
 
 import {
-  replaceQuestions,
-  getFirstLevel,
+  showMessage,
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
-  showMessage,
 } from '../../store/quizSlice';
 import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
@@ -28,7 +27,6 @@ function Breaking() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const questions = useSelector((state) => state.quiz?.questions);
 
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
@@ -37,24 +35,32 @@ function Breaking() {
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
 
+  const breakers = useSelector((state) => state.battle?.breakers);
+  const [name, setName] = useState('');
+
   useEffect(() => {
-    if (roomId) {
-      onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
-        const data = snapshot.val();
-
-        if (!data) return;
-
-        dispatch(replaceQuestions(data.questions));
-      });
-    }
-
-    dispatch(getFirstLevel());
+    const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
+    setName(userName);
     return () => dispatch(showMessage(RESET));
-  }, [roomId]);
+  }, [dispatch]);
 
   const goToNextLevel = () => {
     if (level === QUIZ_LENGTH) {
       return history.push(ROUTE.GAME_OVER);
+    }
+
+    if (breakers) {
+      const updatedLevel = _.cloneDeep(breakers).map((breaker) => {
+        if (breaker.name === name) {
+          breaker.level += 1;
+        }
+
+        return breaker;
+      });
+
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        breakers: updatedLevel,
+      });
     }
 
     dispatch(toggleAnswer(false));

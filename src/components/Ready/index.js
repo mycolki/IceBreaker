@@ -3,11 +3,12 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
-import { replaceQuestions } from '../../store/quizSlice';
+import { replaceQuestions, getFirstLevel } from '../../store/quizSlice';
+import { saveBattle } from '../../store/battleSlice';
 
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
@@ -23,15 +24,40 @@ function Ready() {
 
   useEffect(() => {
     if (roomId) {
-      onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+      return onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
         const data = snapshot.val();
 
         if (!data) return;
 
         dispatch(replaceQuestions(data.questions));
+        dispatch(saveBattle(data.breakers));
+        dispatch(getFirstLevel());
       });
     }
-  }, [roomId]);
+
+    dispatch(getFirstLevel());
+  }, [dispatch, roomId]);
+
+  useEffect(() => {
+    let timer;
+
+    const waitForOneSecond = () => {
+      return new Promise((resolve) => {
+        timer = setTimeout(() => resolve(), 1000);
+      });
+    };
+
+    (async () => {
+      if (second === 0) {
+        return history.push(`${ROUTE.BREAKING}/${roomId}`);
+      }
+
+      await waitForOneSecond();
+      setSecond((prev) => prev - 1);
+    })();
+
+    return () => clearTimeout(timer);
+  }, [history, second]);
 
   useEffect(() => {
     if (second === 3) {
@@ -45,20 +71,6 @@ function Ready() {
       gsap.to(READY.CIRCLE, READY.SCALE_UP_FROM_YELLOW);
     }
   }, [second]);
-
-  useEffect(() => {
-    let timer;
-
-    if (second > 0) {
-      timer = setTimeout(() => {
-        setSecond((prev) => prev - 1);
-      }, 1000);
-    } else {
-      history.push(roomId ? `${ROUTE.BREAKING}/${roomId}` : ROUTE.BREAKING);
-    }
-
-    return () => clearTimeout(timer);
-  }, [history, second]);
 
   return (
     <Container className="background">

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -17,9 +17,10 @@ import GameOver from '../GameOver';
 import ErrorBox from '../ErrorBox';
 
 function App() {
+  const match = useRouteMatch();
   const dispatch = useDispatch();
   const history = useHistory();
-
+  console.log(match.path);
   useEffect(() => {
     onValue(ref(getDatabase(), QUIZ), (snapshot) => {
       const data = snapshot.val();
@@ -40,15 +41,15 @@ function App() {
 
   return (
     <AppContainer>
-      <Route exact path={ROUTE.MENU} component={Menu} />
-      <Route path={ROUTE.READY} component={Ready} />
-      <Route path={ROUTE.READY_ID} component={Ready} />
-      <Route path={ROUTE.BREAKING} component={Breaking} />
-      <Route path={ROUTE.BREAKING_ID} component={Breaking} />
-      <Route path={ROUTE.ROOMS} component={Rooms} />
-      <Route path={ROUTE.ROOM_ID} component={Room} />
-      <Route path={ROUTE.GAME_OVER} component={GameOver} />
-      <Route path={ROUTE.ERROR} component={ErrorBox} />
+      <Switch>
+        <Route exact path={ROUTE.MENU} component={Menu} />
+        <Route path={ROUTE.READY_ID} component={Ready} />
+        <Route path={ROUTE.BREAKING_ID} component={Breaking} />
+        <Route path={ROUTE.ROOMS} component={Rooms} />
+        <Route path={ROUTE.ROOM_ID} component={Room} />
+        <Route path={ROUTE.GAME_OVER} component={GameOver} />
+        <Route path={ROUTE.ERROR} component={ErrorBox} />
+      </Switch>
     </AppContainer>
   );
 }

@@ -50,13 +50,15 @@ function CreateRoomModal({ closeModal }) {
       breakers: [
         {
           name,
-          score: 0,
           isReady: false,
+          level: 1,
+          score: 0,
         },
         {
           name: '',
-          score: 0,
           isReady: false,
+          level: 1,
+          score: 0,
         },
       ],
     });
