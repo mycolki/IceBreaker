@@ -47,6 +47,7 @@ function CreateRoomModal({ closeModal }) {
       questions,
       active: true,
       isAllReady: false,
+      isPlaying: true,
       breakers: [
         {
           name,

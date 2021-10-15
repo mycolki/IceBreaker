@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import _ from 'lodash';
 
-import { getDatabase, ref, update } from 'firebase/database';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 
 import {
   showMessage,
@@ -37,15 +37,37 @@ function Breaking() {
 
   const breakers = useSelector((state) => state.battle?.breakers);
   const [name, setName] = useState('');
+  const [isGameOver, setIsGameOver] = useState(false);
 
   useEffect(() => {
     const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
     setName(userName);
+
     return () => dispatch(showMessage(RESET));
   }, [dispatch]);
 
+  useEffect(() => {
+    onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+      const data = snapshot.val();
+
+      if (!data) return;
+
+      if (!data.isPlaying) {
+        return history.push(`${ROUTE.GAME_OVER}/${roomId}`);
+      }
+    });
+  }, [isGameOver]);
+
   const goToNextLevel = () => {
-    if (level === QUIZ_LENGTH) {
+    if (level === 3) {
+      if (breakers) {
+        update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+          isPlaying: false,
+        });
+
+        return setIsGameOver(true);
+      }
+
       return history.push(ROUTE.GAME_OVER);
     }
 

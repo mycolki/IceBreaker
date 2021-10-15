@@ -47,7 +47,7 @@ function App() {
         <Route path={ROUTE.BREAKING_ID} component={Breaking} />
         <Route path={ROUTE.ROOMS} component={Rooms} />
         <Route path={ROUTE.ROOM_ID} component={Room} />
-        <Route path={ROUTE.GAME_OVER} component={GameOver} />
+        <Route path={ROUTE.GAME_OVER_ID} component={GameOver} />
         <Route path={ROUTE.ERROR} component={ErrorBox} />
       </Switch>
     </AppContainer>

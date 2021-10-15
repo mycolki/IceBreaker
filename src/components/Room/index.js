@@ -63,6 +63,7 @@ function Room() {
 
   useEffect(() => {
     let timer;
+
     if (!rooms) return;
 
     if (rooms[roomId].isAllReady) {
