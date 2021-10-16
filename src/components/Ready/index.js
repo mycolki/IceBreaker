@@ -26,21 +26,20 @@ function Ready() {
   const [second, setSecond] = useState(3);
 
   useEffect(() => {
-    if (roomId) {
-      return onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
-        const data = snapshot.val();
+    if (!roomId) return dispatch(getFirstLevel());
 
-        if (!data) return;
+    return onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+      const data = snapshot.val();
 
-        dispatch(replaceQuestions(data.questions));
-        dispatch(getFirstLevel());
-      });
-    }
-
-    dispatch(getFirstLevel());
+      if (!data) return;
+      dispatch(replaceQuestions(data.questions));
+      dispatch(getFirstLevel());
+    });
   }, [dispatch, roomId]);
 
   useEffect(() => {
+    if (!roomId) return;
+
     try {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
@@ -63,7 +62,9 @@ function Ready() {
 
     (async () => {
       if (second === 0) {
-        return history.push(`${ROUTE.BREAKING}/${roomId}`);
+        roomId
+          ? history.push(`${ROUTE.BREAKING}/${roomId}`)
+          : history.push(ROUTE.BREAKING);
       }
 
       try {

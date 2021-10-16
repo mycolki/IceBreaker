@@ -54,7 +54,6 @@ const quizSlice = createSlice({
       state.userInput = action.payload;
     },
     passNextLevel(state) {
-      console.log('패스!');
       const currentLevel = state.currentQuestion.level;
       const nextQuestion = state.questions.pop();
       nextQuestion.level = currentLevel + 1;

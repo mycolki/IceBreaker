@@ -4,7 +4,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import _ from 'lodash';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
 
@@ -40,11 +39,11 @@ function Header() {
     if (name && level) {
       let updated;
       onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
-        updated = snapshot.val().map((v) => {
-          if (v.name === name) {
-            v.level = level;
+        updated = snapshot.val().map((breaker) => {
+          if (breaker.name === name) {
+            breaker.level = level;
           }
-          return v;
+          return breaker;
         });
       });
 

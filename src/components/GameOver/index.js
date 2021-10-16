@@ -18,7 +18,7 @@ function GameOver() {
       </TitleWrapper>
       <Buttons>
         <li className="button">
-          <Button text="친구에게 공유하기" size="large" color="pink" />
+          <Button text="공유하기" size="large" color="pink" />
         </li>
         <li className="button">
           <Button text="랭킹 등록" size="large" color="purple" />

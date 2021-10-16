@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import _ from 'lodash';
 
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { getDatabase, ref, set, onValue, update } from 'firebase/database';
+import { GiBearFace } from 'react-icons/gi';
 
-import { showMessage, onError } from '../../store/quizSlice';
-import { saveBattle } from '../../store/battleSlice';
+import { onError } from '../../store/quizSlice';
+import { saveBattle, saveName } from '../../store/battleSlice';
 import { ROUTE, ROOM } from '../../constants/game';
-import { RESET } from '../../constants/messages';
 
 import Button from '../share/Button';
 import Message from '../share/Message';
@@ -18,50 +18,64 @@ import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 function BattleOver() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
   const breakers = useSelector((state) => state.battle?.breakers);
   const name = useSelector((state) => state.battle?.name);
+  const [isWinner, setIsWinner] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
 
   useEffect(() => {
+    try {
+      const { userName } = JSON.parse(
+        window.sessionStorage.getItem('userName'),
+      );
+      dispatch(saveName(userName));
+    } catch (err) {
+      dispatch(onError(err.message));
+      history.push(ROUTE.ERROR);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) return;
-
-      dispatch(saveBattle(data));
-    });
-
-    if (breakers) {
-      const sorted = _.sortBy(_.cloneDeep(breakers), 'score');
+      const sorted = _.sortBy(_.cloneDeep(snapshot.val()), 'score');
 
       if (sorted[0].score === sorted[1].score) return setIsDraw(true);
 
       sorted[1].isWinner = true;
 
+      if (sorted[1].name === name) setIsWinner(true);
+
+      dispatch(saveBattle(sorted));
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
         breakers: sorted,
       });
-    }
-  }, [dispatch, roomId]);
+    });
+  }, [dispatch, roomId, name]);
+
+  const goToMenu = () => {
+    set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    history.push(ROUTE.MENU);
+  };
 
   return (
-    <Container>
-      <Result>
+    <Container isWinner={isWinner} isDraw={isDraw}>
+      <Result isWinner={isWinner} isDraw={isDraw}>
         {isDraw ? (
           <h1 className="result-title">DRAW</h1>
         ) : (
-          <h1 className="result-title">
-            {_.filter(breakers, { name, isWinner: true })
-              ? 'YOU WIN'
-              : 'YOU LOST'}
-          </h1>
+          <h1 className="result-title">{isWinner ? 'YOU WIN' : 'YOU LOST'}</h1>
         )}
       </Result>
       <Scores>
         <div className="vs">vs</div>
         {breakers &&
           breakers.map((breaker) => (
-            <ScoreBox isWinner={breaker.isWinner}>
+            <ScoreBox
+              isWinner={breaker.isWinner}
+              isUser={breaker.name === name}
+            >
+              {breaker.name === name && <GiBearFace className="user-icon" />}
               <div className="score">{breaker.score}</div>
               <div className="user-name">{breaker.name}</div>
             </ScoreBox>
@@ -73,7 +87,12 @@ function BattleOver() {
         </li>
         <li className="button">
           <Link to={ROUTE.MENU}>
-            <Button text="처음으로" size="large" color="skyBlue" />
+            <Button
+              text="처음으로"
+              size="large"
+              color="skyBlue"
+              onCick={goToMenu}
+            />
           </Link>
         </li>
       </Buttons>
@@ -86,9 +105,10 @@ export default BattleOver;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.winGameBg};
-  background: ${({ theme }) => theme.loseGameBg};
   text-align: center;
+  background: ${({ theme, isDraw }) => isDraw && theme.drawResultBg};
+  background: ${({ theme, isWinner }) =>
+    isWinner ? theme.winResultBg : theme.loseResultBg};
 `;
 
 const Result = styled.div`
@@ -103,8 +123,9 @@ const Result = styled.div`
     font-size: 44px;
     transform: translate(-50%, -50%);
     color: ${({ theme }) => theme.white};
-    -webkit-text-stroke: 2px ${({ theme }) => theme.deepBlue};
-    -webkit-text-stroke: 2px ${({ theme }) => theme.deepPink};
+    -webkit-text-stroke: 2px ${({ theme, isDraw }) => isDraw && theme.green};
+    -webkit-text-stroke: 2px
+      ${({ isWinner, theme }) => (isWinner ? theme.deepBlue : theme.deepPink)};
   }
 `;
 
@@ -120,18 +141,36 @@ const Scores = styled.div`
 `;
 
 const ScoreBox = styled.div`
-  width: 45%;
+  ${flexCenterColumn}
+  position: relative;
+  width: 50%;
   font-family: 'Do hyeon';
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme, isUser }) => (isUser ? theme.white : theme.deepBlue)};
 
   .score {
-    height: 60px;
-    font-size: 55px;
+    height: 75px;
+    font-size: ${({ isUser }) => (isUser ? '75px' : '55px')};
+    line-height: ${({ isUser }) => (isUser ? '75px' : '80px')};
   }
 
   .user-name {
+    height: 30px;
     font-family: 'Do hyeon';
+    font-size: ${({ isWinner }) => (isWinner ? '30px' : '24px')};
+    line-height: ${({ isWinner }) => (isWinner ? '30px' : '37px')};
+  }
+
+  .user-icon {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    padding: 2px;
+    border-radius: 10px;
     font-size: 22px;
+    background-color: ${({ theme }) => theme.deepGray};
+    transform: translate(40px, -14px);
+    color: ${({ theme }) => theme.white};
   }
 `;
 
