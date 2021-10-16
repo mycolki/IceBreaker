@@ -8,7 +8,7 @@ import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
 import { showMessage, onError } from '../../store/quizSlice';
-import { saveRoomData } from '../../store/battleSlice';
+import { saveRoomData, saveName, saveId } from '../../store/battleSlice';
 
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -24,7 +24,7 @@ function Room() {
   const history = useHistory();
   const { roomId } = useParams();
   const rooms = useSelector((state) => state.battle?.rooms);
-  const [name, setName] = useState('');
+  const name = useSelector((state) => state.battle?.name);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,8 @@ function Room() {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
       );
-      setName(userName);
+
+      dispatch(saveName(userName));
     } catch (err) {
       dispatch(onError(err.message));
       history.push(ROUTE.ERROR);
@@ -85,6 +86,7 @@ function Room() {
 
   const exitRoom = () => {
     if (!rooms) return;
+
     const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === 1) {
@@ -135,6 +137,15 @@ function Room() {
     const readyLength = _.filter(breakers, 'isReady').length;
 
     if (readyLength === BREAKER_LENGTH) {
+      const eachBreakerId = {};
+
+      clone.map((breaker, index) => {
+        breaker.name === name
+          ? (eachBreakerId.id = index)
+          : (eachBreakerId.opponentId = index);
+      });
+
+      dispatch(saveId(eachBreakerId));
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
         isAllReady: true,
       });
