@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -40,12 +40,12 @@ function Breaking() {
   useEffect(() => {
     if (!roomId) return;
 
-    onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
-      const data = snapshot.val();
+    onValue(ref(getDatabase(), `${ROOM}/${roomId}/isPlaying`), (snapshot) => {
+      if (snapshot.val()) return;
 
-      if (!data.isPlaying) history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
+      history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
     });
-  });
+  }, [roomId]);
 
   const goToLastPage = () => {
     if (roomId) {

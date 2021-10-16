@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import _ from 'lodash';
 
 import { getDatabase, ref, set, onValue } from 'firebase/database';
 import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';

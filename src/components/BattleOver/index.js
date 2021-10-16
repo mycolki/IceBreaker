@@ -4,11 +4,11 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import _ from 'lodash';
 
-import { getDatabase, ref, set, onValue, update } from 'firebase/database';
+import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
 import { onError } from '../../store/quizSlice';
-import { saveBattle, saveName } from '../../store/battleSlice';
+import { saveBreakers, saveName } from '../../store/battleSlice';
 import { ROUTE, ROOM } from '../../constants/game';
 
 import Button from '../share/Button';
@@ -37,20 +37,31 @@ function BattleOver() {
   }, [dispatch]);
 
   useEffect(() => {
-    onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
-      const sorted = _.sortBy(_.cloneDeep(snapshot.val()), 'score');
+    const getBreakers = async () => {
+      try {
+        const snapshot = await get(
+          child(ref(getDatabase()), `${ROOM}/${roomId}/breakers`),
+        );
 
-      if (sorted[0].score === sorted[1].score) return setIsDraw(true);
+        const sorted = _.sortBy(_.cloneDeep(snapshot.val()), 'score');
 
-      sorted[1].isWinner = true;
+        if (sorted[0].score === sorted[1].score) return setIsDraw(true);
 
-      if (sorted[1].name === name) setIsWinner(true);
+        sorted[1].isWinner = true;
 
-      dispatch(saveBattle(sorted));
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        breakers: sorted,
-      });
-    });
+        if (sorted[1].name === name) setIsWinner(true);
+
+        dispatch(saveBreakers(sorted));
+        update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+          breakers: sorted,
+        });
+      } catch (err) {
+        dispatch(onError(err.message));
+        history.push(ROUTE.ERROR);
+      }
+    };
+
+    getBreakers();
   }, [dispatch, roomId, name]);
 
   const goToMenu = () => {
@@ -70,8 +81,9 @@ function BattleOver() {
       <Scores>
         <div className="vs">vs</div>
         {breakers &&
-          breakers.map((breaker) => (
+          breakers.map((breaker, i) => (
             <ScoreBox
+              key={breaker.name + i}
               isWinner={breaker.isWinner}
               isUser={breaker.name === name}
             >

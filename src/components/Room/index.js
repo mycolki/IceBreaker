@@ -8,7 +8,7 @@ import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
 import { showMessage, onError } from '../../store/quizSlice';
-import { saveRoomData, saveName, saveId } from '../../store/battleSlice';
+import { saveRoomData, saveName } from '../../store/battleSlice';
 
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';

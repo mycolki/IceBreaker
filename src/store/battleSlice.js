@@ -21,7 +21,7 @@ const battleSlice = createSlice({
     saveRoomId(state, action) {
       state.roomId = action.payload;
     },
-    saveBattle(state, action) {
+    saveBreakers(state, action) {
       state.breakers = action.payload;
     },
     saveName(state, action) {
@@ -32,7 +32,7 @@ const battleSlice = createSlice({
       state.opponentId = opponentId;
       state.id = id;
     },
-    saveOpponentLevel(state, action) {
+    saveOpponentLevel(state) {
       state.opponentLevel += 1;
     },
   },
@@ -41,7 +41,7 @@ const battleSlice = createSlice({
 export const {
   saveRoomData,
   saveRoomId,
-  saveBattle,
+  saveBreakers,
   saveName,
   saveId,
   saveOpponentLevel,

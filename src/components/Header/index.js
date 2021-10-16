@@ -4,7 +4,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import _ from 'lodash';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
 import {
