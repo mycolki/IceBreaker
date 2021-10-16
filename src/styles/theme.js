@@ -27,9 +27,14 @@ const theme = {
     'linear-gradient(180deg, rgba(53, 135, 101, 0.84) 0%, rgba(29, 108, 75, 0.84) 100%)',
   yellowCircleBg:
     'linear-gradient(180deg, rgba(247, 202, 44, 0.89) 0%, rgba(249, 166, 42, 0.89) 100%)',
-  winGameBg: 'linear-gradient(180deg, #f9682a 0%, #ffe587 100%)',
-  loseGameBg:
+  soloResultBg: 'linear-gradient(180deg, #f9682a 0%, #ffe587 100%)',
+  winResultBg:
+    'linear-gradient(180deg, #52C1FF 0%, rgba(252, 146, 216, 0.92) 100%)',
+  loseResultBg:
     'linear-gradient(180deg, #f54379 0%, rgba(76, 95, 174, 0.67) 100%)',
+  drawResultBg:
+    'linear-gradient(180deg, rgba(197, 227, 244, 0.7) 0%, rgba(70, 192, 134, 0.7625) 26.56%, #fc8b23 100%)',
+
   makingIceBg: 'linear-gradient(180deg, #fafdff 0%, #33b6ff 100%)',
   roomBg: 'linear-gradient(180deg, #fc92d8 0%, #f54379 100%)',
   rankingBg:

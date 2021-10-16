@@ -5,11 +5,15 @@ export const QUIZ_LENGTH = 7;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
+  READY_ID: '/ready/:roomId',
   BREAKING: '/breaking',
+  BREAKING_ID: '/breaking/:roomId',
   ROOMS: '/rooms',
   ROOM: '/room',
   ROOM_ID: '/room/:roomId',
   GAME_OVER: '/gameover',
+  BATTLE_OVER_ID: '/battleover/:roomId',
+  BATTLE_OVER: '/battleover',
   ERROR: '/error',
 };
 

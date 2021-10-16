@@ -32,7 +32,7 @@ const Container = styled.div`
   height: 100%;
   box-sizing: border-box;
   padding: 0 50px;
-  background: ${({ theme }) => theme.loseGameBg};
+  background: ${({ theme }) => theme.loseResultBg};
 
   .message {
     margin-bottom: 50px;

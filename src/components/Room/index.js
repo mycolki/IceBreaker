@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import _ from 'lodash';
 
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
-import _ from 'lodash';
 
-import { showMessage } from '../../store/quizSlice';
-import { saveRoomData } from '../../store/battleSlice';
-import { checkBreakerLength } from '../../utils/battle/checkBreakerLength';
+import { showMessage, onError } from '../../store/quizSlice';
+import { saveRoomData, saveName } from '../../store/battleSlice';
 
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -25,7 +24,8 @@ function Room() {
   const history = useHistory();
   const { roomId } = useParams();
   const rooms = useSelector((state) => state.battle?.rooms);
-  const [name, setName] = useState('');
+  const name = useSelector((state) => state.battle?.name);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     onValue(ref(getDatabase(), ROOM), (snapshot) => {
@@ -36,49 +36,78 @@ function Room() {
       dispatch(saveRoomData(data));
     });
 
-    if (
-      rooms &&
-      checkBreakerLength(rooms[roomId]?.breakers, 'name') === BREAKER_LENGTH
-    ) {
+    dispatch(showMessage(BATTLE.PLEASE_READY));
+    try {
+      const { userName } = JSON.parse(
+        window.sessionStorage.getItem('userName'),
+      );
+
+      dispatch(saveName(userName));
+    } catch (err) {
+      dispatch(onError(err.message));
+      history.push(ROUTE.ERROR);
+    }
+
+    return () => dispatch(showMessage(RESET));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!rooms) return;
+
+    const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
+
+    if (breakerLength === BREAKER_LENGTH) {
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
         active: false,
       });
     }
 
-    dispatch(showMessage(BATTLE.PLEASE_READY));
-    const { userName } = JSON.parse(window.sessionStorage.getItem('userName'));
-    setName(userName);
-
-    return () => {
-      dispatch(showMessage(RESET));
-    };
-  }, [dispatch, history, roomId]);
+    for (const breaker of rooms[roomId].breakers) {
+      if (breaker.name === name && breaker.isReady) {
+        return setIsReady(true);
+      }
+    }
+  }, [rooms]);
 
   useEffect(() => {
+    let timer;
+
+    if (!rooms) return;
+
     if (rooms[roomId].isAllReady) {
       dispatch(showMessage(BATTLE.START));
+      timer = setTimeout(() => {
+        history.push(`${ROUTE.READY}/${roomId}`);
+      }, 3000);
     }
+
+    return () => clearTimeout(timer);
   });
 
   const exitRoom = () => {
-    if (checkBreakerLength(rooms[roomId].breakers, 'name') === 1) {
+    if (!rooms) return;
+
+    const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
+
+    if (breakerLength === 1) {
       set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
       return history.push(ROUTE.ROOMS);
     }
 
-    const breakers = [];
     const clone = _.cloneDeep([...rooms[roomId].breakers]);
-    clone.forEach((breaker, i) => {
+
+    if (clone[0].name === name) {
+      [clone[0], clone[1]] = [clone[1], clone[0]];
+    }
+
+    const breakers = clone.map((breaker) => {
+      breaker.isReady = false;
+
       if (breaker.name === name) {
         breaker.name = '';
-
-        if (breaker === clone[0]) {
-          const other = clone[1];
-          [breakers[0], breakers[1]] = [other, breaker];
-        }
       }
 
-      breaker.isReady = false;
+      return breaker;
     });
 
     update(ref(getDatabase(), `${ROOM}/${roomId}`), {
@@ -90,22 +119,12 @@ function Room() {
     history.push(ROUTE.ROOMS);
   };
 
-  const readyBattle = () => {
-    const readyLength = checkBreakerLength(
-      [...rooms[roomId].breakers],
-      'isReady',
-    );
-
-    if (readyLength === 1) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        isAllReady: true,
-      });
-    }
-
+  const readyBattle = async () => {
     const clone = _.cloneDeep([...rooms[roomId].breakers]);
     const breakers = clone.map((breaker) => {
       if (breaker.name === name) {
         breaker.isReady = !breaker.isReady;
+        setIsReady(false);
       }
 
       return breaker;
@@ -114,6 +133,14 @@ function Room() {
     update(ref(getDatabase(), `${ROOM}/${roomId}`), {
       breakers,
     });
+
+    const readyLength = _.filter(breakers, 'isReady').length;
+
+    if (readyLength === BREAKER_LENGTH) {
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        isAllReady: true,
+      });
+    }
   };
 
   return (
@@ -146,19 +173,19 @@ function Room() {
             ))
           : null}
       </BattleGround>
-      <RoomFooter isAllReady={rooms[roomId].isAllReady}>
+      <RoomFooter isAllReady={rooms && rooms[roomId].isAllReady}>
         <Button
           text="READY"
           size="medium"
           color="purple"
-          disabled={rooms[roomId].isAllReady}
+          disabled={rooms && rooms[roomId].isAllReady}
           onClick={readyBattle}
         />
         <Button
           text="나가기"
           size="medium"
           color="pink"
-          disabled={rooms[roomId].isAllReady}
+          disabled={rooms && (isReady || rooms[roomId].isAllReady)}
           onClick={exitRoom}
         />
       </RoomFooter>
@@ -190,9 +217,10 @@ const Breaker = styled.div`
     position: relative;
     display: block;
     font-family: 'Do hyeon';
-    font-size: ${({ isUser }) => (isUser ? '26px' : '20px')};
-    color: ${({ theme }) => theme.deepGray};
-    -webkit-text-stroke: 1px ${({ theme }) => theme.deepGray};
+    font-size: ${({ isUser }) => (isUser ? '27px' : '20px')};
+    color: ${({ theme, isUser }) => (isUser ? theme.white : theme.deepGray)};
+    -webkit-text-stroke: 1px
+      ${({ theme, isUser }) => (isUser ? theme.white : theme.deepGray)};
 
     &:last-child {
       display: block;

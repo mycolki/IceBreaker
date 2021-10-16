@@ -93,30 +93,34 @@ function Rooms() {
       <Message />
       <RoomList>
         {rooms
-          ? Object.entries(rooms).map(([id, room]) => (
-              <RoomItem
-                key={id}
-                onClick={() => enterRoom(id)}
-                active={room.active}
-              >
-                {room.active ? null : (
-                  <span className="on-battle">
-                    <RiGamepadFill />
-                  </span>
-                )}
-                <div className="breaker-box">
-                  <span className="breaker-order">BREAKER1</span>
-                  <span className="breaker-name">{room.breakers[0].name}</span>
-                </div>
-                <div className="vs">vs</div>
-                <div className="breaker-box">
-                  <span className="breaker-order">BREAKER2</span>
-                  <span className="breaker-name">
-                    {room.breakers[1].name ? room.breakers[1].name : '?'}
-                  </span>
-                </div>
-              </RoomItem>
-            ))
+          ? Object.entries(rooms).map(([id, room]) => {
+              return room.isPlaying ? (
+                <RoomItem
+                  key={id}
+                  onClick={() => enterRoom(id)}
+                  active={room.active}
+                >
+                  {room.active ? null : (
+                    <span className="on-battle">
+                      <RiGamepadFill />
+                    </span>
+                  )}
+                  <div className="breaker-box">
+                    <span className="breaker-order">BREAKER1</span>
+                    <span className="breaker-name">
+                      {room.breakers[0].name}
+                    </span>
+                  </div>
+                  <div className="vs">vs</div>
+                  <div className="breaker-box">
+                    <span className="breaker-order">BREAKER2</span>
+                    <span className="breaker-name">
+                      {room.breakers[1].name ? room.breakers[1].name : '?'}
+                    </span>
+                  </div>
+                </RoomItem>
+              ) : null;
+            })
           : null}
       </RoomList>
       <RoomFooter>

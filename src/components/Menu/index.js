@@ -46,12 +46,12 @@ const Container = styled.div`
 
 const TitleWrapper = styled.div`
   position: relative;
-  height: 48%;
+  height: 55%;
   text-align: center;
 
   .app-title {
     position: absolute;
-    top: 75%;
+    top: 60%;
     left: 50%;
     width: 100%;
     line-height: 1.6em;
@@ -63,14 +63,11 @@ const TitleWrapper = styled.div`
 `;
 
 const MenuButtons = styled.ul`
-  height: 52%;
+  height: 45%;
   text-align: center;
 
-  .button {
-    margin-bottom: 0.7em;
-  }
-
   button {
+    margin-bottom: 15px;
     animation: ${smallPounding} 1.2s infinite;
   }
 `;

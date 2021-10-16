@@ -17,6 +17,7 @@ function AnswerDisplayBox() {
             type="text"
             value={letter === userInput[i] ? letter : ''}
             readOnly
+            autoFocus
           />
         ))}
     </Wrapper>

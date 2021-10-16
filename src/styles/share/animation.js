@@ -43,10 +43,8 @@ export const smallPounding = keyframes`
 `;
 
 export const rightAndLeft = keyframes`
-
   0% {
     transform: rotate(-4deg);
-
   }
 
   50% {
@@ -55,6 +53,19 @@ export const rightAndLeft = keyframes`
 
   100% {
     transform: rotate(-4deg);
+  }
+`;
 
+export const emergency = keyframes`
+  0% {
+    color: ${({ theme }) => theme.deepPink};
+  }
+
+  50% {
+    color: ${({ theme }) => theme.white};
+  }
+
+  100% {
+    color: ${({ theme }) => theme.deepGray};
   }
 `;

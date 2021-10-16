@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, onValue, update } from 'firebase/database';
+
 import {
+  showMessage,
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
-  showMessage,
 } from '../../store/quizSlice';
-import { QUIZ_LENGTH, ROUTE } from '../../constants/game';
+import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
 import Header from '../Header';
@@ -21,6 +23,7 @@ import Footer from '../Footer';
 import Button from '../share/Button';
 
 function Breaking() {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
@@ -32,13 +35,29 @@ function Breaking() {
 
   useEffect(() => {
     return () => dispatch(showMessage(RESET));
-  });
+  }, [dispatch]);
 
-  const goToNextLevel = () => {
-    if (level === QUIZ_LENGTH) {
-      return history.push(ROUTE.GAME_OVER);
+  useEffect(() => {
+    if (!roomId) return;
+
+    onValue(ref(getDatabase(), `${ROOM}/${roomId}/isPlaying`), (snapshot) => {
+      if (snapshot.val()) return;
+
+      history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
+    });
+  }, [roomId]);
+
+  const goToLastPage = () => {
+    if (roomId) {
+      return update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        isPlaying: false,
+      });
     }
 
+    return history.push(ROUTE.GAME_OVER);
+  };
+
+  const goToNextLevel = () => {
     dispatch(toggleAnswer(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
@@ -64,7 +83,7 @@ function Breaking() {
               className="button"
               size="medium"
               color="lightPurple"
-              onClick={goToNextLevel}
+              onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
             />
           </div>
         </Answer>

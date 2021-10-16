@@ -1,26 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 import {
   toggleForm,
   toggleAnswer,
   showMessage,
   onError,
 } from '../../store/quizSlice';
-
+import { saveOpponentLevel } from '../../store/battleSlice';
 import { pounding } from '../../styles/share/animation';
 import {
   ROUTE,
+  ROOM,
   SECONDS_PER_LEVEL,
   TIME_LIMIT_ANSWER,
 } from '../../constants/game';
 import { ANSWER, BREAK } from '../../constants/messages';
+import { flexCenter } from '../../styles/share/common';
+import { emergency } from '../../styles/share/animation';
 
 function Header() {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
@@ -28,8 +33,50 @@ function Header() {
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
 
+  const name = useSelector((state) => state.battle?.name);
+  const id = useSelector((state) => state.battle?.id);
+  const opponentId = useSelector((state) => state.battle?.opponentId);
+  const opponentLevel = useSelector((state) => state.battle?.opponentLevel);
+
   const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
   const [second, setSecond] = useState(TIME_LIMIT_BREAK);
+  const [showWarning, setShowWarning] = useState(false);
+
+  useEffect(() => {
+    if (typeof opponentId !== 'number') return;
+
+    return onValue(
+      ref(getDatabase(), `${ROOM}/${roomId}/breakers/${opponentId}/level`),
+      (snapshot) => {
+        const level = snapshot.val();
+
+        if (level === 1) return;
+
+        dispatch(saveOpponentLevel());
+
+        setShowWarning(true);
+        setTimeout(() => {
+          setShowWarning(false);
+        }, 3000);
+      },
+    );
+  }, [opponentId]);
+
+  useEffect(() => {
+    if (!name || !level) return;
+
+    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers/${id}`), {
+      level,
+    });
+  }, [level]);
+
+  useEffect(() => {
+    if (!name || !score) return;
+
+    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers/${id}`), {
+      score,
+    });
+  }, [score]);
 
   useEffect(() => {
     if (!level) return;
@@ -79,8 +126,11 @@ function Header() {
   }, [dispatch, level, isTimeOver, isImageLoaded, history, TIME_LIMIT_BREAK]);
 
   return (
-    <Wrapper>
-      <StateBar>
+    <Container>
+      {showWarning && (
+        <BattleMessage>상대 브레이커 레벨 {opponentLevel} 진입!</BattleMessage>
+      )}
+      <StateBox>
         <Stage width={100} height={64}>
           <Layer>
             <RegularPolygon
@@ -97,24 +147,25 @@ function Header() {
           <span className="level">Lv.{level}</span>
           <span className="score">{score === 0 ? `00` : score}</span>
         </UserScore>
-      </StateBar>
+      </StateBox>
       <Time>
         <span className="clock">⏰</span>
         <span className="second">{second < 10 ? `0${second}` : second}</span>
       </Time>
-    </Wrapper>
+    </Container>
   );
 }
 
 export default Header;
 
-const Wrapper = styled.div`
+const Container = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   height: 9%;
 `;
 
-const StateBar = styled.div`
+const StateBox = styled.div`
   display: flex;
   align-items: center;
   width: 75%;
@@ -156,4 +207,17 @@ const Time = styled.div`
   .answer {
     color: ${({ theme }) => theme.red};
   }
+`;
+
+const BattleMessage = styled.div`
+  ${flexCenter}
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-family: 'Do Hyeon';
+  color: ${({ theme }) => theme.deepPink};
+  animation: ${emergency} 1s infinite;
 `;

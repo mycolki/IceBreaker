@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { getDatabase, ref, set } from '@firebase/database';
-import { saveRoomId } from '../../../store/battleSlice';
+import { saveRoomId, saveName } from '../../../store/battleSlice';
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import { MODAL_TITLE, ROOM, ROUTE } from '../../../constants/game';
@@ -23,9 +23,10 @@ function CreateRoomModal({ closeModal }) {
   const history = useHistory();
   const inputRef = useRef();
   const roomId = useSelector((state) => state.battle?.roomId);
+  const questions = useSelector((state) => state.quiz?.questions);
+  const name = useSelector((state) => state.battle?.name);
   const [title, setTitle] = useState(MODAL_TITLE.INPUT_HOST_NAME);
   const [input, setInput] = useState('');
-  const [name, setName] = useState('');
 
   useEffect(() => {
     return () => {
@@ -37,24 +38,28 @@ function CreateRoomModal({ closeModal }) {
   const enterRoom = (ev) => {
     ev.preventDefault();
 
+    if (!name) return;
+
     const roomId = input;
-    window.sessionStorage.setItem(
-      'userName',
-      JSON.stringify({ userName: name }),
-    );
     set(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      questions,
       active: true,
       isAllReady: false,
+      isPlaying: true,
       breakers: [
         {
           name,
-          score: 0,
           isReady: false,
+          level: 1,
+          score: 0,
+          isWinner: false,
         },
         {
           name: '',
-          score: 0,
           isReady: false,
+          level: 1,
+          score: 0,
+          isWinner: false,
         },
       ],
     });
@@ -71,7 +76,13 @@ function CreateRoomModal({ closeModal }) {
     }
 
     const roomId = Date.now();
-    setName(input);
+
+    dispatch(saveName(input));
+    window.sessionStorage.setItem(
+      'userName',
+      JSON.stringify({ userName: input }),
+    );
+
     setInput(roomId);
     copyToClipboard(roomId);
 
@@ -100,6 +111,7 @@ function CreateRoomModal({ closeModal }) {
           onChange={handleInput}
           ref={inputRef}
           maxLength={roomId ? null : '7'}
+          autoFocus
         />
         <div className="button-area">
           <Button

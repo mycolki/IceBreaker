@@ -10,6 +10,7 @@ import {
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
 import { inspectKorean } from '../../utils/inspectInputType';
+
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { VALIDATION_INPUT, VALIDATION_ANSWER } from '../../constants/messages';
 
@@ -24,9 +25,7 @@ function InputBox() {
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    if (isTimeOver) {
-      setInput('');
-    }
+    if (isTimeOver) setInput('');
   }, [isTimeOver]);
 
   const submitInput = (ev) => {
@@ -36,6 +35,7 @@ function InputBox() {
       setInput('');
       dispatch(addScore());
       dispatch(showAnswerBoxByInput(input));
+
       return dispatch(toggleAnswer(true));
     }
 
@@ -116,6 +116,7 @@ function InputBox() {
             placeholder="Guess What"
             value={input}
             onChange={handleInput}
+            autoFocus
           />
           <Button
             text="Break"
