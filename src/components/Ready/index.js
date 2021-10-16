@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -12,7 +12,7 @@ import {
   getFirstLevel,
   onError,
 } from '../../store/quizSlice';
-import { saveName } from '../../store/battleSlice';
+import { saveName, saveId, saveBattle } from '../../store/battleSlice';
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -23,6 +23,8 @@ function Ready() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+  const name = useSelector((state) => state.battle?.name);
+  const breakers = useSelector((state) => state.battle?.breakers);
   const [second, setSecond] = useState(3);
 
   useEffect(() => {
@@ -32,10 +34,26 @@ function Ready() {
       const data = snapshot.val();
 
       if (!data) return;
+
       dispatch(replaceQuestions(data.questions));
+      dispatch(saveBattle(data.breakers));
       dispatch(getFirstLevel());
     });
   }, [dispatch, roomId]);
+
+  useEffect(() => {
+    if (!name || !breakers) return;
+
+    const eachBreakerId = {};
+
+    breakers.forEach((breaker, index) => {
+      breaker.name === name
+        ? (eachBreakerId.id = index)
+        : (eachBreakerId.opponentId = index);
+    });
+
+    dispatch(saveId(eachBreakerId));
+  }, [dispatch, name, breakers]);
 
   useEffect(() => {
     if (!roomId) return;

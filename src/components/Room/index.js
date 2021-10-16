@@ -137,15 +137,6 @@ function Room() {
     const readyLength = _.filter(breakers, 'isReady').length;
 
     if (readyLength === BREAKER_LENGTH) {
-      const eachBreakerId = {};
-
-      clone.map((breaker, index) => {
-        breaker.name === name
-          ? (eachBreakerId.id = index)
-          : (eachBreakerId.opponentId = index);
-      });
-
-      dispatch(saveId(eachBreakerId));
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
         isAllReady: true,
       });

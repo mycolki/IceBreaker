@@ -7,7 +7,7 @@ const initialState = {
   breakers: null,
   name: '',
   id: '',
-  opponentId: '',
+  opponentId: null,
   opponentLevel: 1,
 };
 

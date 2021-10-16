@@ -33,7 +33,10 @@ function Header() {
   const score = useSelector((state) => state.quiz?.score);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+
   const name = useSelector((state) => state.battle?.name);
+  const id = useSelector((state) => state.battle?.id);
+  const opponentId = useSelector((state) => state.battle?.opponentId);
   const opponentLevel = useSelector((state) => state.battle?.opponentLevel);
 
   const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
@@ -41,60 +44,39 @@ function Header() {
   const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
-    if (!roomId && opponentLevel && showWarning) return;
+    if (typeof opponentId !== 'number') return;
 
     return onValue(
-      ref(getDatabase(), `${ROOM}/${roomId}/breakers/0/level`),
+      ref(getDatabase(), `${ROOM}/${roomId}/breakers/${opponentId}/level`),
       (snapshot) => {
-        console.log(snapshot.val());
-        // const opponent = _.find(
-        //   snapshot.val(),
-        //   (breaker) => breaker.name !== name,
-        // );
+        const level = snapshot.val();
 
-        // if (opponent.level === 1) return;
-        // if (opponent.level === opponentLevel) return;
+        if (level === 1) return;
 
-        // setShowWarning(true);
-        // dispatch(saveOpponentLevel());
+        dispatch(saveOpponentLevel());
+
+        setShowWarning(true);
+        setTimeout(() => {
+          setShowWarning(false);
+        }, 3000);
       },
     );
-  });
+  }, [opponentId]);
 
   useEffect(() => {
-    if (name && level) {
-      let updated;
-      onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
-        updated = snapshot.val().map((breaker) => {
-          if (breaker.name === name) {
-            breaker.level = level;
-          }
-          return breaker;
-        });
-      });
+    if (!name || !level) return;
 
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        breakers: updated,
-      });
-    }
+    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers/${id}`), {
+      level,
+    });
   }, [level]);
 
   useEffect(() => {
-    if (name && score) {
-      let updated;
-      onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
-        updated = snapshot.val().map((breaker) => {
-          if (breaker.name === name) {
-            breaker.score = score;
-          }
-          return breaker;
-        });
-      });
+    if (!name || !score) return;
 
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        breakers: updated,
-      });
-    }
+    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers/${id}`), {
+      score,
+    });
   }, [score]);
 
   useEffect(() => {
@@ -146,7 +128,9 @@ function Header() {
 
   return (
     <Container>
-      {showWarning && <BattleMessage>상대 브레이커 레벨 2 진입!</BattleMessage>}
+      {showWarning && (
+        <BattleMessage>상대 브레이커 레벨 {opponentLevel} 진입!</BattleMessage>
+      )}
       <StateBox>
         <Stage width={100} height={64}>
           <Layer>
