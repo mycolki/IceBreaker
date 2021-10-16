@@ -1,7 +1,7 @@
 export const QUIZ = 'quiz';
 export const ROOM = 'room';
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 3;
+export const QUIZ_LENGTH = 2;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',

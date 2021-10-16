@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import _ from 'lodash';
 
@@ -18,38 +18,24 @@ import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 function BattleOver() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
-
-  const history = useHistory();
   const breakers = useSelector((state) => state.battle?.breakers);
-  const [name, setName] = useState('');
+  const name = useSelector((state) => state.battle?.name);
+  const [isDraw, setIsDraw] = useState(false);
 
   useEffect(() => {
-    try {
-      const { userName } = JSON.parse(
-        window.sessionStorage.getItem('userName'),
-      );
-      setName(userName);
-    } catch (err) {
-      dispatch(onError(err.message));
-      history.push(ROUTE.ERROR);
-    }
-
-    return () => dispatch(showMessage(RESET));
-  }, [dispatch, history]);
-
-  useEffect(() => {
-    if (!roomId) return;
-
-    onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+    onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
       const data = snapshot.val();
 
       if (!data) return;
 
-      dispatch(saveBattle(data.breakers));
+      dispatch(saveBattle(data));
     });
 
     if (breakers) {
       const sorted = _.sortBy(_.cloneDeep(breakers), 'score');
+
+      if (sorted[0].score === sorted[1].score) return setIsDraw(true);
+
       sorted[1].isWinner = true;
 
       update(ref(getDatabase(), `${ROOM}/${roomId}`), {
@@ -61,18 +47,25 @@ function BattleOver() {
   return (
     <Container>
       <Result>
-        <h1 className="result-title">YOU LOST</h1>
+        {isDraw ? (
+          <h1 className="result-title">DRAW</h1>
+        ) : (
+          <h1 className="result-title">
+            {_.filter(breakers, { name, isWinner: true })
+              ? 'YOU WIN'
+              : 'YOU LOST'}
+          </h1>
+        )}
       </Result>
       <Scores>
         <div className="vs">vs</div>
-        <ScoreBox>
-          <div className="score">280</div>
-          <span className="user-name">떡잎쌍잎</span>
-        </ScoreBox>
-        <ScoreBox>
-          <div className="score">100</div>
-          <span className="user-name">호박죽</span>
-        </ScoreBox>
+        {breakers &&
+          breakers.map((breaker) => (
+            <ScoreBox isWinner={breaker.isWinner}>
+              <div className="score">{breaker.score}</div>
+              <div className="user-name">{breaker.name}</div>
+            </ScoreBox>
+          ))}
       </Scores>
       <Buttons>
         <li className="button">
@@ -107,7 +100,7 @@ const Result = styled.div`
     width: 100%;
     top: 50%;
     left: 50%;
-    font-size: 40px;
+    font-size: 44px;
     transform: translate(-50%, -50%);
     color: ${({ theme }) => theme.white};
     -webkit-text-stroke: 2px ${({ theme }) => theme.deepBlue};

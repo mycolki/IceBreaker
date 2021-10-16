@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import _ from 'lodash';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
 
@@ -11,9 +10,7 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
-  onError,
 } from '../../store/quizSlice';
-import { saveName } from '../../store/battleSlice';
 import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
@@ -29,7 +26,6 @@ function Breaking() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
@@ -37,61 +33,31 @@ function Breaking() {
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
 
-  const breakers = useSelector((state) => state.battle?.breakers);
-  const name = useSelector((state) => state.battle?.name);
-  const [isGameOver, setIsGameOver] = useState(false);
-
   useEffect(() => {
-    try {
-      const { userName } = JSON.parse(
-        window.sessionStorage.getItem('userName'),
-      );
-      dispatch(saveName(userName));
-    } catch (err) {
-      dispatch(onError(err.message));
-      history.push(ROUTE.ERROR);
-    }
-
     return () => dispatch(showMessage(RESET));
   }, [dispatch]);
 
   useEffect(() => {
+    if (!roomId) return;
+
     onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
       const data = snapshot.val();
 
-      if (!data.isPlaying) {
-        return history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
-      }
+      if (!data.isPlaying) history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
     });
-  }, [isGameOver]);
+  });
 
   const goToLastPage = () => {
-    if (breakers) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+    if (roomId) {
+      return update(ref(getDatabase(), `${ROOM}/${roomId}`), {
         isPlaying: false,
       });
-
-      return setIsGameOver(true);
     }
 
     return history.push(ROUTE.GAME_OVER);
   };
 
   const goToNextLevel = () => {
-    if (breakers) {
-      const updatedLevel = _.cloneDeep(breakers).map((breaker) => {
-        if (breaker.name === name) {
-          breaker.level += 1;
-        }
-
-        return breaker;
-      });
-
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
-        breakers: updatedLevel,
-      });
-    }
-
     dispatch(toggleAnswer(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());

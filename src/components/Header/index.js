@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
+import _ from 'lodash';
+
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 
 import {
   toggleForm,
@@ -11,25 +14,63 @@ import {
   showMessage,
   onError,
 } from '../../store/quizSlice';
-
 import { pounding } from '../../styles/share/animation';
 import {
   ROUTE,
+  ROOM,
   SECONDS_PER_LEVEL,
   TIME_LIMIT_ANSWER,
 } from '../../constants/game';
 import { ANSWER, BREAK } from '../../constants/messages';
 
 function Header() {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+  const name = useSelector((state) => state.battle?.name);
 
   const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
   const [second, setSecond] = useState(TIME_LIMIT_BREAK);
+
+  useEffect(() => {
+    if (name && level) {
+      let updated;
+      onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
+        updated = snapshot.val().map((v) => {
+          if (v.name === name) {
+            v.level = level;
+          }
+          return v;
+        });
+      });
+
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        breakers: updated,
+      });
+    }
+  }, [level]);
+
+  useEffect(() => {
+    if (name && score) {
+      let updated;
+      onValue(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), (snapshot) => {
+        updated = snapshot.val().map((breaker) => {
+          if (breaker.name === name) {
+            breaker.score = score;
+          }
+          return breaker;
+        });
+      });
+
+      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        breakers: updated,
+      });
+    }
+  }, [score]);
 
   useEffect(() => {
     if (!level) return;

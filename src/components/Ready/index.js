@@ -12,8 +12,7 @@ import {
   getFirstLevel,
   onError,
 } from '../../store/quizSlice';
-import { saveBattle } from '../../store/battleSlice';
-
+import { saveName } from '../../store/battleSlice';
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOM } from '../../constants/game';
@@ -34,13 +33,24 @@ function Ready() {
         if (!data) return;
 
         dispatch(replaceQuestions(data.questions));
-        dispatch(saveBattle(data.breakers));
         dispatch(getFirstLevel());
       });
     }
 
     dispatch(getFirstLevel());
   }, [dispatch, roomId]);
+
+  useEffect(() => {
+    try {
+      const { userName } = JSON.parse(
+        window.sessionStorage.getItem('userName'),
+      );
+      dispatch(saveName(userName));
+    } catch (err) {
+      dispatch(onError(err.message));
+      history.push(ROUTE.ERROR);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     let timer;
