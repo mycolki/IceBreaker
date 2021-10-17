@@ -108,7 +108,11 @@ function InputBox() {
   return (
     <Wrapper>
       {isNotBreaking ? (
-        <Form onSubmit={submitInput} isAnswer={answer === input}>
+        <Form
+          onSubmit={submitInput}
+          isAnswer={answer === input}
+          data-testid="form"
+        >
           <input
             className="input"
             type="text"
