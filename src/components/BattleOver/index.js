@@ -10,6 +10,7 @@ import { GiBearFace } from 'react-icons/gi';
 import { onError } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
 import { ROUTE, ROOM } from '../../constants/game';
+import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
 import Message from '../share/Message';
@@ -31,7 +32,7 @@ function BattleOver() {
       );
       dispatch(saveName(userName));
     } catch (err) {
-      dispatch(onError(err.message));
+      dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
   }, [dispatch]);
@@ -56,7 +57,7 @@ function BattleOver() {
           breakers: sorted,
         });
       } catch (err) {
-        dispatch(onError(err.message));
+        dispatch(onError(ERROR.LOAD_DATA));
         history.push(ROUTE.ERROR);
       }
     };

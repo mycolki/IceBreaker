@@ -129,7 +129,7 @@ describe('<InputBox /> : submit input value', () => {
 
     fireEvent.change(input, {
       target: {
-        value: 'bab',
+        value: '',
       },
     });
 

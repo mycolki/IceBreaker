@@ -13,9 +13,10 @@ import {
   onError,
 } from '../../store/quizSlice';
 import { saveName, saveId, saveBreakers } from '../../store/battleSlice';
+import { ROUTE, ROOM } from '../../constants/game';
+import { ERROR } from '../../constants/error';
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
-import { ROUTE, ROOM } from '../../constants/game';
 
 gsap.registerPlugin(TextPlugin);
 
@@ -64,7 +65,7 @@ function Ready() {
       );
       dispatch(saveName(userName));
     } catch (err) {
-      dispatch(onError(err.message));
+      dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
   }, [dispatch]);
@@ -89,7 +90,7 @@ function Ready() {
         await waitForOneSecond();
         setSecond((prev) => prev - 1);
       } catch (err) {
-        dispatch(onError(err.message));
+        dispatch(onError(ERROR.UNKNOWN));
         history.push(ROUTE.ERROR);
       }
     })();

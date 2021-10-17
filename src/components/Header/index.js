@@ -20,6 +20,7 @@ import {
   SECONDS_PER_LEVEL,
   TIME_LIMIT_ANSWER,
 } from '../../constants/game';
+import { ERROR } from '../../constants/error';
 import { ANSWER, BREAK } from '../../constants/messages';
 import { flexCenter } from '../../styles/share/common';
 import { emergency } from '../../styles/share/animation';
@@ -117,7 +118,7 @@ function Header() {
 
         dispatch(toggleAnswer(true));
       } catch (err) {
-        dispatch(onError(err.message));
+        dispatch(onError(ERROR.UNKNOWN));
         history.push(ROUTE.ERROR);
       }
     })();
