@@ -2,14 +2,12 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Modal from '../Modal';
 
-describe('<Modal /> render', () => {
-  const closeModal = jest.fn();
+function SampleComponent() {
+  return <h1>Sample Heading</h1>;
+}
 
-  function SampleComponent() {
-    return <h1>Sample Heading</h1>;
-  }
-
-  it('renders children', () => {
+describe('<Modal /> : render children', () => {
+  it('should render text children', () => {
     render(
       <Modal onClose={() => {}} dimmed="true" background="orange">
         Sample Test
@@ -19,7 +17,7 @@ describe('<Modal /> render', () => {
     expect(screen.getByText('Sample Test')).toBeInTheDocument();
   });
 
-  it('renders component', () => {
+  it('should render component children', () => {
     render(
       <Modal onClose={() => {}} dimmed="true" background="orange">
         <SampleComponent />
@@ -28,8 +26,12 @@ describe('<Modal /> render', () => {
 
     expect(screen.getByText('Sample Heading')).toBeInTheDocument();
   });
+});
 
-  it('execute onClose function when clicked dimmed or close button', () => {
+describe('<Modal /> : execute onClose when clicked', () => {
+  const closeModal = jest.fn();
+
+  it('should execute onClose function when clicked dimmed or close button', () => {
     render(
       <Modal onClose={closeModal} dimmed="true" background="orange">
         <SampleComponent />
