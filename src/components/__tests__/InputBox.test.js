@@ -71,6 +71,7 @@ describe('<InputBox /> : toggle submit', () => {
 describe('<InputBox /> : submit input value', () => {
   const mockStore = configureStore([]);
   const store = mockStore({});
+  const MOCK_VALUE = '바나나';
 
   it('should reset value of input if submitted value is same with answer', () => {
     useDispatch.mockImplementation(() => function dispatch() {});
@@ -80,7 +81,7 @@ describe('<InputBox /> : submit input value', () => {
           isNotBreaking: true,
           isImageLoaded: true,
           currentQuestion: {
-            answer: '바나나',
+            answer: MOCK_VALUE,
           },
         },
       }),
@@ -92,7 +93,7 @@ describe('<InputBox /> : submit input value', () => {
 
     fireEvent.change(input, {
       target: {
-        value: '바나나',
+        value: MOCK_VALUE,
       },
     });
 
@@ -100,7 +101,7 @@ describe('<InputBox /> : submit input value', () => {
     expect(input).toHaveAttribute('value', '');
 
     store.dispatch(reducers.addScore());
-    store.dispatch(reducers.showAnswerBoxByInput('바나나'));
+    store.dispatch(reducers.showAnswerBoxByInput(MOCK_VALUE));
     store.dispatch(reducers.toggleAnswer(true));
     const actions = store.getActions();
 
@@ -117,7 +118,7 @@ describe('<InputBox /> : submit input value', () => {
           isNotBreaking: true,
           isImageLoaded: true,
           currentQuestion: {
-            answer: '바나나',
+            answer: MOCK_VALUE,
           },
         },
       }),
@@ -152,7 +153,7 @@ describe('<InputBox /> : submit input value', () => {
           isNotBreaking: true,
           isImageLoaded: true,
           currentQuestion: {
-            answer: '바나나',
+            answer: MOCK_VALUE,
           },
         },
       }),
@@ -161,17 +162,18 @@ describe('<InputBox /> : submit input value', () => {
 
     const input = screen.getByPlaceholderText('Guess What');
     const form = screen.getByTestId('form');
+    const WRONG_ANSWER = '복숭아';
 
     fireEvent.change(input, {
       target: {
-        value: '복숭아',
+        value: WRONG_ANSWER,
       },
     });
 
     fireEvent.submit(form);
 
     store.dispatch(reducers.showMessage('All Wrong!'));
-    store.dispatch(reducers.showAnswerBoxByInput('복숭아'));
+    store.dispatch(reducers.showAnswerBoxByInput(WRONG_ANSWER));
     const actions = store.getActions();
 
     expect(actions[0].type).toEqual('quiz/showMessage');
