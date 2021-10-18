@@ -14,6 +14,7 @@ import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOM, BREAKER_LENGTH } from '../../constants/game';
+import { ERROR } from '../../constants/error';
 import { BATTLE, RESET } from '../../constants/messages';
 
 import Message from '../share/Message';
@@ -44,7 +45,7 @@ function Room() {
 
       dispatch(saveName(userName));
     } catch (err) {
-      dispatch(onError(err.message));
+      dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
 

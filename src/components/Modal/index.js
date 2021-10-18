@@ -3,16 +3,10 @@ import theme from '../../styles/theme';
 
 import { flexCenterColumn } from '../../styles/share/common';
 
-export default function Modal({
-  children,
-  dimmed,
-  onClose,
-  isClosed,
-  background,
-}) {
+export default function Modal({ children, dimmed, onClose, background }) {
   return (
     <Wrapper>
-      <Dimmed dimmed={dimmed} onClick={onClose} />
+      <Dimmed data-testid="dimmed" dimmed={dimmed} onClick={onClose} />
       <StyledModal className="modal" tabIndex="-1" background={background}>
         {children}
         <CloseButton className="close" onClick={onClose}>

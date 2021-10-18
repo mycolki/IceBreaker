@@ -12,7 +12,7 @@ function ErrorBox() {
 
   return (
     <Container>
-      <h1 className="message">🙈{error}</h1>
+      <h1 className="error-message">🙈{error}</h1>
       <Link to={ROUTE.MENU}>
         <Button text="메뉴로 돌아가기" size="large" color="pink" />
       </Link>

@@ -64,7 +64,7 @@ Button.propTypes = {
   text: PropTypes.string,
   type: PropTypes.string,
   disabled: PropTypes.bool,
-  size: PropTypes.string.isRequired,
+  size: PropTypes.string,
   color: PropTypes.string,
   onClick: PropTypes.func,
 };
@@ -73,6 +73,7 @@ Button.defaultProps = {
   text: '',
   type: 'button',
   disabled: false,
+  size: 'small',
   color: 'transparent',
 };
 

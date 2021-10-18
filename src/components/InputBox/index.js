@@ -107,8 +107,12 @@ function InputBox() {
 
   return (
     <Wrapper>
-      {isNotBreaking && (
-        <Form onSubmit={submitInput} isAnswer={answer === input}>
+      {isNotBreaking ? (
+        <Form
+          onSubmit={submitInput}
+          isAnswer={answer === input}
+          data-testid="form"
+        >
           <input
             className="input"
             type="text"
@@ -123,10 +127,10 @@ function InputBox() {
             color="lightPurple"
             size="small"
             type="submit"
-            disabled={!isImageLoaded}
+            disabled={isImageLoaded}
           />
         </Form>
-      )}
+      ) : null}
     </Wrapper>
   );
 }
