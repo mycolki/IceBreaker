@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import gsap from 'gsap';
 import { TextPlugin } from 'gsap/TextPlugin.js';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { getDatabase, ref, get, child } from 'firebase/database';
 
 import {
   replaceQuestions,
@@ -31,15 +31,26 @@ function Ready() {
   useEffect(() => {
     if (!roomId) return dispatch(getFirstLevel());
 
-    return onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
-      const data = snapshot.val();
+    const getRoom = async () => {
+      try {
+        const snapshot = await get(
+          child(ref(getDatabase()), `${ROOM}/${roomId}`),
+        );
 
-      if (!data) return;
+        const room = snapshot.val();
 
-      dispatch(replaceQuestions(data.questions));
-      dispatch(saveBreakers(data.breakers));
-      dispatch(getFirstLevel());
-    });
+        if (room) {
+          dispatch(replaceQuestions(room.questions));
+          dispatch(saveBreakers(room.breakers));
+          dispatch(getFirstLevel());
+        }
+      } catch (err) {
+        dispatch(onError(ERROR.LOAD_DATA));
+        history.push(ROUTE.ERROR);
+      }
+    };
+
+    getRoom();
   }, [dispatch, roomId]);
 
   useEffect(() => {

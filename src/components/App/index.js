@@ -3,10 +3,10 @@ import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveQuizData } from '../../store/quizSlice';
-import { saveRoomData } from '../../store/battleSlice';
-import { ROUTE, QUIZ, ROOM } from '../../constants/game';
+import { getDatabase, ref, get, child } from 'firebase/database';
+import { saveQuizData, onError } from '../../store/quizSlice';
+import { ROUTE, QUIZ } from '../../constants/game';
+import { ERROR } from '../../constants/error';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
@@ -22,21 +22,22 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    onValue(ref(getDatabase(), QUIZ), (snapshot) => {
-      const data = snapshot.val();
+    const getQuiz = async () => {
+      try {
+        const snapshot = await get(child(ref(getDatabase()), QUIZ));
 
-      if (!data) return;
+        const quiz = snapshot.val();
 
-      dispatch(saveQuizData(data));
-    });
+        if (quiz) {
+          dispatch(saveQuizData(quiz));
+        }
+      } catch (err) {
+        dispatch(onError(ERROR.LOAD_DATA));
+        history.push(ROUTE.ERROR);
+      }
+    };
 
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
-    });
+    getQuiz();
   }, [dispatch, history]);
 
   return (
