@@ -100,7 +100,8 @@ export default Breaking;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.breakingBg};
+  background-image: url(/background/floatCubeBg.png);
+  background-size: 375px 713px;
 `;
 
 const Answer = styled.div`

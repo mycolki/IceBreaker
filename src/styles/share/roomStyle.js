@@ -4,8 +4,9 @@ import { flexCenter } from './common';
 
 export const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.roomBg};
   text-align: center;
+  background-image: url(/background/roomBg.png);
+  background-size: 375px 713px;
 `;
 
 export const RoomHeader = styled.ul`

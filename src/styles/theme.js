@@ -19,8 +19,6 @@ const theme = {
     'linear-gradient(180deg, #7cd0ff 0%, rgba(207, 218, 255, 0.36) 100%)',
   menuBg: 'linear-gradient(180deg, #b0c5ff 0%, #12a4f5 100%)',
   breakingBg: 'linear-gradient(180deg, #7cd0ff 0%, #379dd7 100%)',
-  readyGameBg:
-    'linear-gradient(180deg, rgba(197, 227, 244, 0.7) 0%, rgba(70, 192, 134, 0.7625) 26.56%, #fc8b23 100%)',
   redCircleBg:
     'linear-gradient(180deg, rgba(255, 86, 86, 0.84) 0%, rgba(221, 37, 37, 0.84) 100%)',
   greenCircleBg:
@@ -36,7 +34,6 @@ const theme = {
     'linear-gradient(180deg, rgba(197, 227, 244, 0.7) 0%, rgba(70, 192, 134, 0.7625) 26.56%, #fc8b23 100%)',
 
   makingIceBg: 'linear-gradient(180deg, #fafdff 0%, #33b6ff 100%)',
-  roomBg: 'linear-gradient(180deg, #fc92d8 0%, #f54379 100%)',
   rankingBg:
     'linear-gradient(180deg, rgba(252, 139, 35, 0.65) 0%, rgba(120, 121, 241, 0.79) 100%)',
   buttonBorder: '2px solid #ffffff',

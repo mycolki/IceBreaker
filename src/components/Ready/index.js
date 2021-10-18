@@ -127,7 +127,8 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background: ${({ theme }) => theme.readyGameBg};
+  background-image: url(/background/readyBg.png);
+  background-size: 375px 713px;
 
   .circle {
     ${flexCenterColumn}
