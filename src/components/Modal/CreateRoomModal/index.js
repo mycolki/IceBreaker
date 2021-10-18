@@ -93,9 +93,7 @@ function CreateRoomModal({ closeModal }) {
     setTitle(MODAL_TITLE.PASS_ROOM_ID);
   };
 
-  const handleInput = (ev) => {
-    setInput(ev.target.value.trim());
-  };
+  const handleInput = (ev) => setInput(ev.target.value.trim());
 
   return (
     <Container>

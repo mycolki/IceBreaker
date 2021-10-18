@@ -35,11 +35,11 @@ function Rooms() {
     dispatch(showMessage(BATTLE.WAITING));
 
     onValue(ref(getDatabase(), ROOMS), (snapshot) => {
-      const data = snapshot.val();
+      const rooms = snapshot.val();
 
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
+      if (rooms) {
+        dispatch(saveRoomData(rooms));
+      }
     });
 
     return () => {

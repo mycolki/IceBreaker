@@ -26,14 +26,6 @@ function EnterRoomModal({ closeModal }) {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
-    });
-
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history]);
 
