@@ -13,7 +13,7 @@ import {
   onError,
 } from '../../store/quizSlice';
 import { saveName, saveId, saveBreakers } from '../../store/battleSlice';
-import { ROUTE, ROOM } from '../../constants/game';
+import { ROUTE, ROOMS } from '../../constants/game';
 import { ERROR } from '../../constants/error';
 import { READY } from '../../styles/gsapStyle';
 import { flexCenterColumn } from '../../styles/share/common';
@@ -34,7 +34,7 @@ function Ready() {
     const getRoom = async () => {
       try {
         const snapshot = await get(
-          child(ref(getDatabase()), `${ROOM}/${roomId}`),
+          child(ref(getDatabase()), `${ROOMS}/${roomId}`),
         );
 
         const room = snapshot.val();

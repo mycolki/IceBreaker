@@ -11,7 +11,7 @@ import {
   toggleAnswer,
   passNextLevel,
 } from '../../store/quizSlice';
-import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
+import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
 import Header from '../Header';
@@ -40,7 +40,7 @@ function Breaking() {
   useEffect(() => {
     if (!roomId) return;
 
-    onValue(ref(getDatabase(), `${ROOM}/${roomId}/isPlaying`), (snapshot) => {
+    onValue(ref(getDatabase(), `${ROOMS}/${roomId}/isPlaying`), (snapshot) => {
       if (snapshot.val()) return;
 
       history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
@@ -49,7 +49,7 @@ function Breaking() {
 
   const goToLastPage = () => {
     if (roomId) {
-      return update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      return update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
         isPlaying: false,
       });
     }

@@ -13,7 +13,7 @@ import { saveRoomData, saveName } from '../../store/battleSlice';
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
-import { ROUTE, ROOM, BREAKER_LENGTH } from '../../constants/game';
+import { ROUTE, ROOMS, BREAKER_LENGTH } from '../../constants/game';
 import { ERROR } from '../../constants/error';
 import { BATTLE, RESET } from '../../constants/messages';
 
@@ -29,7 +29,7 @@ function Room() {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
       const data = snapshot.val();
 
       if (!data) return;
@@ -58,7 +58,7 @@ function Room() {
     const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === BREAKER_LENGTH) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
         active: false,
       });
     }
@@ -91,7 +91,7 @@ function Room() {
     const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === 1) {
-      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+      set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
       return history.push(ROUTE.ROOMS);
     }
 
@@ -111,7 +111,7 @@ function Room() {
       return breaker;
     });
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
       active: true,
       isAllReady: false,
       breakers,
@@ -131,14 +131,14 @@ function Room() {
       return breaker;
     });
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
       breakers,
     });
 
     const readyLength = _.filter(breakers, 'isReady').length;
 
     if (readyLength === BREAKER_LENGTH) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
         isAllReady: true,
       });
     }

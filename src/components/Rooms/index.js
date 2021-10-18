@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getDatabase, ref, set, onValue } from 'firebase/database';
-import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
+import { RiGamepadFill } from 'react-icons/ri';
 import { IoCaretBack } from 'react-icons/io5';
 
 import { showMessage } from '../../store/quizSlice';
@@ -13,7 +13,7 @@ import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
-import { ROUTE, ROOM } from '../../constants/game';
+import { ROUTE, ROOMS } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
 
 import Portal from '../Portal';
@@ -34,7 +34,7 @@ function Rooms() {
   useEffect(() => {
     dispatch(showMessage(BATTLE.WAITING));
 
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
+    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
       const data = snapshot.val();
 
       if (!data) return;
@@ -70,7 +70,7 @@ function Rooms() {
 
   const closeCreateModal = () => {
     if (roomId) {
-      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+      set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     }
 
     setCreateModalOpen(false);

@@ -9,7 +9,7 @@ import { GiBearFace } from 'react-icons/gi';
 
 import { onError } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
-import { ROUTE, ROOM } from '../../constants/game';
+import { ROUTE, ROOMS } from '../../constants/game';
 import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
@@ -41,7 +41,7 @@ function BattleOver() {
     const getBreakers = async () => {
       try {
         const snapshot = await get(
-          child(ref(getDatabase()), `${ROOM}/${roomId}/breakers`),
+          child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers`),
         );
 
         const sorted = _.sortBy(_.cloneDeep(snapshot.val()), 'score');
@@ -53,7 +53,7 @@ function BattleOver() {
         if (sorted[1].name === name) setIsWinner(true);
 
         dispatch(saveBreakers(sorted));
-        update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
           breakers: sorted,
         });
       } catch (err) {
@@ -66,7 +66,7 @@ function BattleOver() {
   }, [dispatch, roomId, name]);
 
   const goToMenu = () => {
-    set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     history.push(ROUTE.MENU);
   };
 
