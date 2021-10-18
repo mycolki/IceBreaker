@@ -46,7 +46,7 @@ function Header() {
   useEffect(() => {
     if (typeof opponentId !== 'number') return;
 
-    return onValue(
+    onValue(
       ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}/level`),
       (snapshot) => {
         const level = snapshot.val();

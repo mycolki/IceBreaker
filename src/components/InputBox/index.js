@@ -127,7 +127,7 @@ function InputBox() {
             color="lightPurple"
             size="small"
             type="submit"
-            disabled={isImageLoaded}
+            disabled={!isImageLoaded}
           />
         </Form>
       ) : null}
