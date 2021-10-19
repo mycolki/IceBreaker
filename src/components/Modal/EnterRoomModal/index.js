@@ -6,7 +6,7 @@ import { getDatabase, ref, onValue, update } from 'firebase/database';
 import { showMessage } from '../../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
-import { ROUTE, ROOM } from '../../../constants/game';
+import { ROUTE, ROOMS } from '../../../constants/game';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
@@ -26,14 +26,6 @@ function EnterRoomModal({ closeModal }) {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
-    });
-
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history]);
 
@@ -50,7 +42,7 @@ function EnterRoomModal({ closeModal }) {
       JSON.stringify({ userName: name }),
     );
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers`), {
       1: { name, isReady: false, level: 1, score: 0, isWinner: false },
     });
 

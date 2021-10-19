@@ -10,8 +10,9 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
+  activateBreaking,
 } from '../../store/quizSlice';
-import { QUIZ_LENGTH, ROUTE, ROOM } from '../../constants/game';
+import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
 import Header from '../Header';
@@ -40,7 +41,7 @@ function Breaking() {
   useEffect(() => {
     if (!roomId) return;
 
-    onValue(ref(getDatabase(), `${ROOM}/${roomId}/isPlaying`), (snapshot) => {
+    onValue(ref(getDatabase(), `${ROOMS}/${roomId}/isPlaying`), (snapshot) => {
       if (snapshot.val()) return;
 
       history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
@@ -49,7 +50,7 @@ function Breaking() {
 
   const goToLastPage = () => {
     if (roomId) {
-      return update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      return update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
         isPlaying: false,
       });
     }
@@ -61,6 +62,7 @@ function Breaking() {
     dispatch(toggleAnswer(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
+    dispatch(activateBreaking(false));
   };
 
   return (
@@ -100,7 +102,8 @@ export default Breaking;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.breakingBg};
+  background-image: url(/background/floatCubeBg.png);
+  background-size: 375px 713px;
 `;
 
 const Answer = styled.div`

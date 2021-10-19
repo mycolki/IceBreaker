@@ -42,7 +42,7 @@ describe('<InputBox /> : toggle submit', () => {
       selector({
         quiz: {
           isNotBreaking: true,
-          isImageLoaded: true,
+          isImageLoaded: false,
         },
       }),
     );
@@ -57,7 +57,7 @@ describe('<InputBox /> : toggle submit', () => {
       selector({
         quiz: {
           isNotBreaking: true,
-          isImageLoaded: false,
+          isImageLoaded: true,
         },
       }),
     );

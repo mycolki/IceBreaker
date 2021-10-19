@@ -6,7 +6,7 @@ import { getDatabase, ref, set } from '@firebase/database';
 import { saveRoomId, saveName } from '../../../store/battleSlice';
 import { showMessage } from '../../../store/quizSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
-import { MODAL_TITLE, ROOM, ROUTE } from '../../../constants/game';
+import { MODAL_TITLE, ROOMS, ROUTE } from '../../../constants/game';
 import { MAKE_ROOM, RESET } from '../../../constants/messages';
 
 import Message from '../../share/Message';
@@ -41,7 +41,7 @@ function CreateRoomModal({ closeModal }) {
     if (!name) return;
 
     const roomId = input;
-    set(ref(getDatabase(), `${ROOM}/${roomId}`), {
+    set(ref(getDatabase(), `${ROOMS}/${roomId}`), {
       questions,
       active: true,
       isAllReady: false,
@@ -93,9 +93,7 @@ function CreateRoomModal({ closeModal }) {
     setTitle(MODAL_TITLE.PASS_ROOM_ID);
   };
 
-  const handleInput = (ev) => {
-    setInput(ev.target.value.trim());
-  };
+  const handleInput = (ev) => setInput(ev.target.value.trim());
 
   return (
     <Container>

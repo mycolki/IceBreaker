@@ -13,12 +13,13 @@ import { saveRoomData, saveName } from '../../store/battleSlice';
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
-import { ROUTE, ROOM, BREAKER_LENGTH } from '../../constants/game';
+import { ROUTE, ROOMS, BREAKER_LENGTH } from '../../constants/game';
 import { ERROR } from '../../constants/error';
 import { BATTLE, RESET } from '../../constants/messages';
 
 import Message from '../share/Message';
 import Button from '../share/Button';
+import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function Room() {
   const dispatch = useDispatch();
@@ -27,14 +28,16 @@ function Room() {
   const rooms = useSelector((state) => state.battle?.rooms);
   const name = useSelector((state) => state.battle?.name);
   const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
-      const data = snapshot.val();
+    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
+      const rooms = snapshot.val();
 
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
+      if (rooms) {
+        dispatch(saveRoomData(rooms));
+        setLoading(true);
+      }
     });
 
     dispatch(showMessage(BATTLE.PLEASE_READY));
@@ -58,7 +61,7 @@ function Room() {
     const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === BREAKER_LENGTH) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
         active: false,
       });
     }
@@ -91,7 +94,7 @@ function Room() {
     const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === 1) {
-      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+      set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
       return history.push(ROUTE.ROOMS);
     }
 
@@ -111,7 +114,7 @@ function Room() {
       return breaker;
     });
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
       active: true,
       isAllReady: false,
       breakers,
@@ -131,14 +134,14 @@ function Room() {
       return breaker;
     });
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
       breakers,
     });
 
     const readyLength = _.filter(breakers, 'isReady').length;
 
     if (readyLength === BREAKER_LENGTH) {
-      update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+      update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
         isAllReady: true,
       });
     }
@@ -190,6 +193,7 @@ function Room() {
           onClick={exitRoom}
         />
       </RoomFooter>
+      {!loading ? <BarSpinner /> : null}
     </Container>
   );
 }

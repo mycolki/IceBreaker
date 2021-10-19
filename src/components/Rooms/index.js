@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getDatabase, ref, set, onValue } from 'firebase/database';
-import { RiGamepadFill, RiGamepadLine } from 'react-icons/ri';
+import { RiGamepadFill } from 'react-icons/ri';
 import { IoCaretBack } from 'react-icons/io5';
 
 import { showMessage } from '../../store/quizSlice';
@@ -13,7 +13,7 @@ import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
-import { ROUTE, ROOM } from '../../constants/game';
+import { ROUTE, ROOMS } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
 
 import Portal from '../Portal';
@@ -22,6 +22,7 @@ import CreateRoomModal from '../Modal/CreateRoomModal';
 import EnterRoomModal from '../Modal/EnterRoomModal';
 import Message from '../share/Message';
 import Button from '../share/Button';
+import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function Rooms() {
   const dispatch = useDispatch();
@@ -30,16 +31,18 @@ function Rooms() {
   const roomId = useSelector((state) => state.battle?.roomId);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(showMessage(BATTLE.WAITING));
 
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
-      const data = snapshot.val();
+    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
+      const rooms = snapshot.val();
 
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
+      if (rooms) {
+        dispatch(saveRoomData(rooms));
+        setLoading(true);
+      }
     });
 
     return () => {
@@ -70,7 +73,7 @@ function Rooms() {
 
   const closeCreateModal = () => {
     if (roomId) {
-      set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+      set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     }
 
     setCreateModalOpen(false);
@@ -151,6 +154,7 @@ function Rooms() {
           </Portal>
         )}
       </RoomFooter>
+      {!loading ? <BarSpinner /> : null}
     </Container>
   );
 }

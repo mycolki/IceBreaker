@@ -16,7 +16,7 @@ import { saveOpponentLevel } from '../../store/battleSlice';
 import { pounding } from '../../styles/share/animation';
 import {
   ROUTE,
-  ROOM,
+  ROOMS,
   SECONDS_PER_LEVEL,
   TIME_LIMIT_ANSWER,
 } from '../../constants/game';
@@ -46,8 +46,8 @@ function Header() {
   useEffect(() => {
     if (typeof opponentId !== 'number') return;
 
-    return onValue(
-      ref(getDatabase(), `${ROOM}/${roomId}/breakers/${opponentId}/level`),
+    onValue(
+      ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}/level`),
       (snapshot) => {
         const level = snapshot.val();
 
@@ -66,7 +66,7 @@ function Header() {
   useEffect(() => {
     if (!name || !level) return;
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers/${id}`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
       level,
     });
   }, [level]);
@@ -74,7 +74,7 @@ function Header() {
   useEffect(() => {
     if (!name || !score) return;
 
-    update(ref(getDatabase(), `${ROOM}/${roomId}/breakers/${id}`), {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
       score,
     });
   }, [score]);

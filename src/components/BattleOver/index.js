@@ -9,12 +9,13 @@ import { GiBearFace } from 'react-icons/gi';
 
 import { onError } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
-import { ROUTE, ROOM } from '../../constants/game';
+import { flexCenter, flexCenterColumn } from '../../styles/share/common';
+import { ROUTE, ROOMS } from '../../constants/game';
 import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
 import Message from '../share/Message';
-import { flexCenter, flexCenterColumn } from '../../styles/share/common';
+import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function BattleOver() {
   const { roomId } = useParams();
@@ -24,6 +25,7 @@ function BattleOver() {
   const name = useSelector((state) => state.battle?.name);
   const [isWinner, setIsWinner] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -41,7 +43,7 @@ function BattleOver() {
     const getBreakers = async () => {
       try {
         const snapshot = await get(
-          child(ref(getDatabase()), `${ROOM}/${roomId}/breakers`),
+          child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers`),
         );
 
         const sorted = _.sortBy(_.cloneDeep(snapshot.val()), 'score');
@@ -53,7 +55,9 @@ function BattleOver() {
         if (sorted[1].name === name) setIsWinner(true);
 
         dispatch(saveBreakers(sorted));
-        update(ref(getDatabase(), `${ROOM}/${roomId}`), {
+        setLoading(true);
+
+        update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
           breakers: sorted,
         });
       } catch (err) {
@@ -66,34 +70,44 @@ function BattleOver() {
   }, [dispatch, roomId, name]);
 
   const goToMenu = () => {
-    set(ref(getDatabase(), `${ROOM}/${roomId}`), null);
+    set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     history.push(ROUTE.MENU);
   };
 
   return (
     <Container isWinner={isWinner} isDraw={isDraw}>
-      <Result isWinner={isWinner} isDraw={isDraw}>
-        {isDraw ? (
-          <h1 className="result-title">DRAW</h1>
-        ) : (
-          <h1 className="result-title">{isWinner ? 'YOU WIN' : 'YOU LOST'}</h1>
-        )}
-      </Result>
-      <Scores>
-        <div className="vs">vs</div>
-        {breakers &&
-          breakers.map((breaker, i) => (
-            <ScoreBox
-              key={breaker.name + i}
-              isWinner={breaker.isWinner}
-              isUser={breaker.name === name}
-            >
-              {breaker.name === name && <GiBearFace className="user-icon" />}
-              <div className="score">{breaker.score}</div>
-              <div className="user-name">{breaker.name}</div>
-            </ScoreBox>
-          ))}
-      </Scores>
+      {loading ? (
+        <>
+          <Result isWinner={isWinner} isDraw={isDraw}>
+            {isDraw ? (
+              <h1 className="result-title">DRAW</h1>
+            ) : (
+              <h1 className="result-title">
+                {isWinner ? 'YOU WIN' : 'YOU LOST'}
+              </h1>
+            )}
+          </Result>
+          <Scores>
+            <div className="vs">vs</div>
+            {breakers &&
+              breakers.map((breaker, i) => (
+                <ScoreBox
+                  key={breaker.name + i}
+                  isWinner={breaker.isWinner}
+                  isUser={breaker.name === name}
+                >
+                  {breaker.name === name && (
+                    <GiBearFace className="user-icon" />
+                  )}
+                  <div className="score">{breaker.score}</div>
+                  <div className="user-name">{breaker.name}</div>
+                </ScoreBox>
+              ))}
+          </Scores>
+        </>
+      ) : (
+        <BarSpinner />
+      )}
       <Buttons>
         <li className="button">
           <Button text="공유하기" size="large" color="pink" />

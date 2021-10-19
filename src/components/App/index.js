@@ -1,12 +1,7 @@
-import { useEffect } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { saveQuizData } from '../../store/quizSlice';
-import { saveRoomData } from '../../store/battleSlice';
-import { ROUTE, QUIZ, ROOM } from '../../constants/game';
+import { ROUTE } from '../../constants/game';
 
 import Menu from '../Menu';
 import Ready from '../Ready';
@@ -18,27 +13,6 @@ import BattleOver from '../BattleOver';
 import ErrorBox from '../ErrorBox';
 
 function App() {
-  const dispatch = useDispatch();
-  const history = useHistory();
-
-  useEffect(() => {
-    onValue(ref(getDatabase(), QUIZ), (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) return;
-
-      dispatch(saveQuizData(data));
-    });
-
-    onValue(ref(getDatabase(), ROOM), (snapshot) => {
-      const data = snapshot.val();
-
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
-    });
-  }, [dispatch, history]);
-
   return (
     <AppContainer>
       <Switch>
@@ -53,6 +27,7 @@ function App() {
         <Route path={ROUTE.GAME_OVER} component={GameOver} />
         <Route path={ROUTE.BATTLE_OVER_ID} component={BattleOver} />
         <Route path={ROUTE.ERROR} component={ErrorBox} />
+        <Redirect path="*" to={ROUTE.MENU} />
       </Switch>
     </AppContainer>
   );

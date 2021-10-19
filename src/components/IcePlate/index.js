@@ -1,11 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Stage, Layer, Line, RegularPolygon, Image } from 'react-konva';
+import { Stage, Layer, Image } from 'react-konva';
+import styled from 'styled-components';
 
 import bearSrc from '../../asset/bear.png';
 import { activateBreaking } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
 import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
+
+import PlateLayer from '../Ice/PlateLayer';
+import Cubes from '../Ice/Cubes';
+import NewCubes from '../Ice/NewCubes';
+import LoadingPlateLayer from '../Ice/LoadingPlateLayer';
+import DotSpinner from '../share/LoadingSpinner/DotSpinner';
 
 function IcePlate() {
   const dispatch = useDispatch();
@@ -13,20 +20,25 @@ function IcePlate() {
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
+  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const initialCubesRef = useRef(null);
   const bearRef = useRef();
+  const stageRef = useRef();
 
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
   const [newCubes, setNewCubes] = useState([]);
   const [image, setImage] = useState(null);
   const [bearImage, setBearImage] = useState(null);
-  const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
+
+  useEffect(() => {
+    if (stageRef) stageRef.current.container().style.cursor = 'pointer';
+  }, []);
 
   useEffect(() => {
     const questionImage = new window.Image();
     questionImage.src = imgUrl;
     questionImage.onload = () => {
-      dispatch(activateBreaking());
+      dispatch(activateBreaking(true));
     };
 
     setImage(questionImage);
@@ -72,11 +84,9 @@ function IcePlate() {
         cube.on('click', () => cube.off('click'));
       }
     });
-  }, [currentQuestion, level]);
 
-  const hideStrongCube = (ev) => {
-    ev.target.hide();
-  };
+    return () => setNewCubes([]);
+  }, [currentQuestion, level]);
 
   const hideCube = (ev) => {
     if (isNotBreaking) return;
@@ -93,146 +103,40 @@ function IcePlate() {
     ev.target.visible(false);
   };
 
-  const displayCursorPointer = (ev) => {
-    const container = ev.target.getStage().container();
-    container.style.cursor = 'pointer';
-  };
-
   return (
-    <Stage style={{ height: '50%' }} width={375} height={400}>
-      <Layer>
-        <Line
-          points={[
-            15, 192, 73, 60, 230, 20, 340, 102, 360, 230, 293, 355, 90, 355,
-          ]}
-          closed="true"
-          fillLinearGradientStartPoint={{ x: 100, y: -80, z: 0 }}
-          fillLinearGradientEndPoint={{ x: -30, y: 0, z: 0 }}
-          fillLinearGradientColorStops={[
-            0,
-            '#62a8f2',
-            0.5,
-            '#b7a4ee',
-            1,
-            '#8bcffc',
-          ]}
-          shadowColor="#000000"
-          shadowBlur={10}
-          shadowOffset={{ x: 0, y: 10 }}
-          shadowOpacity={0.4}
-          draggable
-        />
-      </Layer>
-      <Layer>
-        <Image
-          x={90}
-          y={100}
-          image={image}
-          width={200}
-          height={200}
-          draggable
-        />
-      </Layer>
-      <Layer id="initial-cubes" x={-13} y={0} ref={initialCubesRef}>
-        {initialPositions?.map((pos, i) => {
-          if (colorIndexes.has(i)) {
-            return (
-              <RegularPolygon
-                key={String(pos.x) + String(pos.y) + i}
-                x={pos.x}
-                y={pos.y}
-                sides={6}
-                radius={17}
-                rotation={90}
-                fillLinearGradientStartPoint={{ x: -20, y: 0 }}
-                fillLinearGradientEndPoint={{ x: 20, y: -30 }}
-                fillLinearGradientColorStops={[
-                  0,
-                  '#ffffff',
-                  0.5,
-                  '#8ba5ff',
-                  1,
-                  '#7879f1',
-                ]}
-                stroke="#ffffff"
-                strokeWidth={2}
-                shadowColor="#7879f1"
-                shadowBlur={1}
-                shadowOffset={{ x: 6, y: 5 }}
-                onMouseEnter={displayCursorPointer}
-                onClick={hideCube}
-                draggable
-                fillEnabled="true"
-              />
-            );
-          }
-          return (
-            <RegularPolygon
-              key={String(pos.x) + String(pos.y) + i}
-              x={pos.x}
-              y={pos.y}
-              sides={6}
-              radius={17}
-              rotation={90}
-              fillLinearGradientStartPoint={{ x: -10, y: -5 }}
-              fillLinearGradientEndPoint={{ x: 0, y: -15 }}
-              fillLinearGradientColorStops={[0, '#8EC7FF', 1, '#ffffff']}
-              stroke="#ffffff"
-              strokeWidth={2}
-              shadowColor="#2AA0ED"
-              shadowBlur={1}
-              shadowOffset={{ x: 6, y: 5 }}
-              onMouseEnter={displayCursorPointer}
-              onClick={hideCube}
-              draggable
-            />
-          );
-        })}
-      </Layer>
-      <Layer>
-        {newCubes.map((pos, i) => (
-          <RegularPolygon
-            key={String(pos.x) + String(pos.y) + i}
-            x={pos.x - 13}
-            y={pos.y - 0}
-            sides={6}
-            radius={17}
-            rotation={90}
-            fillLinearGradientStartPoint={{ x: 10, y: 5 }}
-            fillLinearGradientEndPoint={{ x: 0, y: -10 }}
-            fillLinearGradientColorStops={[
-              0,
-              '#fba85c',
-              0.8,
-              '#f178b6',
-              1,
-              '#e95353',
-            ]}
-            stroke="#F8E8D3"
-            strokeWidth={2}
-            shadowColor="#B4457E"
-            shadowBlur={1}
-            shadowOpacity={0.8}
-            shadowOffset={{ x: 5, y: 4 }}
-            onMouseEnter={displayCursorPointer}
-            onClick={hideStrongCube}
-            draggable
+    <Container>
+      <Stage width={375} height={400} ref={stageRef}>
+        <PlateLayer />
+        <Layer>
+          <Image x={90} y={100} image={image} width={200} height={200} />
+        </Layer>
+        <Layer>
+          <Cubes
+            initialCubesRef={initialCubesRef}
+            positions={initialPositions}
+            onHide={hideCube}
           />
-        ))}
-      </Layer>
-      <Layer>
-        <Image
-          ref={bearRef}
-          x={90}
-          y={100}
-          image={bearImage}
-          width={100}
-          height={60}
-          draggable
-        />
-      </Layer>
-    </Stage>
+          <NewCubes cubes={newCubes} />
+        </Layer>
+        <Layer>
+          <Image
+            ref={bearRef}
+            x={90}
+            y={100}
+            image={bearImage}
+            width={100}
+            height={60}
+          />
+        </Layer>
+        {!isImageLoaded ? <LoadingPlateLayer /> : null}
+      </Stage>
+      {!isImageLoaded ? <DotSpinner color="purple" /> : null}
+    </Container>
   );
 }
 
 export default IcePlate;
+
+const Container = styled.div`
+  height: 50%;
+`;

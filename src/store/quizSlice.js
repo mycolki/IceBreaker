@@ -8,7 +8,7 @@ const initialState = {
   quiz: {},
   questions: [],
   currentQuestion: null,
-  isImageLoaded: true,
+  isImageLoaded: false,
   isNotBreaking: false,
   isTimeOver: false,
   userInput: '',
@@ -36,8 +36,8 @@ const quizSlice = createSlice({
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
-    activateBreaking(state) {
-      state.isImageLoaded = false;
+    activateBreaking(state, action) {
+      state.isImageLoaded = action.payload;
     },
     toggleForm(state, action) {
       state.isNotBreaking = action.payload;

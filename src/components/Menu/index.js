@@ -1,12 +1,39 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, get, child } from '@firebase/database';
+import { saveQuizData, onError } from '../../store/quizSlice';
 import { smallPounding } from '../../styles/share/animation';
-import { ROUTE } from '../../constants/game';
+import { ROUTE, QUIZ } from '../../constants/game';
+import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
 
 function Menu() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    const getQuiz = async () => {
+      try {
+        const snapshot = await get(child(ref(getDatabase()), QUIZ));
+
+        const quiz = snapshot.val();
+
+        if (quiz) {
+          dispatch(saveQuizData(quiz));
+        }
+      } catch (err) {
+        dispatch(onError(ERROR.LOAD_DATA));
+        history.push(ROUTE.ERROR);
+      }
+    };
+
+    getQuiz();
+  }, [dispatch, history]);
+
   return (
     <Container>
       <TitleWrapper>
