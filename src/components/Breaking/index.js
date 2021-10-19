@@ -10,6 +10,7 @@ import {
   showAnswerBoxByInput,
   toggleAnswer,
   passNextLevel,
+  activateBreaking,
 } from '../../store/quizSlice';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
@@ -61,6 +62,7 @@ function Breaking() {
     dispatch(toggleAnswer(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
+    dispatch(activateBreaking(false));
   };
 
   return (

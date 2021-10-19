@@ -36,8 +36,8 @@ const quizSlice = createSlice({
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
-    activateBreaking(state) {
-      state.isImageLoaded = true;
+    activateBreaking(state, action) {
+      state.isImageLoaded = action.payload;
     },
     toggleForm(state, action) {
       state.isNotBreaking = action.payload;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Stage, Layer, Image } from 'react-konva';
+import { Stage, Layer, Image, Group } from 'react-konva';
 import styled from 'styled-components';
 
 import bearSrc from '../../asset/bear.png';
@@ -12,6 +12,7 @@ import PlateLayer from '../IceLayers/PlateLayer';
 import CubesLayer from '../IceLayers/CubesLayer';
 import NewCubesLayer from '../IceLayers/NewCubesLayer';
 import Spinner from '../Spinner';
+import LoadingPlateLayer from '../IceLayers/LoadingPlateLayer';
 
 function IcePlate() {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ function IcePlate() {
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
-  const isImgLoaded = useSelector((state) => state.quia?.isImgLoaded);
+  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const initialCubesRef = useRef(null);
   const bearRef = useRef();
 
@@ -32,7 +33,7 @@ function IcePlate() {
     const questionImage = new window.Image();
     questionImage.src = imgUrl;
     questionImage.onload = () => {
-      dispatch(activateBreaking());
+      dispatch(activateBreaking(true));
     };
 
     setImage(questionImage);
@@ -60,24 +61,25 @@ function IcePlate() {
     };
 
     setInitialPositions(makePositions(CUBE_ROWS));
+    console.log(initialCubesRef);
 
-    let randomIndexes;
+    // let randomIndexes;
 
-    if (level >= 4) {
-      const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
-      randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
-    }
+    // if (level >= 4) {
+    //   const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
+    //   randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
+    // }
+    // console.log(initialCubesRef.getChildren());
+    // initialCubesRef.current.children.forEach((cube, i) => {
+    //   if (!cube.isVisible()) {
+    //     cube.show();
+    //   }
 
-    initialCubesRef.current.children.forEach((cube, i) => {
-      if (!cube.isVisible()) {
-        cube.show();
-      }
-
-      if (level >= 4 && randomIndexes.has(i)) {
-        cube.strokeWidth(0);
-        cube.on('click', () => cube.off('click'));
-      }
-    });
+    //   if (level >= 4 && randomIndexes.has(i)) {
+    //     cube.strokeWidth(0);
+    //     cube.on('click', () => cube.off('click'));
+    //   }
+    // });
   }, [currentQuestion, level]);
 
   const hideCube = (ev) => {
@@ -98,7 +100,7 @@ function IcePlate() {
   const displayCursorPointer = (ev) => {
     const container = ev.target.getStage().container();
     container.style.cursor = 'pointer';
-  };
+  }; //useEffect로
 
   return (
     <Container>
@@ -127,8 +129,9 @@ function IcePlate() {
             height={60}
           />
         </Layer>
+        {!isImageLoaded ? <LoadingPlateLayer /> : null}
       </Stage>
-      {/* {!isImgLoaded && <Spinner />} */}
+      {!isImageLoaded ? <Spinner color="purple" /> : null}
     </Container>
   );
 }
