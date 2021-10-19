@@ -8,10 +8,10 @@ import { activateBreaking } from '../../store/quizSlice';
 import { getRandomIndexes } from '../../utils/getRandomIndexes';
 import { CUBE_ROWS, CUBES_LENGTH, UNBREAKABLE_ICE } from '../../constants/ice';
 
-import PlateLayer from '../IceLayers/PlateLayer';
-import CubesLayer from '../IceLayers/CubesLayer';
-import NewCubesLayer from '../IceLayers/NewCubesLayer';
-import LoadingPlateLayer from '../IceLayers/LoadingPlateLayer';
+import PlateLayer from '../Ice/PlateLayer';
+import Cubes from '../Ice/Cubes';
+import NewCubes from '../Ice/NewCubes';
+import LoadingPlateLayer from '../Ice/LoadingPlateLayer';
 import DotSpinner from '../share/LoadingSpinner/DotSpinner';
 
 function IcePlate() {
@@ -23,11 +23,16 @@ function IcePlate() {
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const initialCubesRef = useRef(null);
   const bearRef = useRef();
+  const stageRef = useRef();
 
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
   const [newCubes, setNewCubes] = useState([]);
   const [image, setImage] = useState(null);
   const [bearImage, setBearImage] = useState(null);
+
+  useEffect(() => {
+    if (stageRef) stageRef.current.container().style.cursor = 'pointer';
+  }, []);
 
   useEffect(() => {
     const questionImage = new window.Image();
@@ -79,6 +84,8 @@ function IcePlate() {
         cube.on('click', () => cube.off('click'));
       }
     });
+
+    return () => setNewCubes([]);
   }, [currentQuestion, level]);
 
   const hideCube = (ev) => {
@@ -96,28 +103,21 @@ function IcePlate() {
     ev.target.visible(false);
   };
 
-  const displayCursorPointer = (ev) => {
-    const container = ev.target.getStage().container();
-    container.style.cursor = 'pointer';
-  }; //useEffect로
-
   return (
     <Container>
-      <Stage width={375} height={400}>
+      <Stage width={375} height={400} ref={stageRef}>
         <PlateLayer />
         <Layer>
           <Image x={90} y={100} image={image} width={200} height={200} />
         </Layer>
-        <CubesLayer
-          initialCubesRef={initialCubesRef}
-          positions={initialPositions}
-          onHide={hideCube}
-          displayCursorPointer={displayCursorPointer}
-        />
-        <NewCubesLayer
-          cubes={newCubes}
-          displayCursorPointer={displayCursorPointer}
-        />
+        <Layer>
+          <Cubes
+            initialCubesRef={initialCubesRef}
+            positions={initialPositions}
+            onHide={hideCube}
+          />
+          <NewCubes cubes={newCubes} />
+        </Layer>
         <Layer>
           <Image
             ref={bearRef}

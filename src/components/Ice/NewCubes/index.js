@@ -1,10 +1,10 @@
-import { Layer, RegularPolygon } from 'react-konva';
+import { Group, RegularPolygon } from 'react-konva';
 
-function NewCubesLayer({ cubes, displayCursorPointer }) {
+function NewCubes({ cubes }) {
   const onHide = (ev) => ev.target.hide();
 
   return (
-    <Layer>
+    <Group>
       {cubes.map((pos, i) => (
         <RegularPolygon
           key={String(pos.x) + String(pos.y) + i}
@@ -29,12 +29,11 @@ function NewCubesLayer({ cubes, displayCursorPointer }) {
           shadowBlur={1}
           shadowOpacity={0.8}
           shadowOffset={{ x: 5, y: 4 }}
-          onMouseEnter={displayCursorPointer}
           onClick={onHide}
         />
       ))}
-    </Layer>
+    </Group>
   );
 }
 
-export default NewCubesLayer;
+export default NewCubes;

@@ -1,18 +1,13 @@
-import { Layer, RegularPolygon } from 'react-konva';
+import { Group, RegularPolygon } from 'react-konva';
 
 import { getRandomIndexes } from '../../../utils/getRandomIndexes';
 import { CUBES_LENGTH } from '../../../constants/ice';
 
-function CubesLayer({
-  positions,
-  initialCubesRef,
-  onHide,
-  displayCursorPointer,
-}) {
+function Cubes({ positions, initialCubesRef, onHide }) {
   const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
 
   return (
-    <Layer id="initial-cubes" x={-13} y={0} ref={initialCubesRef}>
+    <Group x={-13} y={0} ref={initialCubesRef}>
       {positions?.map((pos, i) => {
         if (colorIndexes.has(i)) {
           return (
@@ -38,7 +33,6 @@ function CubesLayer({
               shadowColor="#7879f1"
               shadowBlur={1}
               shadowOffset={{ x: 6, y: 5 }}
-              onMouseEnter={displayCursorPointer}
               onClick={onHide}
               fillEnabled="true"
             />
@@ -60,13 +54,12 @@ function CubesLayer({
             shadowColor="#2AA0ED"
             shadowBlur={1}
             shadowOffset={{ x: 6, y: 5 }}
-            onMouseEnter={displayCursorPointer}
             onClick={onHide}
           />
         );
       })}
-    </Layer>
+    </Group>
   );
 }
 
-export default CubesLayer;
+export default Cubes;
