@@ -7,11 +7,13 @@ import store from '../src/store';
 
 import './config/firebase';
 
+import initReactFastclick from 'react-fastclick';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/globalStyle';
 import theme from './styles/theme';
 
 import App from './components/App';
+initReactFastclick();
 
 ReactDOM.render(
   <Router>

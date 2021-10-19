@@ -30,6 +30,7 @@ function NewCubes({ cubes }) {
           shadowOpacity={0.8}
           shadowOffset={{ x: 5, y: 4 }}
           onClick={onHide}
+          onTouchEnd={onHide}
         />
       ))}
     </Group>

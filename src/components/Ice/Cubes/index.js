@@ -55,6 +55,7 @@ function Cubes({ positions, initialCubesRef, onHide }) {
             shadowBlur={1}
             shadowOffset={{ x: 6, y: 5 }}
             onClick={onHide}
+            onTouchEnd={onHide}
           />
         );
       })}
