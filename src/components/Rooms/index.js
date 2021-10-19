@@ -22,6 +22,7 @@ import CreateRoomModal from '../Modal/CreateRoomModal';
 import EnterRoomModal from '../Modal/EnterRoomModal';
 import Message from '../share/Message';
 import Button from '../share/Button';
+import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function Rooms() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function Rooms() {
   const roomId = useSelector((state) => state.battle?.roomId);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(showMessage(BATTLE.WAITING));
@@ -39,6 +41,7 @@ function Rooms() {
 
       if (rooms) {
         dispatch(saveRoomData(rooms));
+        setLoading(true);
       }
     });
 
@@ -151,6 +154,7 @@ function Rooms() {
           </Portal>
         )}
       </RoomFooter>
+      {!loading ? <BarSpinner /> : null}
     </Container>
   );
 }

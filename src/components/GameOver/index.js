@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,16 +7,24 @@ import { ROUTE } from '../../constants/game';
 
 import Button from '../share/Button';
 import Message from '../share/Message';
+import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function GameOver() {
   const score = useSelector((state) => state.quiz?.score);
   const isWin = score ? score === 500 : null;
+  const [loading, setLoading] = useState(false);
+
+  if (score && isWin) setLoading(true);
 
   return (
     <Container isWin={isWin}>
-      <TitleWrapper isWin={isWin}>
-        <h1 className="app-title">{isWin ? 'YOU WON' : 'YOU LOST'}</h1>
-      </TitleWrapper>
+      {loading ? (
+        <TitleWrapper isWin={isWin}>
+          <h1 className="app-title">{isWin ? 'YOU WON' : 'YOU LOST'}</h1>
+        </TitleWrapper>
+      ) : (
+        <BarSpinner />
+      )}
       <Buttons>
         <li className="button">
           <Button text="공유하기" size="large" color="pink" />

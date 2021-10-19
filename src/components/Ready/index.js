@@ -51,7 +51,7 @@ function Ready() {
     };
 
     getRoom();
-  }, [dispatch, roomId]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!name || !breakers) return;

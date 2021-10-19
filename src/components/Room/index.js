@@ -19,6 +19,7 @@ import { BATTLE, RESET } from '../../constants/messages';
 
 import Message from '../share/Message';
 import Button from '../share/Button';
+import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function Room() {
   const dispatch = useDispatch();
@@ -27,14 +28,16 @@ function Room() {
   const rooms = useSelector((state) => state.battle?.rooms);
   const name = useSelector((state) => state.battle?.name);
   const [isReady, setIsReady] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     onValue(ref(getDatabase(), ROOMS), (snapshot) => {
-      const data = snapshot.val();
+      const rooms = snapshot.val();
 
-      if (!data) return;
-
-      dispatch(saveRoomData(data));
+      if (rooms) {
+        dispatch(saveRoomData(rooms));
+        setLoading(true);
+      }
     });
 
     dispatch(showMessage(BATTLE.PLEASE_READY));
@@ -190,6 +193,7 @@ function Room() {
           onClick={exitRoom}
         />
       </RoomFooter>
+      {!loading ? <BarSpinner /> : null}
     </Container>
   );
 }
