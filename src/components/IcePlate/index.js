@@ -108,7 +108,7 @@ function IcePlate() {
       <Stage width={375} height={400} ref={stageRef}>
         <PlateLayer />
         <Layer>
-          <Image x={90} y={100} image={image} width={200} height={200} />
+          <Image x={90} y={105} image={image} width={195} height={195} />
         </Layer>
         <Layer>
           <Cubes

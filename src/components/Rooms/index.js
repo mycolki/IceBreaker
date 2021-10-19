@@ -39,10 +39,10 @@ function Rooms() {
     onValue(ref(getDatabase(), ROOMS), (snapshot) => {
       const rooms = snapshot.val();
 
-      if (rooms) {
-        dispatch(saveRoomData(rooms));
-        setLoading(true);
-      }
+      if (!rooms) setLoading(true);
+
+      dispatch(saveRoomData(rooms));
+      setLoading(true);
     });
 
     return () => {

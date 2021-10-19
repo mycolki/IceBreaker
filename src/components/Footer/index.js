@@ -62,11 +62,11 @@ function Footer() {
         </span>
       </Nav>
       <Cokes>
-        <img src={coke} alt="coke" width="27" height="41" />
-        <img src={coke} alt="coke" width="27" height="41" />
-        <img src={coke} alt="coke" width="27" height="41" />
-        <img src={coke} alt="coke" width="27" height="41" />
-        <img src={coke} alt="coke" width="27" height="41" />
+        {Array(5)
+          .fill(null)
+          .map((_, i) => (
+            <img key={i} src={coke} alt="coke" width="27" height="41" />
+          ))}
       </Cokes>
     </Wrapper>
   );

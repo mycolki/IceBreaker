@@ -22,6 +22,7 @@ function PlateLayer() {
         shadowBlur={10}
         shadowOffset={{ x: 0, y: 10 }}
         shadowOpacity={0.4}
+        draggable
       />
     </Layer>
   );

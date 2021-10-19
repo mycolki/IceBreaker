@@ -6,7 +6,7 @@ function BarSpinner({ color = 'white' }) {
   return (
     <Wrapper>
       <BarLoader
-        size="90"
+        size="90px"
         width="100"
         height="6"
         color={theme[color]}
