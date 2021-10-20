@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import _ from 'lodash';
+import { cloneDeep, filter } from 'lodash';
 
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
 import { showMessage, onError } from '../../store/quizSlice';
 import { saveRoomData, saveName } from '../../store/battleSlice';
+import { detectWebp } from '../../utils/detectWebp';
 
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -58,7 +59,7 @@ function Room() {
   useEffect(() => {
     if (!rooms) return;
 
-    const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
+    const breakerLength = filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === BREAKER_LENGTH) {
       update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
@@ -91,14 +92,14 @@ function Room() {
   const exitRoom = () => {
     if (!rooms) return;
 
-    const breakerLength = _.filter(rooms[roomId].breakers, 'name').length;
+    const breakerLength = filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === 1) {
       set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
       return history.push(ROUTE.ROOMS);
     }
 
-    const clone = _.cloneDeep([...rooms[roomId].breakers]);
+    const clone = cloneDeep([...rooms[roomId].breakers]);
 
     if (clone[0].name === name) {
       [clone[0], clone[1]] = [clone[1], clone[0]];
@@ -124,7 +125,7 @@ function Room() {
   };
 
   const readyBattle = async () => {
-    const clone = _.cloneDeep([...rooms[roomId].breakers]);
+    const clone = cloneDeep([...rooms[roomId].breakers]);
     const breakers = clone.map((breaker) => {
       if (breaker.name === name) {
         breaker.isReady = !breaker.isReady;
@@ -138,7 +139,7 @@ function Room() {
       breakers,
     });
 
-    const readyLength = _.filter(breakers, 'isReady').length;
+    const readyLength = filter(breakers, 'isReady').length;
 
     if (readyLength === BREAKER_LENGTH) {
       update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
@@ -148,7 +149,7 @@ function Room() {
   };
 
   return (
-    <Container>
+    <Container isWebp={detectWebp()}>
       <RoomHeader>
         <h1 className="title">
           BREAKER <br />

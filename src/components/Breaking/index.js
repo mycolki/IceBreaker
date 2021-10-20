@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,16 +12,20 @@ import {
   passNextLevel,
   activateBreaking,
 } from '../../store/quizSlice';
+import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
 import Message from '../share/Message';
-import IcePlate from '../IcePlate';
 import InputBox from '../InputBox';
 import Footer from '../Footer';
 import Button from '../share/Button';
+// import IcePlate from '../IcePlate';
+import DotSpinner from '../share/LoadingSpinner/DotSpinner';
+
+const IcePlate = lazy(() => import('../IcePlate'));
 
 function Breaking() {
   const { roomId } = useParams();
@@ -64,37 +68,42 @@ function Breaking() {
     dispatch(passNextLevel());
     dispatch(activateBreaking(false));
   };
+  console.log(detectWebp());
 
   return (
-    <Container>
-      <Header />
-      <AnswerDisplayBox />
-      {isTimeOver && (
-        <Answer>
-          <div className="result">
-            <span className="result-text">{isAnswer ? '정답' : '얼음땡'}</span>
-            <img
-              className="img"
-              src={imgUrl}
-              alt={answer}
-              width="130"
-              height="130"
-            />
-            <Button
-              text="NEXT"
-              className="button"
-              size="medium"
-              color="lightPurple"
-              onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
-            />
-          </div>
-        </Answer>
-      )}
-      <Message />
-      <IcePlate />
-      <InputBox />
-      <Footer />
-    </Container>
+    <Suspense fallback={<DotSpinner color="purple" />}>
+      <Container isWebp={detectWebp()}>
+        <Header />
+        <AnswerDisplayBox />
+        {isTimeOver && (
+          <Answer>
+            <div className="result">
+              <span className="result-text">
+                {isAnswer ? '정답' : '얼음땡'}
+              </span>
+              <img
+                className="img"
+                src={imgUrl}
+                alt={answer}
+                width="130"
+                height="130"
+              />
+              <Button
+                text="NEXT"
+                className="button"
+                size="medium"
+                color="lightPurple"
+                onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
+              />
+            </div>
+          </Answer>
+        )}
+        <Message />
+        <IcePlate />
+        <InputBox />
+        <Footer />
+      </Container>
+    </Suspense>
   );
 }
 
@@ -102,8 +111,11 @@ export default Breaking;
 
 const Container = styled.div`
   height: 100%;
-  background-image: url(/background/floatCubeBg.png);
-  background-size: 375px 713px;
+
+  background-image: ${({ isWebp }) =>
+    isWebp
+      ? 'url(/background/floatCubeBg.webp)'
+      : 'url(/background/floatCubeBg.png)'};
 `;
 
 const Answer = styled.div`

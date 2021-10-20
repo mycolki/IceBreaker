@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,6 +14,18 @@ import BattleOver from '../BattleOver';
 import ErrorBox from '../ErrorBox';
 
 function App() {
+  useEffect(() => {
+    window.Modernizr.on('webp', function (result) {
+      if (result) {
+        document
+          .getElementsByClassName('no-webp')[0]
+          .classList.remove('no-webp');
+      } else {
+        document.getElementsByClassName('webp')[0].classList.remove('webp');
+      }
+    });
+  }, []);
+
   return (
     <AppContainer>
       <Switch>

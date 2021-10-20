@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import _ from 'lodash';
+import { shuffle } from 'lodash';
 import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/game';
 
 const name = QUIZ;
@@ -27,7 +27,7 @@ const quizSlice = createSlice({
     saveQuizData(state, action) {
       state.quiz = action.payload;
       const allQuestions = Object.values(state.quiz);
-      state.questions = _.shuffle(allQuestions).slice(0, QUIZ_LENGTH);
+      state.questions = shuffle(allQuestions).slice(0, QUIZ_LENGTH);
     },
     replaceQuestions(state, action) {
       state.questions = action.payload;

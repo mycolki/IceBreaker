@@ -7,7 +7,7 @@ function Cubes({ positions, initialCubesRef, onHide }) {
   const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
 
   return (
-    <Group x={-13} y={0} ref={initialCubesRef}>
+    <Group x={-18} y={0} ref={initialCubesRef}>
       {positions?.map((pos, i) => {
         if (colorIndexes.has(i)) {
           return (
@@ -32,9 +32,10 @@ function Cubes({ positions, initialCubesRef, onHide }) {
               strokeWidth={2}
               shadowColor="#7879f1"
               shadowBlur={1}
-              shadowOffset={{ x: 6, y: 5 }}
-              onClick={onHide}
+              shadowOffset={{ x: 8, y: 6 }}
+              onMouseUp={onHide}
               fillEnabled="true"
+              draggable
             />
           );
         }
@@ -54,7 +55,7 @@ function Cubes({ positions, initialCubesRef, onHide }) {
             shadowColor="#2AA0ED"
             shadowBlur={1}
             shadowOffset={{ x: 6, y: 5 }}
-            onClick={onHide}
+            onMouseUp={onHide}
             onTouchEnd={onHide}
           />
         );

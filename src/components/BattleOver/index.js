@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import _ from 'lodash';
+import { sortBy, cloneDeep } from 'lodash';
 
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
 import { onError } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
+import { detectWebp } from '../../utils/detectWebp';
+
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
 import { ERROR } from '../../constants/error';
@@ -46,7 +48,7 @@ function BattleOver() {
           child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers`),
         );
 
-        const sorted = _.sortBy(_.cloneDeep(snapshot.val()), 'score');
+        const sorted = sortBy(cloneDeep(snapshot.val()), 'score');
 
         if (sorted[0].score === sorted[1].score) return setIsDraw(true);
 
@@ -75,7 +77,7 @@ function BattleOver() {
   };
 
   return (
-    <Container isWinner={isWinner} isDraw={isDraw}>
+    <Container isWinner={isWinner} isDraw={isDraw} isWebp={detectWebp()}>
       {loading ? (
         <>
           <Result isWinner={isWinner} isDraw={isDraw}>

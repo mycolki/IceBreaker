@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { getDatabase, ref, update } from 'firebase/database';
 import { showMessage } from '../../../store/quizSlice';
-import { saveRoomData, saveRoomId } from '../../../store/battleSlice';
+import { saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
 import { ROUTE, ROOMS } from '../../../constants/game';
 

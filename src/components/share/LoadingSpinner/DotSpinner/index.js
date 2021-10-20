@@ -7,7 +7,7 @@ function DotSpinner({ color = 'white' }) {
     <Wrapper>
       <DotLoader
         className="spinner"
-        size="90"
+        size="90px"
         width="32"
         height="160"
         color={theme[color]}
