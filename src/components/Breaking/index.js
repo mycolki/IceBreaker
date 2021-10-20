@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -19,10 +19,13 @@ import { RESET } from '../../constants/messages';
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
 import Message from '../share/Message';
-import IcePlate from '../IcePlate';
 import InputBox from '../InputBox';
 import Footer from '../Footer';
 import Button from '../share/Button';
+// import IcePlate from '../IcePlate';
+import DotSpinner from '../share/LoadingSpinner/DotSpinner';
+
+const IcePlate = lazy(() => import('../IcePlate'));
 
 function Breaking() {
   const { roomId } = useParams();
@@ -68,35 +71,39 @@ function Breaking() {
   console.log(detectWebp());
 
   return (
-    <Container isWebp={detectWebp()}>
-      <Header />
-      <AnswerDisplayBox />
-      {isTimeOver && (
-        <Answer>
-          <div className="result">
-            <span className="result-text">{isAnswer ? '정답' : '얼음땡'}</span>
-            <img
-              className="img"
-              src={imgUrl}
-              alt={answer}
-              width="130"
-              height="130"
-            />
-            <Button
-              text="NEXT"
-              className="button"
-              size="medium"
-              color="lightPurple"
-              onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
-            />
-          </div>
-        </Answer>
-      )}
-      <Message />
-      <IcePlate />
-      <InputBox />
-      <Footer />
-    </Container>
+    <Suspense fallback={<DotSpinner color="purple" />}>
+      <Container isWebp={detectWebp()}>
+        <Header />
+        <AnswerDisplayBox />
+        {isTimeOver && (
+          <Answer>
+            <div className="result">
+              <span className="result-text">
+                {isAnswer ? '정답' : '얼음땡'}
+              </span>
+              <img
+                className="img"
+                src={imgUrl}
+                alt={answer}
+                width="130"
+                height="130"
+              />
+              <Button
+                text="NEXT"
+                className="button"
+                size="medium"
+                color="lightPurple"
+                onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
+              />
+            </div>
+          </Answer>
+        )}
+        <Message />
+        <IcePlate />
+        <InputBox />
+        <Footer />
+      </Container>
+    </Suspense>
   );
 }
 

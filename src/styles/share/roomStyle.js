@@ -6,7 +6,7 @@ export const Container = styled.div`
   height: 100%;
   text-align: center;
   background-image: ${({ isWebp }) =>
-    isWebp ? 'url(/background/roomBg.webp)' : 'url(/background/roomBg.png)'};
+    isWebp ? 'url(/background/roomsBg.webp)' : 'url(/background/roomsBg.png)'};
 `;
 
 export const RoomHeader = styled.ul`
