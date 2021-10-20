@@ -9,6 +9,7 @@ import { GiBearFace } from 'react-icons/gi';
 
 import { showMessage, onError } from '../../store/quizSlice';
 import { saveRoomData, saveName } from '../../store/battleSlice';
+import { detectWebp } from '../../utils/detectWebp';
 
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -148,7 +149,7 @@ function Room() {
   };
 
   return (
-    <Container>
+    <Container isWebp={detectWebp()}>
       <RoomHeader>
         <h1 className="title">
           BREAKER <br />

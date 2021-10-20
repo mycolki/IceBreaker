@@ -13,6 +13,7 @@ import GlobalStyle from './styles/globalStyle';
 import theme from './styles/theme';
 
 import App from './components/App';
+
 initReactFastclick();
 
 ReactDOM.render(

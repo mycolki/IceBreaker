@@ -3,10 +3,13 @@ import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
+import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
 import { flexCenter } from '../../styles/share/common';
 import { ROUTE } from '../../constants/game';
+
+import ImgWithFallback from '../ImgWithFallback';
 
 function Footer() {
   const history = useHistory();
@@ -65,7 +68,14 @@ function Footer() {
         {Array(5)
           .fill(null)
           .map((_, i) => (
-            <img key={i} src={coke} alt="coke" width="27" height="41" />
+            <ImgWithFallback
+              key={i}
+              src={cokeWeb}
+              fallback={coke}
+              alt="coke"
+              width="27"
+              height="41"
+            />
           ))}
       </Cokes>
     </Wrapper>

@@ -9,6 +9,7 @@ import { IoCaretBack } from 'react-icons/io5';
 
 import { showMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
+import { detectWebp } from '../../utils/detectWebp';
 
 import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
@@ -81,7 +82,7 @@ function Rooms() {
   };
 
   return (
-    <Container>
+    <Container isWebp={detectWebp()}>
       <RoomHeader>
         <h1 className="title">
           BREAKER <br />

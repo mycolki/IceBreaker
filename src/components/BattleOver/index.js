@@ -9,6 +9,8 @@ import { GiBearFace } from 'react-icons/gi';
 
 import { onError } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
+import { detectWebp } from '../../utils/detectWebp';
+
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
 import { ERROR } from '../../constants/error';
@@ -75,7 +77,7 @@ function BattleOver() {
   };
 
   return (
-    <Container isWinner={isWinner} isDraw={isDraw}>
+    <Container isWinner={isWinner} isDraw={isDraw} isWebp={detectWebp()}>
       {loading ? (
         <>
           <Result isWinner={isWinner} isDraw={isDraw}>

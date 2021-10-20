@@ -12,6 +12,7 @@ import {
   passNextLevel,
   activateBreaking,
 } from '../../store/quizSlice';
+import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
 
@@ -64,9 +65,10 @@ function Breaking() {
     dispatch(passNextLevel());
     dispatch(activateBreaking(false));
   };
+  console.log(detectWebp());
 
   return (
-    <Container>
+    <Container isWebp={detectWebp()}>
       <Header />
       <AnswerDisplayBox />
       {isTimeOver && (
@@ -102,8 +104,11 @@ export default Breaking;
 
 const Container = styled.div`
   height: 100%;
-  background-image: url(/background/floatCubeBg.png);
-  background-size: 375px 713px;
+
+  background-image: ${({ isWebp }) =>
+    isWebp
+      ? 'url(/background/floatCubeBg.webp)'
+      : 'url(/background/floatCubeBg.png)'};
 `;
 
 const Answer = styled.div`
