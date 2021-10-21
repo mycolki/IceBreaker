@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { ROUTE } from '../../constants/game';
 
-import BarSpinner from '../share/LoadingSpinner/BarSpinner';
+import DotSpinner from '../share/LoadingSpinner/DotSpinner';
 
 const Menu = lazy(() => import('../Menu'));
 const Ready = lazy(() => import('../Ready'));
@@ -31,7 +31,7 @@ function App() {
 
   return (
     <AppContainer>
-      <Suspense fallback={<BarSpinner color="purple" />}>
+      <Suspense fallback={<DotSpinner color="purple" />}>
         <Switch>
           <Route exact path={ROUTE.MENU} component={Menu} />
           <Route path={[ROUTE.READY_ID, ROUTE.READY]} component={Ready} />

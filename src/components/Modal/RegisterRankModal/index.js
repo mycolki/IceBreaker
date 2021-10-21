@@ -17,7 +17,7 @@ import { ERROR } from '../../../constants/error';
 import Message from '../../share/Message';
 import Button from '../../share/Button';
 
-function ResisterRankModal({ onClose, hasRank }) {
+function RegisterRankModal({ onClose, hasRank }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const score = useSelector((state) => state.quiz?.score);
@@ -85,4 +85,4 @@ function ResisterRankModal({ onClose, hasRank }) {
   );
 }
 
-export default ResisterRankModal;
+export default RegisterRankModal;

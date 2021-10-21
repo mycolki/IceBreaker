@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,10 +11,11 @@ import { RESET, GAME } from '../../constants/messages';
 
 import Button from '../share/Button';
 import Message from '../share/Message';
-import Portal from '../Portal';
-import Modal from '../Modal';
-import ResisterRankModal from '../Modal/RegisterRankModal';
 import BarSpinner from '../share/LoadingSpinner/BarSpinner';
+
+const Portal = lazy(() => import('../Portal'));
+const Modal = lazy(() => import('../Modal'));
+const RegisterRankModal = lazy(() => import('../Modal/RegisterRankModal'));
 
 function GameOver() {
   const dispatch = useDispatch();
@@ -71,14 +72,16 @@ function GameOver() {
             disabled={hasRank}
           />
           {rankModalOpen && (
-            <Portal>
-              <Modal onClose={closeRankModal} dimmed={true}>
-                <ResisterRankModal
-                  onClose={closeRankModal}
-                  hasRank={setHasRank}
-                />
-              </Modal>
-            </Portal>
+            <Suspense fallback={null}>
+              <Portal>
+                <Modal onClose={closeRankModal} dimmed={true}>
+                  <RegisterRankModal
+                    onClose={closeRankModal}
+                    hasRank={setHasRank}
+                  />
+                </Modal>
+              </Portal>
+            </Suspense>
           )}
         </li>
         <li className="button">

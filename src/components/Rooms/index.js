@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -17,13 +17,14 @@ import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { ROUTE, ROOMS } from '../../constants/game';
 import { BATTLE, RESET } from '../../constants/messages';
 
-import Portal from '../Portal';
-import Modal from '../Modal';
-import CreateRoomModal from '../Modal/CreateRoomModal';
-import EnterRoomModal from '../Modal/EnterRoomModal';
 import Message from '../share/Message';
 import Button from '../share/Button';
 import BarSpinner from '../share/LoadingSpinner/BarSpinner';
+
+const Portal = lazy(() => import('../Portal'));
+const Modal = lazy(() => import('../Modal'));
+const CreateRoomModal = lazy(() => import('../Modal/CreateRoomModal'));
+const EnterRoomModal = lazy(() => import('../Modal/EnterRoomModal'));
 
 function Rooms() {
   const dispatch = useDispatch();
@@ -135,11 +136,13 @@ function Rooms() {
           onClick={openEnterModal}
         />
         {enterModalOpen && (
-          <Portal>
-            <Modal onClose={closeEnterModal} dimmed={true}>
-              <EnterRoomModal onClose={closeEnterModal} />
-            </Modal>
-          </Portal>
+          <Suspense fallback={null}>
+            <Portal>
+              <Modal onClose={closeEnterModal} dimmed={true}>
+                <EnterRoomModal onClose={closeEnterModal} />
+              </Modal>
+            </Portal>
+          </Suspense>
         )}
         <Button
           text="방 만들기"
@@ -148,11 +151,13 @@ function Rooms() {
           onClick={openCreateModal}
         />
         {createModalOpen && (
-          <Portal>
-            <Modal onClose={closeCreateModal} dimmed={true}>
-              <CreateRoomModal onClose={closeCreateModal} />
-            </Modal>
-          </Portal>
+          <Suspense fallback={null}>
+            <Portal>
+              <Modal onClose={closeCreateModal} dimmed={true}>
+                <CreateRoomModal onClose={closeCreateModal} />
+              </Modal>
+            </Portal>
+          </Suspense>
         )}
       </RoomFooter>
       {!loading ? <BarSpinner /> : null}
