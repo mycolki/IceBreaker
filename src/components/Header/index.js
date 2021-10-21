@@ -12,7 +12,7 @@ import {
   showMessage,
   onError,
 } from '../../store/quizSlice';
-import { saveOpponentLevel } from '../../store/battleSlice';
+import { saveOpponentLevel, saveId } from '../../store/battleSlice';
 import { pounding } from '../../styles/share/animation';
 import {
   ROUTE,
@@ -53,7 +53,7 @@ function Header() {
 
         if (level === 1) return;
 
-        dispatch(saveOpponentLevel());
+        dispatch(saveOpponentLevel(level));
 
         setShowWarning(true);
         setTimeout(() => {
@@ -61,6 +61,16 @@ function Header() {
         }, 3000);
       },
     );
+
+    return () => {
+      dispatch(saveOpponentLevel(1));
+      dispatch(
+        saveId({
+          id: null,
+          opponentId: null,
+        }),
+      );
+    };
   }, [opponentId]);
 
   useEffect(() => {

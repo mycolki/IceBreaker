@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { sortBy, cloneDeep } from 'lodash';
 
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
-import { onError } from '../../store/quizSlice';
+import { onError, resetScore } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
 
@@ -39,6 +39,12 @@ function BattleOver() {
       dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
+
+    return () => {
+      window.sessionStorage.removeItem('userName');
+      dispatch(resetScore());
+      dispatch(saveName(''));
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -69,6 +75,8 @@ function BattleOver() {
     };
 
     getBreakers();
+
+    return () => dispatch(saveBreakers(null));
   }, [dispatch, roomId, name]);
 
   const goToMenu = () => {
@@ -120,7 +128,7 @@ function BattleOver() {
               text="처음으로"
               size="large"
               color="skyBlue"
-              onCick={goToMenu}
+              onClick={goToMenu}
             />
           </Link>
         </li>

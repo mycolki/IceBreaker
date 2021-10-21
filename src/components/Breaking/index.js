@@ -11,6 +11,7 @@ import {
   toggleAnswer,
   passNextLevel,
   activateBreaking,
+  resetScore,
 } from '../../store/quizSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
@@ -36,7 +37,11 @@ function Breaking() {
   const isAnswer = userInput ? answer === userInput : null;
 
   useEffect(() => {
-    return () => dispatch(showMessage(RESET));
+    return () => {
+      dispatch(showMessage(RESET));
+      dispatch(showAnswerBoxByInput(''));
+      dispatch(toggleAnswer(false));
+    };
   }, [dispatch]);
 
   useEffect(() => {

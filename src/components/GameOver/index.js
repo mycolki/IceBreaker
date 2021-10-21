@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { resetScore } from '../../store/quizSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE } from '../../constants/game';
 
@@ -11,17 +12,22 @@ import Message from '../share/Message';
 import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function GameOver() {
+  const dispatch = useDispatch();
   const score = useSelector((state) => state.quiz?.score);
   const isWin = score ? score === 500 : null;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  if (score && isWin) setLoading(true);
+  useEffect(() => {
+    if (score && isWin) setLoading(false);
+
+    return () => dispatch(resetScore());
+  }, [score, isWin]);
 
   return (
     <Container isWin={isWin} isWebp={detectWebp()}>
       {loading ? (
         <TitleWrapper isWin={isWin}>
-          <h1 className="app-title">{isWin ? 'YOU WON' : 'YOU LOST'}</h1>
+          <h1 className="score">{score}</h1>
         </TitleWrapper>
       ) : (
         <BarSpinner />
@@ -54,25 +60,24 @@ const Container = styled.div`
 
 const TitleWrapper = styled.div`
   position: relative;
-  height: 48%;
+  height: 65%;
   text-align: center;
 
-  .app-title {
+  .score {
     position: absolute;
     top: 75%;
     left: 50%;
     width: 100%;
     line-height: 1.6em;
-    font-size: 2em;
+    font-size: 60px;
     color: white;
-    -webkit-text-stroke: 2px
-      ${({ theme, isWinner }) => (isWinner ? theme.deepBlue : theme.deepPink)};
+    -webkit-text-stroke: 2px ${({ theme }) => theme.orange};
     transform: translate(-50%, -50%);
   }
 `;
 
 const Buttons = styled.ul`
-  height: 52%;
+  height: 30%;
   text-align: center;
 
   .button {

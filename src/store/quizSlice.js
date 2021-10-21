@@ -66,6 +66,9 @@ const quizSlice = createSlice({
     onError(state, action) {
       state.error = action.payload;
     },
+    resetScore(state) {
+      state.score = 0;
+    },
   },
 });
 
@@ -80,6 +83,7 @@ export const {
   showAnswerBoxByInput,
   passNextLevel,
   addScore,
+  resetScore,
   onError,
 } = quizSlice.actions;
 
