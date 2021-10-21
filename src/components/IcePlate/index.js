@@ -42,6 +42,8 @@ function IcePlate() {
     };
 
     setImage(questionImage);
+
+    return () => dispatch(activateBreaking(false));
   }, [imgUrl, dispatch]);
 
   useEffect(() => {

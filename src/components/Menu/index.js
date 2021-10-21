@@ -53,9 +53,11 @@ function Menu() {
             <Button text="같이 얼음깨기" size="large" color="skyBlue" />
           </Link>
         </li>
-        <li className="button">
-          <Button text="랭킹보기" size="large" color="purple" />
-        </li>
+        <Link to={ROUTE.RANKING}>
+          <li className="button">
+            <Button text="랭킹보기" size="large" color="purple" />
+          </li>
+        </Link>
         <li className="button">
           <Button text="게임 방법" size="large" color="purple" />
         </li>

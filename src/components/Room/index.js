@@ -156,28 +156,36 @@ function Room() {
           BATTLE
         </h1>
       </RoomHeader>
-      <Message />
-      <BattleGround>
-        <div className="vs">VS</div>
-        {rooms
-          ? rooms[roomId].breakers.map((breaker, i) => (
-              <Breaker
-                key={breaker.name + i}
-                isReady={breaker.isReady}
-                isUser={breaker.name === name}
-              >
-                <span className="name">
-                  {breaker.name ? breaker.name : ''}
-                  {breaker.name === name && (
-                    <GiBearFace className="user-icon" />
-                  )}
-                </span>
-                <img src={iceBear} alt="bear" width="160" height="auto" />
-                <span className="ready">{breaker.isReady ? 'READY' : ' '}</span>
-              </Breaker>
-            ))
-          : null}
-      </BattleGround>
+      {loading ? (
+        <>
+          <Message />
+          <BattleGround>
+            <div className="vs">VS</div>
+            {rooms
+              ? rooms[roomId].breakers.map((breaker, i) => (
+                  <Breaker
+                    key={breaker.name + i}
+                    isReady={breaker.isReady}
+                    isUser={breaker.name === name}
+                  >
+                    <span className="name">
+                      {breaker.name ? breaker.name : ''}
+                      {breaker.name === name && (
+                        <GiBearFace className="user-icon" />
+                      )}
+                    </span>
+                    <img src={iceBear} alt="bear" width="160" height="auto" />
+                    <span className="ready">
+                      {breaker.isReady ? 'READY' : ' '}
+                    </span>
+                  </Breaker>
+                ))
+              : null}
+          </BattleGround>
+        </>
+      ) : (
+        <BarSpinner color="white" />
+      )}
       <RoomFooter isAllReady={rooms && rooms[roomId].isAllReady}>
         <Button
           text="READY"
@@ -194,7 +202,6 @@ function Room() {
           onClick={exitRoom}
         />
       </RoomFooter>
-      {!loading ? <BarSpinner /> : null}
     </Container>
   );
 }
@@ -240,7 +247,7 @@ const Breaker = styled.div`
       padding: 2px;
       border-radius: 10px;
       font-size: 22px;
-      background-color: ${({ theme }) => theme.deepPink};
+      background-color: ${({ theme }) => theme.deepGray};
       transform: translate(40px, -14px);
       color: ${({ theme }) => theme.white};
     }

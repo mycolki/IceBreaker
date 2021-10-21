@@ -18,7 +18,7 @@ import {
   Form,
 } from '../../../styles/share/modalStyle';
 
-function CreateRoomModal({ closeModal }) {
+function CreateRoomModal({ onClose }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const inputRef = useRef();
@@ -116,7 +116,7 @@ function CreateRoomModal({ closeModal }) {
             text={roomId ? '방 삭제하기' : '뒤로 가기'}
             size="small"
             color="purple"
-            onClick={closeModal}
+            onClick={onClose}
           />
           <Button
             text={roomId ? '입장하기' : '방 만들기'}

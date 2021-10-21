@@ -17,7 +17,7 @@ import {
   Form,
 } from '../../../styles/share/modalStyle';
 
-function EnterRoomModal({ closeModal }) {
+function EnterRoomModal({ onClose }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const rooms = useSelector((state) => state.battle?.rooms);
@@ -69,9 +69,7 @@ function EnterRoomModal({ closeModal }) {
     setName(ev.target.value.trim());
   };
 
-  const handleRoomIdInput = (ev) => {
-    setInput(ev.target.value.trim());
-  };
+  const handleRoomIdInput = (ev) => setInput(ev.target.value.trim());
 
   return (
     <Container>
@@ -98,7 +96,7 @@ function EnterRoomModal({ closeModal }) {
             text="뒤로가기"
             size="small"
             color="purple"
-            onClick={closeModal}
+            onClick={onClose}
           />
           <Button
             text={roomId ? '입장하기' : 'ID확인'}

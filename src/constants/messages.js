@@ -1,3 +1,18 @@
+export const GAME = {
+  SHARE: {
+    type: 'game',
+    text: '아이스브레이커 URL이 복사되었습니다!',
+  },
+  FILL_BLANK: {
+    type: 'game',
+    text: '이름이 입력되지 않았습니다',
+  },
+  EXIST_RANK: {
+    type: 'game',
+    text: '이미 존재하는 이름입니다. 다시 입력해주세요',
+  },
+};
+
 export const RESET = {
   type: '',
   text: '',

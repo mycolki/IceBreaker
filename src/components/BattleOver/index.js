@@ -7,12 +7,14 @@ import { sortBy, cloneDeep } from 'lodash';
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
-import { onError } from '../../store/quizSlice';
+import { onError, resetScore, showMessage } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
+import { copyToClipboard } from '../../utils/copyToClipboard';
 import { detectWebp } from '../../utils/detectWebp';
 
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
+import { GAME } from '../../constants/messages';
 import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
@@ -39,6 +41,12 @@ function BattleOver() {
       dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
+
+    return () => {
+      window.sessionStorage.removeItem('userName');
+      dispatch(resetScore());
+      dispatch(saveName(''));
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -69,7 +77,14 @@ function BattleOver() {
     };
 
     getBreakers();
+
+    return () => dispatch(saveBreakers(null));
   }, [dispatch, roomId, name]);
+
+  const shareGameURL = () => {
+    copyToClipboard('https://icebreaker.colki.me');
+    dispatch(showMessage(GAME.SHARE));
+  };
 
   const goToMenu = () => {
     set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
@@ -112,7 +127,12 @@ function BattleOver() {
       )}
       <Buttons>
         <li className="button">
-          <Button text="공유하기" size="large" color="pink" />
+          <Button
+            text="공유하기"
+            size="large"
+            color="pink"
+            onClick={shareGameURL}
+          />
         </li>
         <li className="button">
           <Link to={ROUTE.MENU}>
@@ -120,7 +140,7 @@ function BattleOver() {
               text="처음으로"
               size="large"
               color="skyBlue"
-              onCick={goToMenu}
+              onClick={goToMenu}
             />
           </Link>
         </li>
@@ -135,9 +155,18 @@ export default BattleOver;
 const Container = styled.div`
   height: 100%;
   text-align: center;
-  background: ${({ theme, isDraw }) => isDraw && theme.drawResultBg};
-  background: ${({ theme, isWinner }) =>
-    isWinner ? theme.winResultBg : theme.loseResultBg};
+  background: ${({ isDraw, isWebp }) =>
+    isDraw && isWebp && 'url(/background/draw.webp)'};
+  background: ${({ isDraw, isWebp }) =>
+    isDraw && !isWebp && 'url(/background/draw.png)'};
+  background: ${({ isWinner, isWebp }) =>
+    isWinner && isWebp && 'url(/background/won.webp)'};
+  background: ${({ isWinner, isWebp }) =>
+    isWinner && !isWebp && 'url(/background/won.png)'};
+  background: ${({ isWinner, isWebp }) =>
+    !isWinner && isWebp && 'url(/background/lost.webp)'};
+  background: ${({ isWinner, isWebp }) =>
+    !isWinner && !isWebp && 'url(/background/lost.png)'};
 `;
 
 const Result = styled.div`

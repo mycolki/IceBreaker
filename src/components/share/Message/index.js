@@ -3,6 +3,9 @@ import styled, { css } from 'styled-components';
 import theme from '../../../styles/theme';
 
 const STYLES = {
+  game: css`
+    background-color: ${theme.purple};
+  `,
   battle: css`
     background-color: ${theme.purple};
   `,

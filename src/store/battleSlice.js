@@ -32,8 +32,8 @@ const battleSlice = createSlice({
       state.opponentId = opponentId;
       state.id = id;
     },
-    saveOpponentLevel(state) {
-      state.opponentLevel += 1;
+    saveOpponentLevel(state, action) {
+      state.opponentLevel = action.payload;
     },
   },
 });
