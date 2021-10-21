@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE } from '../../constants/game';
 
 import Button from '../share/Button';
@@ -17,7 +18,7 @@ function GameOver() {
   if (score && isWin) setLoading(true);
 
   return (
-    <Container isWin={isWin}>
+    <Container isWin={isWin} isWebp={detectWebp()}>
       {loading ? (
         <TitleWrapper isWin={isWin}>
           <h1 className="app-title">{isWin ? 'YOU WON' : 'YOU LOST'}</h1>
@@ -47,8 +48,8 @@ export default GameOver;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme, isWin }) =>
-    isWin ? theme.winGameBg : theme.loseGameBg}; ;
+  background-image: ${({ isWebp }) =>
+    isWebp ? 'url(/background/solo.webp)' : 'url(/background/solo.png)'};
 `;
 
 const TitleWrapper = styled.div`

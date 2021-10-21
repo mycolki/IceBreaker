@@ -240,7 +240,7 @@ const Breaker = styled.div`
       padding: 2px;
       border-radius: 10px;
       font-size: 22px;
-      background-color: ${({ theme }) => theme.deepPink};
+      background-color: ${({ theme }) => theme.deepGray};
       transform: translate(40px, -14px);
       color: ${({ theme }) => theme.white};
     }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { sortBy, cloneDeep } from 'lodash';
 
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
@@ -135,9 +135,18 @@ export default BattleOver;
 const Container = styled.div`
   height: 100%;
   text-align: center;
-  background: ${({ theme, isDraw }) => isDraw && theme.drawResultBg};
-  background: ${({ theme, isWinner }) =>
-    isWinner ? theme.winResultBg : theme.loseResultBg};
+  background: ${({ isDraw, isWebp }) =>
+    isDraw && isWebp && 'url(/background/draw.webp)'};
+  background: ${({ isDraw, isWebp }) =>
+    isDraw && !isWebp && 'url(/background/draw.png)'};
+  background: ${({ isWinner, isWebp }) =>
+    isWinner && isWebp && 'url(/background/won.webp)'};
+  background: ${({ isWinner, isWebp }) =>
+    isWinner && !isWebp && 'url(/background/won.png)'};
+  background: ${({ isWinner, isWebp }) =>
+    !isWinner && isWebp && 'url(/background/lost.webp)'};
+  background: ${({ isWinner, isWebp }) =>
+    !isWinner && !isWebp && 'url(/background/lost.png)'};
 `;
 
 const Result = styled.div`
