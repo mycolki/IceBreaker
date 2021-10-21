@@ -3,18 +3,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { resetScore } from '../../store/quizSlice';
+import { showMessage, resetScore } from '../../store/quizSlice';
+import { copyToClipboard } from '../../utils/copyToClipboard';
 import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE } from '../../constants/game';
+import { RESET, GAME } from '../../constants/messages';
 
 import Button from '../share/Button';
 import Message from '../share/Message';
+import Portal from '../Portal';
+import Modal from '../Modal';
+import ResisterRankModal from '../Modal/RegisterRankModal';
 import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function GameOver() {
   const dispatch = useDispatch();
   const score = useSelector((state) => state.quiz?.score);
   const isWin = score ? score === 500 : null;
+  const [rankModalOpen, setRankModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,6 +28,20 @@ function GameOver() {
 
     return () => dispatch(resetScore());
   }, [score, isWin]);
+
+  const shareGameURL = () => {
+    copyToClipboard('https://icebreaker.colki.me');
+    dispatch(showMessage(GAME.SHARE));
+  };
+
+  const openRankModal = () => {
+    setRankModalOpen(true);
+  };
+
+  const closeRankModal = () => {
+    setRankModalOpen(false);
+    dispatch(showMessage(RESET));
+  };
 
   return (
     <Container isWin={isWin} isWebp={detectWebp()}>
@@ -34,10 +54,27 @@ function GameOver() {
       )}
       <Buttons>
         <li className="button">
-          <Button text="공유하기" size="large" color="pink" />
+          <Button
+            text="공유하기"
+            size="large"
+            color="pink"
+            onClick={shareGameURL}
+          />
         </li>
         <li className="button">
-          <Button text="랭킹 등록" size="large" color="purple" />
+          <Button
+            text="랭킹 등록"
+            size="large"
+            color="purple"
+            onClick={openRankModal}
+          />
+          {rankModalOpen && (
+            <Portal>
+              <Modal onClose={closeRankModal} dimmed={true}>
+                <ResisterRankModal onClose={closeRankModal} />
+              </Modal>
+            </Portal>
+          )}
         </li>
         <li className="button">
           <Link to={ROUTE.MENU}>

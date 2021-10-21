@@ -137,7 +137,7 @@ function Rooms() {
         {enterModalOpen && (
           <Portal>
             <Modal onClose={closeEnterModal} dimmed={true}>
-              <EnterRoomModal closeModal={closeEnterModal} />
+              <EnterRoomModal onClose={closeEnterModal} />
             </Modal>
           </Portal>
         )}
@@ -150,7 +150,7 @@ function Rooms() {
         {createModalOpen && (
           <Portal>
             <Modal onClose={closeCreateModal} dimmed={true}>
-              <CreateRoomModal closeModal={closeCreateModal} />
+              <CreateRoomModal onClose={closeCreateModal} />
             </Modal>
           </Portal>
         )}

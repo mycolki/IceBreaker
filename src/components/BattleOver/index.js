@@ -7,12 +7,14 @@ import { sortBy, cloneDeep } from 'lodash';
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 
-import { onError, resetScore } from '../../store/quizSlice';
+import { onError, resetScore, showMessage } from '../../store/quizSlice';
 import { saveBreakers, saveName } from '../../store/battleSlice';
+import { copyToClipboard } from '../../utils/copyToClipboard';
 import { detectWebp } from '../../utils/detectWebp';
 
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
+import { GAME } from '../../constants/messages';
 import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
@@ -79,6 +81,11 @@ function BattleOver() {
     return () => dispatch(saveBreakers(null));
   }, [dispatch, roomId, name]);
 
+  const shareGameURL = () => {
+    copyToClipboard('https://icebreaker.colki.me');
+    dispatch(showMessage(GAME.SHARE));
+  };
+
   const goToMenu = () => {
     set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     history.push(ROUTE.MENU);
@@ -120,7 +127,12 @@ function BattleOver() {
       )}
       <Buttons>
         <li className="button">
-          <Button text="공유하기" size="large" color="pink" />
+          <Button
+            text="공유하기"
+            size="large"
+            color="pink"
+            onClick={shareGameURL}
+          />
         </li>
         <li className="button">
           <Link to={ROUTE.MENU}>

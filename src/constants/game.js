@@ -1,7 +1,8 @@
 export const QUIZ = 'quiz';
 export const ROOMS = 'rooms';
+export const RANKS = 'ranks';
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 2;
+export const QUIZ_LENGTH = 1;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
