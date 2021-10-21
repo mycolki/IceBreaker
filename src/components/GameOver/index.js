@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { showMessage, resetScore } from '../../store/quizSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
@@ -24,6 +25,12 @@ function GameOver() {
   const [rankModalOpen, setRankModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasRank, setHasRank] = useState(false);
+  const [play] = useSound('/audio/click.mp3');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' &&
+      new Audio(score >= 140 ? 'audio/won.mp3' : 'audio/lost.mp3'),
+  );
 
   useEffect(() => {
     if (score && isWin) setLoading(false);
@@ -34,18 +41,31 @@ function GameOver() {
     };
   }, [score, isWin]);
 
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) audio.play();
+  }, [isPlaying]);
+
   const shareGameURL = () => {
     copyToClipboard('https://icebreaker.colki.me');
     dispatch(showMessage(GAME.SHARE));
+    play();
   };
 
   const openRankModal = () => {
     setRankModalOpen(true);
+    play();
   };
 
   const closeRankModal = () => {
     setRankModalOpen(false);
     dispatch(showMessage(RESET));
+    play();
   };
 
   return (

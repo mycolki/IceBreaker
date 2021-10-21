@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Image } from 'react-konva';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import bearSrc from '../../asset/bear.png';
 import { activateBreaking } from '../../store/quizSlice';
@@ -29,6 +30,7 @@ function IcePlate() {
   const [newCubes, setNewCubes] = useState([]);
   const [image, setImage] = useState(null);
   const [bearImage, setBearImage] = useState(null);
+  const [play] = useSound('/audio/click.mp3');
 
   useEffect(() => {
     const questionImage = new window.Image();
@@ -43,7 +45,7 @@ function IcePlate() {
   }, [imgUrl, dispatch]);
 
   useEffect(() => {
-    if (level >= 6) {
+    if (level === 6) {
       const bear = new window.Image();
       bear.src = bearSrc;
       setBearImage(bear);
@@ -88,11 +90,12 @@ function IcePlate() {
         cube.off('click touchstart mousedown');
       }
     });
-  }, [level, isImageLoaded, cubesRef]);
+  }, [level, isImageLoaded, initialPositions]);
 
   const hideCube = (ev) => {
     if (isNotBreaking) return;
 
+    play();
     const pos = {
       x: ev.target.x(),
       y: ev.target.y(),
@@ -122,11 +125,11 @@ function IcePlate() {
           <Layer>
             <Image
               ref={bearRef}
-              x={90}
-              y={100}
+              x={100}
+              y={150}
               image={bearImage}
-              width={100}
-              height={60}
+              width={110}
+              height={70}
             />
           </Layer>
           {!isImageLoaded ? <LoadingPlateLayer /> : null}

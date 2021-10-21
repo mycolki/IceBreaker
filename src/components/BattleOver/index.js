@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { sortBy, cloneDeep } from 'lodash';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
@@ -30,6 +31,11 @@ function BattleOver() {
   const [isWinner, setIsWinner] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [play] = useSound('/audio/click.mp3');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' && new Audio('audio/won.mp3'),
+  );
 
   useEffect(() => {
     try {
@@ -84,12 +90,25 @@ function BattleOver() {
     };
   }, [dispatch, roomId, name]);
 
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) audio.play();
+    console.log(audio);
+  }, [isPlaying]);
+
   const shareGameURL = () => {
+    play();
     copyToClipboard('https://icebreaker.colki.me');
     dispatch(showMessage(GAME.SHARE));
   };
 
   const goToMenu = () => {
+    play();
     set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     history.push(ROUTE.MENU);
   };

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -34,6 +34,10 @@ function Breaking() {
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' && new Audio('audio/breaking.mp3'),
+  );
 
   useEffect(() => {
     return () => {
@@ -52,6 +56,19 @@ function Breaking() {
       history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
     });
   }, [roomId]);
+
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) {
+      audio.play();
+      audio.loop = true;
+    }
+  }, [isPlaying]);
 
   const goToLastPage = () => {
     if (roomId) {

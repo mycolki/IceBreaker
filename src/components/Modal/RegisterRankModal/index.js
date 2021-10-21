@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, get, set, child } from '@firebase/database';
 import { onError, showMessage } from '../../../store/quizSlice';
@@ -22,6 +23,7 @@ function RegisterRankModal({ onClose, hasRank }) {
   const history = useHistory();
   const score = useSelector((state) => state.quiz?.score);
   const [name, setName] = useState('');
+  const [play] = useSound('/audio/click.mp3');
 
   const close = () => {
     setName('');
@@ -31,6 +33,7 @@ function RegisterRankModal({ onClose, hasRank }) {
   const submitName = async (ev) => {
     ev.preventDefault();
 
+    play();
     if (!name) {
       dispatch(showMessage(GAME.FILL_BLANK));
       return setName('');

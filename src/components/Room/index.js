@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { cloneDeep, filter } from 'lodash';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
@@ -30,6 +31,11 @@ function Room() {
   const name = useSelector((state) => state.battle?.name);
   const [isReady, setIsReady] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [play] = useSound('/audio/click.mp3');
+  const [audio] = useState(
+    typeof Audio !== 'undefined' && new Audio('audio/room.mp3'),
+  );
 
   useEffect(() => {
     onValue(ref(getDatabase(), ROOMS), (snapshot) => {
@@ -42,6 +48,7 @@ function Room() {
     });
 
     dispatch(showMessage(BATTLE.PLEASE_READY));
+
     try {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
@@ -89,9 +96,20 @@ function Room() {
     return () => clearTimeout(timer);
   });
 
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) audio.play();
+  }, [isPlaying]);
+
   const exitRoom = () => {
     if (!rooms) return;
 
+    play();
     const breakerLength = filter(rooms[roomId].breakers, 'name').length;
 
     if (breakerLength === 1) {
@@ -125,6 +143,7 @@ function Room() {
   };
 
   const readyBattle = async () => {
+    play();
     const clone = cloneDeep([...rooms[roomId].breakers]);
     const breakers = clone.map((breaker) => {
       if (breaker.name === name) {

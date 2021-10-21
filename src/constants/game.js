@@ -31,7 +31,7 @@ export const SCORES = {
 
 export const TIME_LIMIT_ANSWER = 5;
 export const SECONDS_PER_LEVEL = {
-  Lv1: 3,
+  Lv1: 10,
   Lv2: 7,
   Lv3: 10,
   Lv4: 7,
