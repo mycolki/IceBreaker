@@ -8,8 +8,8 @@ function DotSpinner({ color = 'white' }) {
       <DotLoader
         className="spinner"
         size="90px"
-        width="32"
-        height="160"
+        width="32px"
+        height="160px"
         color={theme[color]}
         radius="10"
       />

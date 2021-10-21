@@ -22,6 +22,7 @@ function GameOver() {
   const isWin = score ? score === 500 : null;
   const [rankModalOpen, setRankModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hasRank, setHasRank] = useState(false);
 
   useEffect(() => {
     if (score && isWin) setLoading(false);
@@ -67,11 +68,15 @@ function GameOver() {
             size="large"
             color="purple"
             onClick={openRankModal}
+            disabled={hasRank}
           />
           {rankModalOpen && (
             <Portal>
               <Modal onClose={closeRankModal} dimmed={true}>
-                <ResisterRankModal onClose={closeRankModal} />
+                <ResisterRankModal
+                  onClose={closeRankModal}
+                  hasRank={setHasRank}
+                />
               </Modal>
             </Portal>
           )}

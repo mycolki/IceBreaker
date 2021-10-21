@@ -1,6 +1,6 @@
 export const QUIZ = 'quiz';
 export const ROOMS = 'rooms';
-export const RANKS = 'ranks';
+export const RANKERS = 'rankers';
 export const BREAKER_LENGTH = 2;
 export const QUIZ_LENGTH = 1;
 export const ROUTE = {
@@ -15,6 +15,7 @@ export const ROUTE = {
   GAME_OVER: '/gameover',
   BATTLE_OVER_ID: '/battleover/:roomId',
   BATTLE_OVER: '/battleover',
+  RANKING: '/ranking',
   ERROR: '/error',
 };
 

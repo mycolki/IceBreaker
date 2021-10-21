@@ -10,14 +10,14 @@ import {
   Title,
   Form,
 } from '../../../styles/share/modalStyle';
-import { ROUTE, RANKS } from '../../../constants/game';
+import { ROUTE, RANKERS } from '../../../constants/game';
 import { GAME } from '../../../constants/messages';
 import { ERROR } from '../../../constants/error';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
 
-function ResisterRankModal({ onClose }) {
+function ResisterRankModal({ onClose, hasRank }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const score = useSelector((state) => state.quiz?.score);
@@ -37,7 +37,9 @@ function ResisterRankModal({ onClose }) {
     }
 
     try {
-      const snapshot = await get(child(ref(getDatabase()), `${RANKS}/${name}`));
+      const snapshot = await get(
+        child(ref(getDatabase()), `${RANKERS}/${name}`),
+      );
 
       if (snapshot.val() !== null) {
         dispatch(showMessage(GAME.EXIST_RANK));
@@ -48,11 +50,12 @@ function ResisterRankModal({ onClose }) {
       history.push(ROUTE.ERROR);
     }
 
-    set(ref(getDatabase(), `${RANKS}/${name}`), {
+    set(ref(getDatabase(), `${RANKERS}/${name}`), {
       name,
       score,
     });
 
+    hasRank(true);
     close();
   };
 
