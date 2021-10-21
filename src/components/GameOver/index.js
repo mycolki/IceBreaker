@@ -28,7 +28,10 @@ function GameOver() {
   useEffect(() => {
     if (score && isWin) setLoading(false);
 
-    return () => dispatch(resetScore());
+    return () => {
+      dispatch(resetScore());
+      dispatch(showMessage(RESET));
+    };
   }, [score, isWin]);
 
   const shareGameURL = () => {
@@ -49,7 +52,8 @@ function GameOver() {
     <Container isWin={isWin} isWebp={detectWebp()}>
       {loading ? (
         <TitleWrapper isWin={isWin}>
-          <h1 className="score">{score}</h1>
+          <h1 className="title">GAME OVER</h1>
+          <h2 className="score">{score}</h2>
         </TitleWrapper>
       ) : (
         <BarSpinner />
@@ -108,6 +112,15 @@ const TitleWrapper = styled.div`
   height: 65%;
   text-align: center;
 
+  .title {
+    margin: auto;
+    padding-top: 100px;
+    font-family: 'Do hyeon';
+    font-size: 55px;
+    color: ${({ theme }) => theme.white};
+    -webkit-text-stroke: 2px ${({ theme }) => theme.white};
+  }
+
   .score {
     position: absolute;
     top: 75%;
@@ -115,8 +128,8 @@ const TitleWrapper = styled.div`
     width: 100%;
     line-height: 1.6em;
     font-size: 60px;
-    color: white;
-    -webkit-text-stroke: 2px ${({ theme }) => theme.orange};
+    color: ${({ theme }) => theme.red};
+    -webkit-text-stroke: 2px ${({ theme }) => theme.red};
     transform: translate(-50%, -50%);
   }
 `;

@@ -8,7 +8,7 @@ function NewCubes({ cubes }) {
       {cubes.map((pos, i) => (
         <RegularPolygon
           key={String(pos.x) + String(pos.y) + i}
-          x={pos.x - 13}
+          x={pos.x - 18}
           y={pos.y - 0}
           sides={6}
           radius={17}

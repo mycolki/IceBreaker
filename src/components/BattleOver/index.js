@@ -14,7 +14,7 @@ import { detectWebp } from '../../utils/detectWebp';
 
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
-import { GAME } from '../../constants/messages';
+import { GAME, RESET } from '../../constants/messages';
 import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
@@ -78,7 +78,10 @@ function BattleOver() {
 
     getBreakers();
 
-    return () => dispatch(saveBreakers(null));
+    return () => {
+      dispatch(saveBreakers(null));
+      dispatch(showMessage(RESET));
+    };
   }, [dispatch, roomId, name]);
 
   const shareGameURL = () => {

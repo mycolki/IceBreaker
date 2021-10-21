@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ROUTE } from '../../constants/game';
@@ -45,7 +45,6 @@ function App() {
           <Route path={ROUTE.BATTLE_OVER_ID} component={BattleOver} />
           <Route path={ROUTE.RANKING} component={Ranking} />
           <Route path={ROUTE.ERROR} component={ErrorBox} />
-          <Redirect path="*" to={ROUTE.MENU} />
         </Switch>
       </Suspense>
     </AppContainer>

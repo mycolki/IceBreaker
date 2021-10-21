@@ -35,7 +35,7 @@ function Cubes({ positions, initialCubesRef, onHide }) {
               shadowOffset={{ x: 8, y: 6 }}
               onMouseUp={onHide}
               fillEnabled="true"
-              draggable
+              perfectDrawEnabled="false"
             />
           );
         }
@@ -57,6 +57,7 @@ function Cubes({ positions, initialCubesRef, onHide }) {
             shadowOffset={{ x: 6, y: 5 }}
             onMouseUp={onHide}
             onTouchEnd={onHide}
+            perfectDrawEnabled="false"
           />
         );
       })}

@@ -1,4 +1,4 @@
-import { useEffect, lazy } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,7 +11,6 @@ import {
   toggleAnswer,
   passNextLevel,
   activateBreaking,
-  resetScore,
 } from '../../store/quizSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';

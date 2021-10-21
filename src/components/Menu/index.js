@@ -70,17 +70,17 @@ export default Menu;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.menuBg};
+  background-image: url(/background/menu.jpg);
 `;
 
 const TitleWrapper = styled.div`
   position: relative;
-  height: 55%;
+  height: 53%;
   text-align: center;
 
   .app-title {
     position: absolute;
-    top: 60%;
+    top: 73%;
     left: 50%;
     width: 100%;
     line-height: 1.6em;
@@ -92,7 +92,7 @@ const TitleWrapper = styled.div`
 `;
 
 const MenuButtons = styled.ul`
-  height: 45%;
+  height: 47%;
   text-align: center;
 
   button {
