@@ -29,7 +29,7 @@ export const SCORES = {
   Lv7: 230,
 };
 
-export const TIME_LIMIT_ANSWER = 5;
+export const TIME_LIMIT_ANSWER = 10;
 export const SECONDS_PER_LEVEL = {
   Lv1: 10,
   Lv2: 7,

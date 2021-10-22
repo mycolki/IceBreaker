@@ -8,8 +8,8 @@ const initialState = {
   quiz: {},
   questions: [],
   currentQuestion: null,
-  isImageLoaded: false,
-  isNotBreaking: false,
+  isImgLoaded: false,
+  isAnswerTime: false,
   isTimeOver: false,
   userInput: '',
   message: {
@@ -36,13 +36,13 @@ const quizSlice = createSlice({
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
-    activateBreaking(state, action) {
-      state.isImageLoaded = action.payload;
+    loadImage(state, action) {
+      state.isImgLoaded = action.payload;
     },
-    toggleForm(state, action) {
-      state.isNotBreaking = action.payload;
+    showForm(state, action) {
+      state.isAnswerTime = action.payload;
     },
-    toggleAnswer(state, action) {
+    showResult(state, action) {
       state.isTimeOver = action.payload;
     },
     showMessage(state, action) {
@@ -76,9 +76,9 @@ export const {
   saveQuizData,
   replaceQuestions,
   getFirstLevel,
-  activateBreaking,
-  toggleForm,
-  toggleAnswer,
+  loadImage,
+  showForm,
+  showResult,
   showMessage,
   showAnswerBoxByInput,
   passNextLevel,

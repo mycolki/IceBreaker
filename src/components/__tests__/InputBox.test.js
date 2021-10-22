@@ -11,7 +11,7 @@ describe('<InputBox /> : render form', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: true,
+          isAnswerTime: true,
         },
       }),
     );
@@ -25,7 +25,7 @@ describe('<InputBox /> : render form', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: false,
+          isAnswerTime: false,
         },
       }),
     );
@@ -41,8 +41,8 @@ describe('<InputBox /> : toggle submit', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: true,
-          isImageLoaded: false,
+          isAnswerTime: true,
+          isImgLoaded: false,
         },
       }),
     );
@@ -56,8 +56,8 @@ describe('<InputBox /> : toggle submit', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: true,
-          isImageLoaded: true,
+          isAnswerTime: true,
+          isImgLoaded: true,
         },
       }),
     );
@@ -78,8 +78,8 @@ describe('<InputBox /> : submit input value', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: true,
-          isImageLoaded: true,
+          isAnswerTime: true,
+          isImgLoaded: true,
           currentQuestion: {
             answer: MOCK_VALUE,
           },
@@ -102,12 +102,12 @@ describe('<InputBox /> : submit input value', () => {
 
     store.dispatch(reducers.addScore());
     store.dispatch(reducers.showAnswerBoxByInput(MOCK_VALUE));
-    store.dispatch(reducers.toggleAnswer(true));
+    store.dispatch(reducers.showResult(true));
     const actions = store.getActions();
 
     expect(actions[0].type).toEqual('quiz/addScore');
     expect(actions[1].type).toEqual('quiz/showAnswerBoxByInput');
-    expect(actions[2].type).toEqual('quiz/toggleAnswer');
+    expect(actions[2].type).toEqual('quiz/showResult');
   });
 
   it('should reset value of input if submitted value is not korean', () => {
@@ -115,8 +115,8 @@ describe('<InputBox /> : submit input value', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: true,
-          isImageLoaded: true,
+          isAnswerTime: true,
+          isImgLoaded: true,
           currentQuestion: {
             answer: MOCK_VALUE,
           },
@@ -150,8 +150,8 @@ describe('<InputBox /> : submit input value', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isNotBreaking: true,
-          isImageLoaded: true,
+          isAnswerTime: true,
+          isImgLoaded: true,
           currentQuestion: {
             answer: MOCK_VALUE,
           },

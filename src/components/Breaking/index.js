@@ -8,9 +8,9 @@ import { getDatabase, ref, onValue, update } from 'firebase/database';
 import {
   showMessage,
   showAnswerBoxByInput,
-  toggleAnswer,
+  loadImage,
+  showResult,
   passNextLevel,
-  activateBreaking,
 } from '../../store/quizSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
@@ -34,16 +34,19 @@ function Breaking() {
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(
-    typeof Audio !== 'undefined' && new Audio('audio/breaking.mp3'),
-  );
+  // const [isPlaying, setIsPlaying] = useState(false);
+  // const [audio] = useState(
+  //   typeof Audio !== 'undefined' &&
+  //     new Audio(
+  //       'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/breaking.mp3',
+  //     ),
+  // );
 
   useEffect(() => {
     return () => {
       dispatch(showMessage(RESET));
       dispatch(showAnswerBoxByInput(''));
-      dispatch(toggleAnswer(false));
+      dispatch(showResult(false));
     };
   }, [dispatch]);
 
@@ -57,18 +60,19 @@ function Breaking() {
     });
   }, [roomId]);
 
-  useEffect(() => {
-    setIsPlaying(true);
+  // useEffect(() => {
+  //   setIsPlaying(true);
 
-    return () => audio.pause();
-  }, []);
+  //   return () => audio.pause();
+  // }, []);
 
-  useEffect(() => {
-    if (isPlaying) {
-      audio.play();
-      audio.loop = true;
-    }
-  }, [isPlaying]);
+  // useEffect(() => {
+  //   if (isPlaying) {
+  //     console.log(111);
+  //     audio.play();
+  //     audio.loop = true;
+  //   }
+  // }, [isPlaying]);
 
   const goToLastPage = () => {
     if (roomId) {
@@ -81,10 +85,10 @@ function Breaking() {
   };
 
   const goToNextLevel = () => {
-    dispatch(toggleAnswer(false));
+    dispatch(showResult(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
-    dispatch(activateBreaking(false));
+    dispatch(loadImage(false));
   };
 
   return (

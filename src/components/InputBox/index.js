@@ -6,7 +6,7 @@ import useSound from 'use-sound';
 import {
   showMessage,
   showAnswerBoxByInput,
-  toggleAnswer,
+  showResult,
   addScore,
 } from '../../store/quizSlice';
 import { countEachLetter } from '../../utils/countEachLetter';
@@ -20,8 +20,8 @@ import Button from '../share/Button';
 function InputBox() {
   const dispatch = useDispatch();
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
-  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
-  const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
+  const isImgLoaded = useSelector((state) => state.quiz?.isImgLoaded);
+  const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const [play] = useSound('/audio/breakIce.wav');
   const [input, setInput] = useState('');
@@ -39,7 +39,7 @@ function InputBox() {
       dispatch(addScore());
       dispatch(showAnswerBoxByInput(input));
 
-      return dispatch(toggleAnswer(true));
+      return dispatch(showResult(true));
     }
 
     if (input.length === 0) {
@@ -110,7 +110,7 @@ function InputBox() {
 
   return (
     <Wrapper>
-      {isNotBreaking ? (
+      {isAnswerTime ? (
         <Form
           onSubmit={submitInput}
           isAnswer={answer === input}
@@ -130,7 +130,7 @@ function InputBox() {
             color="lightPurple"
             size="small"
             type="submit"
-            disabled={!isImageLoaded}
+            disabled={!isImgLoaded}
           />
         </Form>
       ) : null}
