@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 import { rememberSecond, showMessage } from '../../store/quizSlice';
+import usedCokeWeb from '../../asset/usedCoke.webp';
+import usedCoke from '../../asset/usedCoke.png';
 import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
@@ -21,6 +23,7 @@ const HintModal = lazy(() => import('../Modal/HintModal'));
 function Footer() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
   const hints = useSelector((state) => state.quiz?.hints);
   const [hintModalOpen, setHintModalOpen] = useState(false);
 
@@ -43,6 +46,7 @@ function Footer() {
     const container = ev.target.getStage().container();
     container.style.cursor = 'pointer';
   };
+  console.log(hints);
 
   return (
     <Wrapper>
@@ -96,18 +100,20 @@ function Footer() {
         )}
       </Nav>
       <Cokes>
-        {Array(hints)
+        {Array(5)
           .fill(null)
-          .map((_, i) => (
-            <ImgWithFallback
-              key={i}
-              src={cokeWeb}
-              fallback={coke}
-              alt="coke"
-              width="27"
-              height="41"
-            />
-          ))}
+          .map((_, i) => {
+            return (
+              <ImgWithFallback
+                key={i}
+                src={i > hints - 1 ? usedCokeWeb : cokeWeb}
+                fallback={i > hints - 1 ? usedCoke : coke}
+                alt="coke"
+                width="27"
+                height="41"
+              />
+            );
+          })}
       </Cokes>
     </Wrapper>
   );

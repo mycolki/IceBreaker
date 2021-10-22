@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import hintCokeWeb from '../../../asset/hintCoke.webp';
 import hintCoke from '../../../asset/hintCoke.png';
 
-import { useHint } from '../../../store/quizSlice';
+import { takeHint } from '../../../store/quizSlice';
 import { rightAndLeft } from '../../../styles/share/animation';
 
 import Message from '../../share/Message';
@@ -15,12 +15,12 @@ function HintModal({ onClose }) {
   const dispatch = useDispatch();
 
   const useHint1Coke = () => {
-    dispatch(useHint(1));
+    dispatch(takeHint(1));
     onClose();
   };
 
   const useHint2Coke = () => {
-    dispatch(useHint(2));
+    dispatch(takeHint(2));
     onClose();
   };
 

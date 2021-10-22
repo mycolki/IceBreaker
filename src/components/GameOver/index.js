@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { showMessage, resetScore } from '../../store/quizSlice';
+import { showMessage, resetScore, takeHint } from '../../store/quizSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE } from '../../constants/game';
@@ -39,6 +39,7 @@ function GameOver() {
     return () => {
       dispatch(resetScore());
       dispatch(showMessage(RESET));
+      dispatch(takeHint(5));
       audio.pause();
     };
   }, [score]);
