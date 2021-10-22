@@ -1,32 +1,61 @@
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getDatabase, ref, update } from 'firebase/database';
+import { takeHint, showMessage } from '../../../store/quizSlice';
 import hintCokeWeb from '../../../asset/hintCoke.webp';
 import hintCoke from '../../../asset/hintCoke.png';
-
-import { takeHint } from '../../../store/quizSlice';
 import { rightAndLeft } from '../../../styles/share/animation';
+import { flexCenter } from '../../../styles/share/common';
+import { ROOMS } from '../../../constants/game';
+import { HINT, RESET } from '../../../constants/messages';
 
 import ImgWithFallback from '../../ImgWithFallback';
-import { flexCenter } from '../../../styles/share/common';
+import Message from '../../share/Message';
 
 function HintModal({ onClose }) {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
+  const opponentId = useSelector((state) => state.battle?.opponentId);
+  const hints = useSelector((state) => state.quiz?.hints);
 
-  const useHint1Coke = () => {
-    dispatch(takeHint(1));
-    onClose();
+  useEffect(() => {
+    dispatch(showMessage(HINT.GUIDE));
+
+    return () => dispatch(showMessage(RESET));
+  }, []);
+
+  const attackOpponent = () => {
+    update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}`), {
+      isAttacked: true,
+    });
   };
 
   const useHint2Coke = () => {
+    if (hints < 2) {
+      return dispatch(showMessage(HINT.NOPE));
+    }
+
+    attackOpponent();
     dispatch(takeHint(2));
+    onClose();
+  };
+
+  const useHint1Coke = () => {
+    if (hints === 0) {
+      return dispatch(showMessage(HINT.NOPE));
+    }
+
+    dispatch(takeHint(1));
     onClose();
   };
 
   return (
     <Container>
       <MessageArea>
-        <p className="message">원하는 힌트의 콜라를 눌러주세요</p>
+        <Message height="15" />
       </MessageArea>
       <Hint>
         <div className="cokes">

@@ -6,6 +6,9 @@ const STYLES = {
   game: css`
     background-color: ${theme.purple};
   `,
+  hint: css`
+    background-color: ${theme.deepGray};
+  `,
   battle: css`
     background-color: ${theme.purple};
   `,

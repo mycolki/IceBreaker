@@ -9,6 +9,7 @@ const initialState = {
   id: '',
   opponentId: null,
   opponentLevel: 1,
+  isAttacked: false,
 };
 
 const battleSlice = createSlice({
@@ -35,6 +36,13 @@ const battleSlice = createSlice({
     saveOpponentLevel(state, action) {
       state.opponentLevel = action.payload;
     },
+    receiveAttack(state, action) {
+      if (action.payload === true) {
+        state.currentSecond -= 5;
+      }
+
+      state.isAttacked = action.payload;
+    },
   },
 });
 
@@ -45,6 +53,7 @@ export const {
   saveName,
   saveId,
   saveOpponentLevel,
+  receiveAttack,
 } = battleSlice.actions;
 
 export default battleSlice.reducer;

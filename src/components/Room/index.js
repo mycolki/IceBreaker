@@ -41,7 +41,7 @@ function Room() {
   );
 
   useEffect(() => {
-    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
+    const cleanUp = onValue(ref(getDatabase(), ROOMS), (snapshot) => {
       const rooms = snapshot.val();
 
       if (rooms) {
@@ -63,7 +63,10 @@ function Room() {
       history.push(ROUTE.ERROR);
     }
 
-    return () => dispatch(showMessage(RESET));
+    return () => {
+      dispatch(showMessage(RESET));
+      cleanUp();
+    };
   }, [dispatch]);
 
   useEffect(() => {

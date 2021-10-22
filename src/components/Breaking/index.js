@@ -14,6 +14,7 @@ import {
   showForm,
   takeHint,
 } from '../../store/quizSlice';
+import { receiveAttack } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
@@ -33,6 +34,10 @@ function Breaking() {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
+  const currentSecond = useSelector((state) => state.quiz?.currentSecond);
+
+  const id = useSelector((state) => state.battle?.id);
+  const isAttacked = useSelector((state) => state.battle?.isAttacked);
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
@@ -50,7 +55,6 @@ function Breaking() {
       dispatch(showAnswerBoxByInput(''));
       dispatch(showResult(false));
       dispatch(showForm(false));
-      debugger;
       dispatch(takeHint(5));
     };
   }, [dispatch]);
@@ -63,6 +67,25 @@ function Breaking() {
 
       history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
     });
+  }, [roomId]);
+
+  useEffect(() => {
+    if (!roomId) return;
+
+    const cleanUp = onValue(
+      ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}/isAttacked`),
+      (snapshot) => {
+        if (!snapshot.val()) return;
+
+        dispatch(receiveAttack(true));
+      },
+    );
+
+    // update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
+    //   isAttacked: false,
+    // });
+
+    return () => cleanUp();
   }, [roomId]);
 
   useEffect(() => {

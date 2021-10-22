@@ -47,7 +47,7 @@ function Rooms() {
   useEffect(() => {
     dispatch(showMessage(BATTLE.WAITING));
 
-    onValue(ref(getDatabase(), ROOMS), (snapshot) => {
+    const cleanUp = onValue(ref(getDatabase(), ROOMS), (snapshot) => {
       const rooms = snapshot.val();
 
       if (!rooms) setLoading(true);
@@ -59,6 +59,7 @@ function Rooms() {
     return () => {
       dispatch(showMessage(RESET));
       dispatch(saveRoomId(''));
+      cleanUp();
     };
   }, [dispatch, history]);
 

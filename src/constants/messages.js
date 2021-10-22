@@ -13,6 +13,17 @@ export const GAME = {
   },
 };
 
+export const HINT = {
+  GUIDE: {
+    type: 'hint',
+    text: '원하는 힌트의 콜라를 눌러주세요',
+  },
+  NOPE: {
+    type: 'hint',
+    text: '콜라가 부족합니다',
+  },
+};
+
 export const RESET = {
   type: '',
   text: '',

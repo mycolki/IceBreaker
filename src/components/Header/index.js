@@ -39,6 +39,7 @@ function Header() {
   const isOpenedHint = useSelector((state) => state.quiz?.isOpenedHint);
   const isClosedHint = useSelector((state) => state.quiz?.isClosedHint);
   const currentSecond = useSelector((state) => state.quiz?.currentSecond);
+  const isAttacked = useSelector((state) => state.battle?.isAttacked);
 
   const name = useSelector((state) => state.battle?.name);
   const id = useSelector((state) => state.battle?.id);
@@ -52,7 +53,7 @@ function Header() {
   useEffect(() => {
     if (typeof opponentId !== 'number') return;
 
-    onValue(
+    const cleanUp = onValue(
       ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}/level`),
       (snapshot) => {
         const level = snapshot.val();
@@ -69,6 +70,7 @@ function Header() {
     );
 
     return () => {
+      cleanUp();
       dispatch(saveOpponentLevel(1));
       dispatch(
         saveId({
@@ -120,9 +122,12 @@ function Header() {
     };
 
     const countAnswerTime = async () => {
-      await waitForOneSecond();
-      await countToZero(currentSecond ? currentSecond : TIME_LIMIT_ANSWER);
+      // await waitForOneSecond();
+      await countToZero(
+        currentSecond > 0 ? currentSecond : TIME_LIMIT_ANSWER + currentSecond,
+      );
       dispatch(showResult(true));
+      dispatch(rememberSecond(0));
     };
 
     (async () => {
@@ -138,7 +143,7 @@ function Header() {
         return clearTimeout(timer);
       }
 
-      if (isClosedHint) {
+      if (isClosedHint || isAttacked) {
         await countAnswerTime();
         dispatch(rememberSecond(0));
         return dispatch(countAgain(false));
