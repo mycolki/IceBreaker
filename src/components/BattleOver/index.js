@@ -65,11 +65,12 @@ function BattleOver() {
 
         const sorted = sortBy(cloneDeep(snapshot.val()), 'score');
 
-        if (sorted[0].score === sorted[1].score) return setIsDraw(true);
-
-        sorted[1].isWinner = true;
-
-        if (sorted[1].name === name) setIsWinner(true);
+        if (sorted[0].score === sorted[1].score) {
+          setIsDraw(true);
+        } else if (sorted[1].name === name) {
+          setIsWinner(true);
+          sorted[1].isWinner = true;
+        }
 
         dispatch(saveBreakers(sorted));
         setLoading(true);
@@ -117,9 +118,9 @@ function BattleOver() {
 
   return (
     <Container isWinner={isWinner} isDraw={isDraw} isWebp={detectWebp()}>
-      {loading ? (
-        <>
-          <Result isWinner={isWinner} isDraw={isDraw}>
+      <Result isWinner={isWinner} isDraw={isDraw}>
+        {loading ? (
+          <>
             {isDraw ? (
               <h1 className="result-title">DRAW</h1>
             ) : (
@@ -127,28 +128,34 @@ function BattleOver() {
                 {isWinner ? 'YOU WIN' : 'YOU LOST'}
               </h1>
             )}
-          </Result>
-          <Scores>
-            <div className="vs">vs</div>
-            {breakers &&
-              breakers.map((breaker, i) => (
-                <ScoreBox
-                  key={breaker.name + i}
-                  isWinner={breaker.isWinner}
-                  isUser={breaker.name === name}
-                >
-                  {breaker.name === name && (
-                    <GiBearFace className="user-icon" />
-                  )}
-                  <div className="score">{breaker.score}</div>
-                  <div className="user-name">{breaker.name}</div>
-                </ScoreBox>
-              ))}
-          </Scores>
-        </>
-      ) : (
-        <BarSpinner />
-      )}
+          </>
+        ) : (
+          <BarSpinner color="purple" />
+        )}
+      </Result>
+      <Scores>
+        <div className="vs">vs</div>
+        {breakers
+          ? breakers.map((breaker, i) => (
+              <ScoreBox
+                key={breaker.name + i}
+                isWinner={breaker.isWinner}
+                isUser={breaker.name === name}
+              >
+                {breaker.name === name && <GiBearFace className="user-icon" />}
+                {loading ? (
+                  <>
+                    <div className="score">{breaker.score}</div>
+                    <div className="user-name">{breaker.name}</div>
+                  </>
+                ) : (
+                  <BarSpinner color="purple" />
+                )}
+              </ScoreBox>
+            ))
+          : null}
+      </Scores>
+
       <Buttons>
         <li className="button">
           <Button
