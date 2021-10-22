@@ -11,10 +11,6 @@ export const GAME = {
     type: 'game',
     text: '이미 존재하는 이름입니다. 다시 입력해주세요',
   },
-  HINT: {
-    type: 'game',
-    text: '원하는 힌트의 콜라를 눌러주세요',
-  },
 };
 
 export const RESET = {

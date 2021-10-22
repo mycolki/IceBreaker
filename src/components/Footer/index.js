@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
@@ -28,15 +28,15 @@ function Footer() {
   const [hintModalOpen, setHintModalOpen] = useState(false);
 
   const openHintModal = () => {
-    if (isAnswerTime) return;
+    if (!isAnswerTime) return;
 
-    dispatch(showMessage(GAME.HINT));
     dispatch(stopCount(true));
     setHintModalOpen(true);
   };
 
   const closeHintModal = () => {
     dispatch(showMessage(RESET));
+    dispatch(stopCount(false));
     dispatch(countAgain(true));
     setHintModalOpen(false);
   };

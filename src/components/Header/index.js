@@ -11,6 +11,7 @@ import {
   showResult,
   showMessage,
   rememberSecond,
+  countAgain,
   onError,
 } from '../../store/quizSlice';
 import { saveOpponentLevel, saveId } from '../../store/battleSlice';
@@ -37,6 +38,7 @@ function Header() {
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isOpenedHint = useSelector((state) => state.quiz?.isOpenedHint);
   const isClosedHint = useSelector((state) => state.quiz?.isClosedHint);
+  const currentSecond = useSelector((state) => state.quiz?.currentSecond);
 
   const name = useSelector((state) => state.battle?.name);
   const id = useSelector((state) => state.battle?.id);
@@ -113,14 +115,13 @@ function Header() {
     const countBreaking = async () => {
       dispatch(showMessage(BREAK[`Lv${level}`]));
       await countToZero(TIME_LIMIT_BREAK);
+      dispatch(showMessage(ANSWER[`Lv${level}`]));
+      dispatch(showForm(true));
     };
 
     const countAnswerTime = async () => {
-      dispatch(showMessage(ANSWER[`Lv${level}`]));
-      dispatch(showForm(true));
-
       await waitForOneSecond();
-      await countToZero(TIME_LIMIT_ANSWER);
+      await countToZero(currentSecond ? currentSecond : TIME_LIMIT_ANSWER);
       dispatch(showResult(true));
     };
 
@@ -135,6 +136,12 @@ function Header() {
       if (isOpenedHint) {
         dispatch(rememberSecond(second));
         return clearTimeout(timer);
+      }
+
+      if (isClosedHint) {
+        await countAnswerTime();
+        dispatch(rememberSecond(0));
+        return dispatch(countAgain(false));
       }
 
       try {
@@ -155,6 +162,7 @@ function Header() {
     history,
     TIME_LIMIT_BREAK,
     isOpenedHint,
+    isClosedHint,
   ]);
 
   return (

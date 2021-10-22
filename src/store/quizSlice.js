@@ -69,7 +69,8 @@ const quizSlice = createSlice({
     },
     takeHint(state, action) {
       if (action.payload === 5) {
-        return (state.hints = 5);
+        void (state.hints = 5);
+        return;
       }
 
       if (action.payload === 1) {
