@@ -80,10 +80,7 @@ function EnterRoomModal({ onClose }) {
     setInput('');
   };
 
-  const handleNameInput = (ev) => {
-    setName(ev.target.value.trim());
-  };
-
+  const handleNameInput = (ev) => setName(ev.target.value.trim());
   const handleRoomIdInput = (ev) => setInput(ev.target.value.trim());
 
   return (

@@ -1,18 +1,39 @@
+import { useState, lazy, Suspense } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
+import { rememberSecond, showMessage } from '../../store/quizSlice';
 import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
 import { flexCenter } from '../../styles/share/common';
 import { ROUTE } from '../../constants/game';
+import { RESET, GAME } from '../../constants/messages';
 
 import ImgWithFallback from '../ImgWithFallback';
+const Portal = lazy(() => import('../Portal'));
+const Modal = lazy(() => import('../Modal'));
+const HintModal = lazy(() => import('../Modal/HintModal'));
 
 function Footer() {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const hints = useSelector((state) => state.quiz?.hints);
+  const [hintModalOpen, setHintModalOpen] = useState(false);
+
+  const openHintModal = () => {
+    dispatch(showMessage(GAME.HINT));
+    // dispatch(rememberSecond())
+    setHintModalOpen(true);
+  };
+
+  const closeHintModal = () => {
+    dispatch(showMessage(RESET));
+    setHintModalOpen(false);
+  };
 
   const moveToMenu = () => {
     history.push(ROUTE.MENU);
@@ -52,6 +73,7 @@ function Footer() {
             shadowOffset={{ x: 1, y: 6 }}
             shadowOpacity={0.2}
             onMouseEnter={displayCursorPointer}
+            onClick={openHintModal}
           />
         </Layer>
       </Stage>
@@ -59,13 +81,22 @@ function Footer() {
         <Link to={ROUTE.MENU}>
           <span className="menu">MENU</span>
         </Link>
-        <span className="hint">
+        <span className="hint" onClick={openHintModal}>
           <img src={coke} alt="coke" width="20" height="25" />
           HINT
         </span>
+        {hintModalOpen && (
+          <Suspense fallback={null}>
+            <Portal>
+              <Modal onClose={closeHintModal} dimmed={true}>
+                <HintModal onClose={closeHintModal} />
+              </Modal>
+            </Portal>
+          </Suspense>
+        )}
       </Nav>
       <Cokes>
-        {Array(5)
+        {Array(hints)
           .fill(null)
           .map((_, i) => (
             <ImgWithFallback

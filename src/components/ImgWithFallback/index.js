@@ -5,9 +5,10 @@ const ImgWithFallback = ({
   width,
   height,
   type = 'image/webp',
+  onClick,
 }) => {
   return (
-    <picture>
+    <picture onClick={onClick}>
       <source srcSet={src} type={type} />
       <img src={fallback} alt={alt} width={width} height={height} />
     </picture>

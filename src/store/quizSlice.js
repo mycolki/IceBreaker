@@ -18,6 +18,8 @@ const initialState = {
   },
   score: 0,
   error: null,
+  hints: 5,
+  lastSecond: 0,
 };
 
 const quizSlice = createSlice({
@@ -63,11 +65,17 @@ const quizSlice = createSlice({
       const currentLevel = state.currentQuestion.level;
       state.score += SCORES[`Lv${currentLevel}`];
     },
-    onError(state, action) {
-      state.error = action.payload;
+    useHint(state, action) {
+      state.hints -= action.payload;
+    },
+    rememberSecond(state, action) {
+      state.lastSecond = action.payload;
     },
     resetScore(state) {
       state.score = 0;
+    },
+    onError(state, action) {
+      state.error = action.payload;
     },
   },
 });
@@ -83,6 +91,8 @@ export const {
   showAnswerBoxByInput,
   passNextLevel,
   addScore,
+  useHint,
+  rememberSecond,
   resetScore,
   onError,
 } = quizSlice.actions;

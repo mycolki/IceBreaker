@@ -11,6 +11,7 @@ import {
   loadImage,
   showResult,
   passNextLevel,
+  showForm,
 } from '../../store/quizSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
@@ -47,6 +48,7 @@ function Breaking() {
       dispatch(showMessage(RESET));
       dispatch(showAnswerBoxByInput(''));
       dispatch(showResult(false));
+      dispatch(showForm(false));
     };
   }, [dispatch]);
 
