@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { cloneDeep, filter } from 'lodash';
-import useSound from 'use-sound';
 
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
+import { cloneDeep, filter } from 'lodash';
 import { GiBearFace } from 'react-icons/gi';
+import useSound from 'use-sound';
 
 import { showMessage, onError } from '../../store/quizSlice';
 import { saveRoomData, saveName } from '../../store/battleSlice';
@@ -31,10 +31,13 @@ function Room() {
   const name = useSelector((state) => state.battle?.name);
   const [isReady, setIsReady] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [play] = useSound('/audio/click.mp3');
+  const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(
-    typeof Audio !== 'undefined' && new Audio('audio/room.mp3'),
+    typeof Audio !== 'undefined' &&
+      new Audio(
+        'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/room.mp3',
+      ),
   );
 
   useEffect(() => {
@@ -103,7 +106,9 @@ function Room() {
   }, []);
 
   useEffect(() => {
-    if (isPlaying) audio.play();
+    if (isPlaying) {
+      audio.play();
+    }
   }, [isPlaying]);
 
   const exitRoom = () => {

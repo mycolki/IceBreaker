@@ -33,9 +33,10 @@ function BattleOver() {
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(
-    typeof Audio !== 'undefined' && new Audio('audio/won.mp3'),
-  );
+
+  const audio =
+    typeof Audio !== 'undefined' &&
+    new Audio(isWinner ? '/audio/won.mp3' : '/audio/lost.mp3');
 
   useEffect(() => {
     try {
@@ -91,14 +92,15 @@ function BattleOver() {
   }, [dispatch, roomId, name]);
 
   useEffect(() => {
-    setIsPlaying(true);
+    if (loading) setIsPlaying(true);
 
     return () => audio.pause();
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
-    if (isPlaying) audio.play();
-    console.log(audio);
+    if (isPlaying) {
+      audio.play();
+    }
   }, [isPlaying]);
 
   const shareGameURL = () => {

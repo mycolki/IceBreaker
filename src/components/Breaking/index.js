@@ -34,13 +34,13 @@ function Breaking() {
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
-  // const [isPlaying, setIsPlaying] = useState(false);
-  // const [audio] = useState(
-  //   typeof Audio !== 'undefined' &&
-  //     new Audio(
-  //       'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/breaking.mp3',
-  //     ),
-  // );
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' &&
+      new Audio(
+        'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/breaking.mp3',
+      ),
+  );
 
   useEffect(() => {
     return () => {
@@ -60,19 +60,18 @@ function Breaking() {
     });
   }, [roomId]);
 
-  // useEffect(() => {
-  //   setIsPlaying(true);
+  useEffect(() => {
+    setIsPlaying(true);
 
-  //   return () => audio.pause();
-  // }, []);
+    return () => audio.pause();
+  }, []);
 
-  // useEffect(() => {
-  //   if (isPlaying) {
-  //     console.log(111);
-  //     audio.play();
-  //     audio.loop = true;
-  //   }
-  // }, [isPlaying]);
+  useEffect(() => {
+    if (isPlaying) {
+      audio.play();
+      audio.loop = true;
+    }
+  }, [isPlaying]);
 
   const goToLastPage = () => {
     if (roomId) {

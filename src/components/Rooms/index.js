@@ -38,7 +38,10 @@ function Rooms() {
   const [play] = useSound('/audio/click.mp3');
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(
-    typeof Audio !== 'undefined' && new Audio('audio/rooms.mp3'),
+    typeof Audio !== 'undefined' &&
+      new Audio(
+        'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/rooms.mp3',
+      ),
   );
 
   useEffect(() => {
