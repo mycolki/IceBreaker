@@ -49,8 +49,8 @@ const StyledModal = styled.div`
   text-align: center;
   transform: translate(-50%, -50%);
   border-radius: 25px;
-  background-color: ${({ background }) =>
-    background ? background : `${theme.lightPurple}`};
+  background-color: ${({ background, theme }) =>
+    background ? theme[background] : `${theme.lightPurple}`};
   box-shadow: ${({ theme }) => theme.boxShadow};
 `;
 
@@ -59,7 +59,7 @@ const CloseButton = styled.button`
   top: 5px;
   right: 10px;
   cursor: pointer;
-  text-shadow: 0px 6px 2px ${({ theme }) => theme.purple};
+  text-shadow: 0px 6px 2px ${({ theme }) => theme.deepGray};
   background-color: transparent;
   color: ${({ theme }) => theme.white};
 

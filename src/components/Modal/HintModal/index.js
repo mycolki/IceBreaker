@@ -7,7 +7,6 @@ import hintCoke from '../../../asset/hintCoke.png';
 import { takeHint } from '../../../store/quizSlice';
 import { rightAndLeft } from '../../../styles/share/animation';
 
-import Message from '../../share/Message';
 import ImgWithFallback from '../../ImgWithFallback';
 import { flexCenter } from '../../../styles/share/common';
 
@@ -27,7 +26,7 @@ function HintModal({ onClose }) {
   return (
     <Container>
       <MessageArea>
-        <Message height="15" />
+        <p className="message">원하는 힌트의 콜라를 눌러주세요</p>
       </MessageArea>
       <Hint>
         <div className="cokes">
@@ -71,6 +70,7 @@ export default HintModal;
 
 const Container = styled.div`
   height: 100%;
+  padding-bottom: 5px;
   font-family: 'Do Hyeon';
   text-align: center;
 `;
@@ -80,6 +80,17 @@ const MessageArea = styled.div`
   align-items: flex-end;
   width: 100%;
   height: 26%;
+
+  .message {
+    width: 80%;
+    height: 30px;
+    margin: auto;
+    font-size: 17px;
+    line-height: 30px;
+    border-radius: 20px;
+    background-color: ${({ theme }) => theme.deepGray};
+    color: ${({ theme }) => theme.white};
+  }
 `;
 
 const Hint = styled.div`
@@ -102,6 +113,6 @@ const Hint = styled.div`
   .hint-comment {
     width: 60%;
     font-size: 18px;
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.deepGray};
   }
 `;

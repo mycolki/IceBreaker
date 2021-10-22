@@ -20,6 +20,8 @@ const initialState = {
   error: null,
   hints: 5,
   currentSecond: 0,
+  isOpenedHint: false,
+  isClosedHint: false,
 };
 
 const quizSlice = createSlice({
@@ -66,9 +68,21 @@ const quizSlice = createSlice({
       state.score += SCORES[`Lv${currentLevel}`];
     },
     takeHint(state, action) {
-      if (action.payload === 5) return (state.hints = 5);
+      if (action.payload === 5) {
+        return (state.hints = 5);
+      }
+
+      if (action.payload === 1) {
+        state.currentSecond += 10;
+      }
 
       state.hints -= action.payload;
+    },
+    stopCount(state, action) {
+      state.isOpenedHint = action.payload;
+    },
+    countAgain(state, action) {
+      state.isClosedHint = action.payload;
     },
     rememberSecond(state, action) {
       state.currentSecond = action.payload;
@@ -94,6 +108,8 @@ export const {
   passNextLevel,
   addScore,
   takeHint,
+  stopCount,
+  countAgain,
   rememberSecond,
   resetScore,
   onError,

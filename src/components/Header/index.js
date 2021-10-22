@@ -10,6 +10,7 @@ import {
   showForm,
   showResult,
   showMessage,
+  rememberSecond,
   onError,
 } from '../../store/quizSlice';
 import { saveOpponentLevel, saveId } from '../../store/battleSlice';
@@ -34,6 +35,8 @@ function Header() {
   const isImgLoaded = useSelector((state) => state.quiz?.isImgLoaded);
   const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
+  const isOpenedHint = useSelector((state) => state.quiz?.isOpenedHint);
+  const isClosedHint = useSelector((state) => state.quiz?.isClosedHint);
 
   const name = useSelector((state) => state.battle?.name);
   const id = useSelector((state) => state.battle?.id);
@@ -107,6 +110,20 @@ function Header() {
       }
     };
 
+    const countBreaking = async () => {
+      dispatch(showMessage(BREAK[`Lv${level}`]));
+      await countToZero(TIME_LIMIT_BREAK);
+    };
+
+    const countAnswerTime = async () => {
+      dispatch(showMessage(ANSWER[`Lv${level}`]));
+      dispatch(showForm(true));
+
+      await waitForOneSecond();
+      await countToZero(TIME_LIMIT_ANSWER);
+      dispatch(showResult(true));
+    };
+
     (async () => {
       if (!isImgLoaded) return;
 
@@ -115,16 +132,14 @@ function Header() {
         return clearTimeout(timer);
       }
 
+      if (isOpenedHint) {
+        dispatch(rememberSecond(second));
+        return clearTimeout(timer);
+      }
+
       try {
-        dispatch(showMessage(BREAK[`Lv${level}`]));
-        await countToZero(TIME_LIMIT_BREAK);
-
-        dispatch(showMessage(ANSWER[`Lv${level}`]));
-        dispatch(showForm(true));
-
-        await waitForOneSecond();
-        await countToZero(TIME_LIMIT_ANSWER);
-        dispatch(showResult(true));
+        await countBreaking();
+        await countAnswerTime();
       } catch (err) {
         dispatch(onError(ERROR.UNKNOWN));
         history.push(ROUTE.ERROR);
@@ -132,7 +147,15 @@ function Header() {
     })();
 
     return () => clearTimeout(timer);
-  }, [dispatch, level, isTimeOver, isImgLoaded, history, TIME_LIMIT_BREAK]);
+  }, [
+    dispatch,
+    level,
+    isTimeOver,
+    isImgLoaded,
+    history,
+    TIME_LIMIT_BREAK,
+    isOpenedHint,
+  ]);
 
   return (
     <Container>

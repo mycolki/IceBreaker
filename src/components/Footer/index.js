@@ -5,7 +5,7 @@ import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-import { rememberSecond, showMessage } from '../../store/quizSlice';
+import { stopCount, countAgain, showMessage } from '../../store/quizSlice';
 import usedCokeWeb from '../../asset/usedCoke.webp';
 import usedCoke from '../../asset/usedCoke.png';
 import cokeWeb from '../../asset/coke.webp';
@@ -28,13 +28,16 @@ function Footer() {
   const [hintModalOpen, setHintModalOpen] = useState(false);
 
   const openHintModal = () => {
+    if (isAnswerTime) return;
+
     dispatch(showMessage(GAME.HINT));
-    // dispatch(rememberSecond())
+    dispatch(stopCount(true));
     setHintModalOpen(true);
   };
 
   const closeHintModal = () => {
     dispatch(showMessage(RESET));
+    dispatch(countAgain(true));
     setHintModalOpen(false);
   };
 
@@ -46,7 +49,6 @@ function Footer() {
     const container = ev.target.getStage().container();
     container.style.cursor = 'pointer';
   };
-  console.log(hints);
 
   return (
     <Wrapper>
@@ -71,7 +73,7 @@ function Footer() {
             y={31}
             sides={6}
             radius={26}
-            fill={theme.deepPink}
+            fill={isAnswerTime ? theme.deepPink : theme.lightGray}
             shadowColor="#000000"
             shadowBlur={4}
             shadowOffset={{ x: 1, y: 6 }}
@@ -92,7 +94,7 @@ function Footer() {
         {hintModalOpen && (
           <Suspense fallback={null}>
             <Portal>
-              <Modal onClose={closeHintModal} dimmed={true}>
+              <Modal onClose={closeHintModal} dimmed={true} background="red">
                 <HintModal onClose={closeHintModal} />
               </Modal>
             </Portal>
