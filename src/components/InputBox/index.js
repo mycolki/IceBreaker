@@ -156,11 +156,14 @@ const Form = styled.form`
     margin-right: 10px;
     text-align: center;
     border-radius: 20px;
+    font-family: 'Do hyeon';
+    font-size: 20px;
     background-color: #ffffff80;
     box-shadow: ${({ theme }) => theme.boxShadow};
 
     ::placeholder {
-      font-size: 0.8em;
+      font-size: 15px;
+      font-family: 'Rammetto One';
       color: ${({ theme }) => theme.deepGray60};
     }
   }

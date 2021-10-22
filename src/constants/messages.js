@@ -21,7 +21,7 @@ export const RESET = {
 export const BATTLE = {
   WAITING: {
     type: 'battle',
-    text: '빈 방에 입장하거나, 전달받은 ID로 들어갈 수 있습니다',
+    text: '전달받은 ID로도 들어갈 수 있습니다',
   },
   PLEASE_READY: {
     type: 'battle',
@@ -34,6 +34,10 @@ export const BATTLE = {
 };
 
 export const ENTER_ROOM = {
+  EXIST_NAME: {
+    type: 'enterRoom',
+    text: '방장과 같은 이름으로 설정할 수 없습니다',
+  },
   FILL_NAME: {
     type: 'enterRoom',
     text: '닉네임은 공백으로 설정할 수 없습니다',
