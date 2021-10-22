@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, get, child } from '@firebase/database';
 import { GiBearFace } from 'react-icons/gi';
@@ -21,13 +22,18 @@ function Ranking() {
   const history = useHistory();
   const [rankers, setRankers] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [play] = useSound('/audio/click.mp3');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' && new Audio('audio/room.mp3'),
+  );
 
   useEffect(() => {
     const getRanks = async () => {
       try {
         const snapshot = await get(child(ref(getDatabase()), RANKERS));
 
-        if (!snapshot.val()) setLoading(true);
+        if (!snapshot.val()) return setLoading(true);
 
         const rankerList = Object.values(snapshot.val());
         rankerList.sort((a, b) => b.score - a.score);
@@ -43,6 +49,16 @@ function Ranking() {
     getRanks();
   }, [dispatch, history]);
 
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) audio.play();
+  }, [isPlaying]);
+
   return (
     <Container isWebp={detectWebp()}>
       <TitleWrapper>
@@ -55,22 +71,23 @@ function Ranking() {
           <span className="score">점수</span>
         </div>
         {loading ? (
-          rankers &&
-          Object.values(rankers).map((ranker, i) => (
-            <Ranker key={ranker.name} className={i < 3 && `rank${i + 1}`}>
-              {i < 3 && <GiBearFace className={`medal${i + 1}`} />}
-              <span className="user-ranking">{i + 1}</span>
-              <span className="user-name">{ranker.name}</span>
-              <span className="user-score">{ranker.score}</span>
-            </Ranker>
-          ))
+          rankers ? (
+            Object.values(rankers).map((ranker, i) => (
+              <Ranker key={ranker.name} className={i < 3 && `rank${i + 1}`}>
+                {i < 3 && <GiBearFace className={`medal${i + 1}`} />}
+                <span className="user-ranking">{i + 1}</span>
+                <span className="user-name">{ranker.name}</span>
+                <span className="user-score">{ranker.score}</span>
+              </Ranker>
+            ))
+          ) : null
         ) : (
           <BarSpinner color="white" />
         )}
       </Rankers>
       <ButtonArea>
         <Link to={ROUTE.MENU}>
-          <Button text="처음으로" color="purple" size="large" />
+          <Button text="처음으로" color="purple" size="large" onClick={play} />
         </Link>
       </ButtonArea>
     </Container>

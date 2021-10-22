@@ -45,6 +45,8 @@ const GlobalStyle = createGlobalStyle`
     li {
       list-style: none;
     }
+
+    cursor: url('/hammer.png') 10 30, auto;
   }
 `;
 

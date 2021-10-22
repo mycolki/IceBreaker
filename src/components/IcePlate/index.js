@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Image } from 'react-konva';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import bearSrc from '../../asset/bear.png';
 import { activateBreaking } from '../../store/quizSlice';
@@ -21,18 +22,15 @@ function IcePlate() {
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
-  const initialCubesRef = useRef(null);
-  const bearRef = useRef();
-  const stageRef = useRef();
+  const cubesRef = useRef(null);
+  const bearRef = useRef(null);
+  const stageRef = useRef(null);
 
   const [initialPositions, setInitialPositions] = useState([{ x: 0, y: 0 }]);
   const [newCubes, setNewCubes] = useState([]);
   const [image, setImage] = useState(null);
   const [bearImage, setBearImage] = useState(null);
-
-  useEffect(() => {
-    if (stageRef) stageRef.current.container().style.cursor = 'pointer';
-  }, []);
+  const [play] = useSound('/audio/click.mp3');
 
   useEffect(() => {
     const questionImage = new window.Image();
@@ -47,10 +45,12 @@ function IcePlate() {
   }, [imgUrl, dispatch]);
 
   useEffect(() => {
-    const bear = new window.Image();
-    bear.src = bearSrc;
-    setBearImage(bear);
-  }, []);
+    if (level === 6) {
+      const bear = new window.Image();
+      bear.src = bearSrc;
+      setBearImage(bear);
+    }
+  }, [level]);
 
   useEffect(() => {
     const makePositions = (rows) => {
@@ -69,6 +69,12 @@ function IcePlate() {
 
     setInitialPositions(makePositions(CUBE_ROWS));
 
+    return () => setNewCubes([]);
+  }, [currentQuestion, level]);
+
+  useEffect(() => {
+    if (!cubesRef) return;
+
     let randomIndexes;
 
     if (level >= 4) {
@@ -76,63 +82,61 @@ function IcePlate() {
       randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
     }
 
-    initialCubesRef.current.children.forEach((cube, i) => {
-      if (!cube.isVisible()) {
-        cube.show();
-      }
+    cubesRef?.current?.children.forEach((cube, i) => {
+      if (!cube.isVisible()) cube.show();
 
       if (level >= 4 && randomIndexes.has(i)) {
         cube.strokeWidth(0);
-        cube.on('click', () => cube.off('click'));
+        cube.off('click touchstart mousedown');
       }
     });
-
-    return () => setNewCubes([]);
-  }, [currentQuestion, level]);
+  }, [level, isImageLoaded, initialPositions]);
 
   const hideCube = (ev) => {
     if (isNotBreaking) return;
 
+    play();
     const pos = {
       x: ev.target.x(),
       y: ev.target.y(),
     };
 
-    if (level >= 3) {
-      setNewCubes([...newCubes, pos]);
-    }
+    if (level >= 3) setNewCubes([...newCubes, pos]);
 
     ev.target.visible(false);
   };
 
   return (
     <Container>
-      <Stage width={375} height={400} ref={stageRef}>
-        <PlateLayer />
-        <Layer>
-          <Image x={90} y={105} image={image} width={195} height={195} />
-        </Layer>
-        <Layer>
-          <Cubes
-            initialCubesRef={initialCubesRef}
-            positions={initialPositions}
-            onHide={hideCube}
-          />
-          <NewCubes cubes={newCubes} />
-        </Layer>
-        <Layer>
-          <Image
-            ref={bearRef}
-            x={90}
-            y={100}
-            image={bearImage}
-            width={100}
-            height={60}
-          />
-        </Layer>
-        {!isImageLoaded ? <LoadingPlateLayer /> : null}
-      </Stage>
-      {!isImageLoaded ? <DotSpinner color="purple" /> : null}
+      {isImageLoaded ? (
+        <Stage width={375} height={400} ref={stageRef}>
+          <PlateLayer />
+          <Layer>
+            <Image x={90} y={105} image={image} width={195} height={195} />
+          </Layer>
+          <Layer>
+            <Cubes
+              positions={initialPositions}
+              onHide={hideCube}
+              cubeRef={cubesRef}
+            />
+            <NewCubes cubes={newCubes} />
+          </Layer>
+          <Layer>
+            <Image
+              ref={bearRef}
+              x={100}
+              y={150}
+              image={bearImage}
+              width={110}
+              height={70}
+            />
+          </Layer>
+          {!isImageLoaded ? <LoadingPlateLayer /> : null}
+        </Stage>
+      ) : (
+        <DotSpinner color="purple" />
+      )}
     </Container>
   );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, set, onValue } from 'firebase/database';
 import { RiGamepadFill } from 'react-icons/ri';
@@ -34,6 +35,11 @@ function Rooms() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [enterModalOpen, setEnterModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [play] = useSound('/audio/click.mp3');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' && new Audio('audio/rooms.mp3'),
+  );
 
   useEffect(() => {
     dispatch(showMessage(BATTLE.WAITING));
@@ -53,27 +59,43 @@ function Rooms() {
     };
   }, [dispatch, history]);
 
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) audio.play();
+  }, [isPlaying]);
+
   const enterRoom = (roomId) => {
+    play();
     dispatch(saveRoomId(roomId));
     openEnterModal();
   };
 
   const openEnterModal = () => {
+    play();
     setEnterModalOpen(true);
     dispatch(showMessage(RESET));
   };
 
   const closeEnterModal = () => {
+    play();
     setEnterModalOpen(false);
     dispatch(showMessage(RESET));
   };
 
   const openCreateModal = () => {
+    play();
     setCreateModalOpen(true);
     dispatch(showMessage(RESET));
   };
 
   const closeCreateModal = () => {
+    play();
+
     if (roomId) {
       set(ref(getDatabase(), `${ROOMS}/${roomId}`), null);
     }
@@ -113,14 +135,18 @@ function Rooms() {
                   <div className="breaker-box">
                     <span className="breaker-order">BREAKER1</span>
                     <span className="breaker-name">
-                      {room.breakers[0].name}
+                      {room.breakers[0].name !== ''
+                        ? room.breakers[0].name
+                        : '?'}
                     </span>
                   </div>
                   <div className="vs">vs</div>
                   <div className="breaker-box">
                     <span className="breaker-order">BREAKER2</span>
                     <span className="breaker-name">
-                      {room.breakers[1].name ? room.breakers[1].name : '?'}
+                      {room.breakers[1].name !== ''
+                        ? room.breakers[1].name
+                        : '?'}
                     </span>
                   </div>
                 </RoomItem>

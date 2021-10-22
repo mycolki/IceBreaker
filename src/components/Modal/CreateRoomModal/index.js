@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, set } from '@firebase/database';
 import { saveRoomId, saveName } from '../../../store/battleSlice';
@@ -27,6 +28,7 @@ function CreateRoomModal({ onClose }) {
   const name = useSelector((state) => state.battle?.name);
   const [title, setTitle] = useState(MODAL_TITLE.INPUT_HOST_NAME);
   const [input, setInput] = useState('');
+  const [play] = useSound('/audio/click.mp3');
 
   useEffect(() => {
     return () => {
@@ -39,6 +41,7 @@ function CreateRoomModal({ onClose }) {
     ev.preventDefault();
 
     if (!name) return;
+    play();
 
     const roomId = input;
     set(ref(getDatabase(), `${ROOMS}/${roomId}`), {
@@ -68,6 +71,7 @@ function CreateRoomModal({ onClose }) {
   };
 
   const makeRoom = (ev) => {
+    play();
     ev.preventDefault();
 
     if (input.length === 0) {
@@ -123,6 +127,7 @@ function CreateRoomModal({ onClose }) {
             type="submit"
             size="small"
             color="purple"
+            onClick={play}
           />
         </div>
       </Form>

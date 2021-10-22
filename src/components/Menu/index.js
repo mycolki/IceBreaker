@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { getDatabase, ref, get, child } from '@firebase/database';
 import { saveQuizData, onError } from '../../store/quizSlice';
@@ -14,6 +15,7 @@ import Button from '../share/Button';
 function Menu() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const [play] = useSound('/audio/click.mp3');
 
   useEffect(() => {
     const getQuiz = async () => {
@@ -45,21 +47,36 @@ function Menu() {
       <MenuButtons>
         <li className="button">
           <Link to={ROUTE.READY}>
-            <Button text="혼자 얼음깨기" size="large" color="skyBlue" />
+            <Button
+              text="혼자 얼음깨기"
+              size="large"
+              color="skyBlue"
+              onClick={play}
+            />
           </Link>
         </li>
         <li className="button">
           <Link to={ROUTE.ROOMS}>
-            <Button text="같이 얼음깨기" size="large" color="skyBlue" />
+            <Button
+              text="같이 얼음깨기"
+              size="large"
+              color="skyBlue"
+              onClick={play}
+            />
           </Link>
         </li>
         <Link to={ROUTE.RANKING}>
           <li className="button">
-            <Button text="랭킹보기" size="large" color="purple" />
+            <Button
+              text="랭킹보기"
+              size="large"
+              color="purple"
+              onClick={play}
+            />
           </li>
         </Link>
         <li className="button">
-          <Button text="게임 방법" size="large" color="purple" />
+          <Button text="게임 방법" size="large" color="purple" onClick={play} />
         </li>
       </MenuButtons>
     </Container>
@@ -70,17 +87,17 @@ export default Menu;
 
 const Container = styled.div`
   height: 100%;
-  background: ${({ theme }) => theme.menuBg};
+  background-image: url(/background/menu.jpg);
 `;
 
 const TitleWrapper = styled.div`
   position: relative;
-  height: 55%;
+  height: 53%;
   text-align: center;
 
   .app-title {
     position: absolute;
-    top: 60%;
+    top: 73%;
     left: 50%;
     width: 100%;
     line-height: 1.6em;
@@ -92,7 +109,7 @@ const TitleWrapper = styled.div`
 `;
 
 const MenuButtons = styled.ul`
-  height: 45%;
+  height: 47%;
   text-align: center;
 
   button {

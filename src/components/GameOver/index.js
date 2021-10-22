@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import { showMessage, resetScore } from '../../store/quizSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
@@ -24,32 +25,55 @@ function GameOver() {
   const [rankModalOpen, setRankModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasRank, setHasRank] = useState(false);
+  const [play] = useSound('/audio/click.mp3');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(
+    typeof Audio !== 'undefined' &&
+      new Audio(score >= 140 ? 'audio/won.mp3' : 'audio/lost.mp3'),
+  );
 
   useEffect(() => {
     if (score && isWin) setLoading(false);
 
-    return () => dispatch(resetScore());
+    return () => {
+      dispatch(resetScore());
+      dispatch(showMessage(RESET));
+    };
   }, [score, isWin]);
+
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  useEffect(() => {
+    if (isPlaying) audio.play();
+  }, [isPlaying]);
 
   const shareGameURL = () => {
     copyToClipboard('https://icebreaker.colki.me');
     dispatch(showMessage(GAME.SHARE));
+    play();
   };
 
   const openRankModal = () => {
     setRankModalOpen(true);
+    play();
   };
 
   const closeRankModal = () => {
     setRankModalOpen(false);
     dispatch(showMessage(RESET));
+    play();
   };
 
   return (
     <Container isWin={isWin} isWebp={detectWebp()}>
       {loading ? (
         <TitleWrapper isWin={isWin}>
-          <h1 className="score">{score}</h1>
+          <h1 className="title">GAME OVER</h1>
+          <h2 className="score">{score}</h2>
         </TitleWrapper>
       ) : (
         <BarSpinner />
@@ -108,6 +132,15 @@ const TitleWrapper = styled.div`
   height: 65%;
   text-align: center;
 
+  .title {
+    margin: auto;
+    padding-top: 100px;
+    font-family: 'Do hyeon';
+    font-size: 55px;
+    color: ${({ theme }) => theme.white};
+    -webkit-text-stroke: 2px ${({ theme }) => theme.white};
+  }
+
   .score {
     position: absolute;
     top: 75%;
@@ -115,8 +148,8 @@ const TitleWrapper = styled.div`
     width: 100%;
     line-height: 1.6em;
     font-size: 60px;
-    color: white;
-    -webkit-text-stroke: 2px ${({ theme }) => theme.orange};
+    color: ${({ theme }) => theme.red};
+    -webkit-text-stroke: 2px ${({ theme }) => theme.red};
     transform: translate(-50%, -50%);
   }
 `;

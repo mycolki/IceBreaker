@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import useSound from 'use-sound';
 
 import {
   showMessage,
@@ -22,6 +23,7 @@ function InputBox() {
   const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
   const isNotBreaking = useSelector((state) => state.quiz?.isNotBreaking);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
+  const [play] = useSound('/audio/breakIce.wav');
   const [input, setInput] = useState('');
 
   useEffect(() => {
@@ -30,6 +32,7 @@ function InputBox() {
 
   const submitInput = (ev) => {
     ev.preventDefault();
+    play();
 
     if (input === answer) {
       setInput('');
