@@ -3,9 +3,13 @@ import { Group, RegularPolygon } from 'react-konva';
 import useSound from 'use-sound';
 
 import { getRandomIndexes } from '../../../utils/getRandomIndexes';
-import { CUBES_LENGTH, CUBE_ROWS } from '../../../constants/ice';
+import {
+  CUBES_LENGTH,
+  CUBE_ROWS,
+  UNBREAKABLE_ICE,
+} from '../../../constants/ice';
 
-function Cubes({ level, isAnswerTime }) {
+function Cubes({ level, isAnswerTime, isImgLoaded }) {
   const cubesRef = useRef(null);
   const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
   const [positions, setPositions] = useState([{ x: 0, y: 0 }]);
@@ -32,28 +36,23 @@ function Cubes({ level, isAnswerTime }) {
     return () => setNewCubes([]);
   }, [level]);
 
-  // useEffect(() => {
-  //   if (!cubesRef) return;
+  useEffect(() => {
+    if (!cubesRef || level < 4) return;
 
-  //   let randomIndexes;
+    let randomIndexes;
 
-  //   if (level >= 4) {
-  //     const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
-  //     randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
-  //   }
+    const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
+    randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
 
-  //   cubesRef?.current?.children.forEach((cube, i) => {
-  //     if (!cube.isVisible()) cube.show();
-
-  //     if (level >= 4 && randomIndexes.has(i)) {
-  //       cube.strokeWidth(0);
-  //       cube.off('click touchstart mousedown');
-  //     }
-  //   });
-  // }, [level, isImgLoaded]);
+    cubesRef.current?.children.forEach((cube, i) => {
+      if (randomIndexes.has(i)) {
+        cube.strokeWidth(0);
+        cube.on('click touchstart mousedown', null);
+      }
+    });
+  }, [level, isImgLoaded, positions]);
 
   const hideNewCube = (ev) => ev.target.hide();
-
   const hideCube = (ev) => {
     play();
 
@@ -64,7 +63,7 @@ function Cubes({ level, isAnswerTime }) {
       y: ev.target.y(),
     };
 
-    if (level >= 3) return setNewCubes([...newCubes, pos]);
+    if (level >= 3) setNewCubes([...newCubes, pos]);
 
     ev.target.remove();
   };
@@ -127,12 +126,12 @@ function Cubes({ level, isAnswerTime }) {
           />
         );
       })}
-      {newCubes
+      {newCubes.length > 0
         ? newCubes.map((pos, i) => (
             <RegularPolygon
               key={String(pos.x) + String(pos.y) + i}
-              x={pos.x - 18}
-              y={pos.y - 0}
+              x={pos.x}
+              y={pos.y}
               sides={6}
               radius={17}
               rotation={90}

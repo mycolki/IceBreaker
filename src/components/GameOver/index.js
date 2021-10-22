@@ -33,19 +33,17 @@ function GameOver() {
   );
 
   useEffect(() => {
-    if (score && isWin) setLoading(false);
+    if (score && isWin) {
+      setLoading(false);
+      setIsPlaying(true);
+    }
 
     return () => {
       dispatch(resetScore());
       dispatch(showMessage(RESET));
+      audio.pause();
     };
   }, [score, isWin]);
-
-  useEffect(() => {
-    setIsPlaying(true);
-
-    return () => audio.pause();
-  }, []);
 
   useEffect(() => {
     if (isPlaying) audio.play();

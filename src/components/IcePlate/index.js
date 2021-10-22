@@ -34,7 +34,7 @@ function IcePlate() {
   }, [imgUrl, dispatch]);
 
   useEffect(() => {
-    if (level === 6) {
+    if (level >= 6) {
       const bear = new window.Image();
       bear.src = bearSrc;
       setBearImage(bear);
@@ -50,18 +50,24 @@ function IcePlate() {
             <Image x={90} y={105} image={image} width={195} height={195} />
           </Layer>
           <Layer>
-            <Cubes level={level} isAnswerTime={isAnswerTime} />
-          </Layer>
-          <Layer>
-            <Image
-              ref={bearRef}
-              x={100}
-              y={150}
-              image={bearImage}
-              width={110}
-              height={70}
+            <Cubes
+              level={level}
+              isAnswerTime={isAnswerTime}
+              isImgLoaded={isImgLoaded}
             />
           </Layer>
+          {bearImage && (
+            <Layer>
+              <Image
+                ref={bearRef}
+                x={100}
+                y={150}
+                image={bearImage}
+                width={110}
+                height={70}
+              />
+            </Layer>
+          )}
         </Stage>
       ) : (
         <DotSpinner color="purple" />
