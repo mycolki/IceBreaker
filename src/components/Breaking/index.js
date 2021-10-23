@@ -116,6 +116,7 @@ function Breaking() {
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
     dispatch(loadImage(false));
+    dispatch(showMessage(RESET));
   };
 
   return (

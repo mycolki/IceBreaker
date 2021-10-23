@@ -26,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     overflow: hidden;
     font-family: 'Rammetto One', 'Do Hyeon';
+    background: linear-gradient(180deg, #7cd0ff 0%, rgba(207, 218, 255, 0.36) 100%);
 
     input {
       border: none;
