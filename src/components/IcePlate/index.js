@@ -33,14 +33,6 @@ function IcePlate() {
     return () => dispatch(loadImage(false));
   }, [imgUrl, dispatch]);
 
-  useEffect(() => {
-    if (level >= 6) {
-      const bear = new window.Image();
-      bear.src = bearSrc;
-      setBearImage(bear);
-    }
-  }, [level]);
-
   return (
     <Container>
       {isImgLoaded ? (
@@ -56,18 +48,6 @@ function IcePlate() {
               isImgLoaded={isImgLoaded}
             />
           </Layer>
-          {bearImage && (
-            <Layer>
-              <Image
-                ref={bearRef}
-                x={100}
-                y={150}
-                image={bearImage}
-                width={110}
-                height={70}
-              />
-            </Layer>
-          )}
         </Stage>
       ) : (
         <DotSpinner color="purple" />

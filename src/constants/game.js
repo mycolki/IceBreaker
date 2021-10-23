@@ -2,7 +2,7 @@ export const QUIZ = 'quiz';
 export const ROOMS = 'rooms';
 export const RANKERS = 'rankers';
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 1;
+export const QUIZ_LENGTH = 7;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
@@ -31,13 +31,13 @@ export const SCORES = {
 
 export const TIME_LIMIT_ANSWER = 15;
 export const SECONDS_PER_LEVEL = {
-  Lv1: 3,
-  Lv2: 7,
+  Lv1: 15,
+  Lv2: 10,
   Lv3: 10,
-  Lv4: 7,
+  Lv4: 10,
   Lv5: 7,
   Lv6: 7,
-  Lv7: 7,
+  Lv7: 5,
 };
 
 export const MODAL_TITLE = {

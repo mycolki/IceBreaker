@@ -113,7 +113,7 @@ export const BREAK = {
   },
   Lv4: {
     type: 'break',
-    text: '열번 찍어도 안 꺠지는 얼음이 있다?',
+    text: '열번 찍어도 안 깨지는 얼음이 있다?',
   },
   Lv5: {
     type: 'break',
@@ -121,7 +121,7 @@ export const BREAK = {
   },
   Lv6: {
     type: 'break',
-    text: '이런, 곰이 얼음을 가리고 있어요!',
+    text: '시간 내에 최대한 많은 얼음을 깨주세요!',
   },
   Lv7: {
     type: 'break',
