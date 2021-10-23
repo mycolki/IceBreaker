@@ -1,18 +1,45 @@
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
+import { stopCount, countAgain, showMessage } from '../../store/quizSlice';
+import usedCokeWeb from '../../asset/usedCoke.webp';
+import usedCoke from '../../asset/usedCoke.png';
 import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
 import { flexCenter } from '../../styles/share/common';
 import { ROUTE } from '../../constants/game';
+import { RESET, GAME } from '../../constants/messages';
 
 import ImgWithFallback from '../ImgWithFallback';
+const Portal = lazy(() => import('../Portal'));
+const Modal = lazy(() => import('../Modal'));
+const HintModal = lazy(() => import('../Modal/HintModal'));
 
 function Footer() {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
+  const hints = useSelector((state) => state.quiz?.hints);
+  const [hintModalOpen, setHintModalOpen] = useState(false);
+
+  const openHintModal = () => {
+    if (!isAnswerTime) return;
+
+    dispatch(stopCount(true));
+    setHintModalOpen(true);
+  };
+
+  const closeHintModal = () => {
+    dispatch(showMessage(RESET));
+    dispatch(stopCount(false));
+    dispatch(countAgain(true));
+    setHintModalOpen(false);
+  };
 
   const moveToMenu = () => {
     history.push(ROUTE.MENU);
@@ -46,12 +73,13 @@ function Footer() {
             y={31}
             sides={6}
             radius={26}
-            fill={theme.deepPink}
+            fill={isAnswerTime ? theme.deepPink : theme.lightGray}
             shadowColor="#000000"
             shadowBlur={4}
             shadowOffset={{ x: 1, y: 6 }}
             shadowOpacity={0.2}
             onMouseEnter={displayCursorPointer}
+            onClick={openHintModal}
           />
         </Layer>
       </Stage>
@@ -59,24 +87,35 @@ function Footer() {
         <Link to={ROUTE.MENU}>
           <span className="menu">MENU</span>
         </Link>
-        <span className="hint">
+        <span className="hint" onClick={openHintModal}>
           <img src={coke} alt="coke" width="20" height="25" />
           HINT
         </span>
+        {hintModalOpen && (
+          <Suspense fallback={null}>
+            <Portal>
+              <Modal onClose={closeHintModal} dimmed={true} background="red">
+                <HintModal onClose={closeHintModal} />
+              </Modal>
+            </Portal>
+          </Suspense>
+        )}
       </Nav>
       <Cokes>
         {Array(5)
           .fill(null)
-          .map((_, i) => (
-            <ImgWithFallback
-              key={i}
-              src={cokeWeb}
-              fallback={coke}
-              alt="coke"
-              width="27"
-              height="41"
-            />
-          ))}
+          .map((_, i) => {
+            return (
+              <ImgWithFallback
+                key={i}
+                src={i > hints - 1 ? usedCokeWeb : cokeWeb}
+                fallback={i > hints - 1 ? usedCoke : coke}
+                alt="coke"
+                width="27"
+                height="41"
+              />
+            );
+          })}
       </Cokes>
     </Wrapper>
   );

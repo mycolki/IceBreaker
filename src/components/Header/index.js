@@ -7,9 +7,11 @@ import theme from '../../styles/theme';
 
 import { getDatabase, ref, onValue, update } from 'firebase/database';
 import {
-  toggleForm,
-  toggleAnswer,
+  showForm,
+  showResult,
   showMessage,
+  rememberSecond,
+  countAgain,
   onError,
 } from '../../store/quizSlice';
 import { saveOpponentLevel, saveId } from '../../store/battleSlice';
@@ -31,8 +33,13 @@ function Header() {
   const history = useHistory();
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
   const score = useSelector((state) => state.quiz?.score);
+  const isImgLoaded = useSelector((state) => state.quiz?.isImgLoaded);
+  const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
-  const isImageLoaded = useSelector((state) => state.quiz?.isImageLoaded);
+  const isOpenedHint = useSelector((state) => state.quiz?.isOpenedHint);
+  const isClosedHint = useSelector((state) => state.quiz?.isClosedHint);
+  const currentSecond = useSelector((state) => state.quiz?.currentSecond);
+  const isAttacked = useSelector((state) => state.battle?.isAttacked);
 
   const name = useSelector((state) => state.battle?.name);
   const id = useSelector((state) => state.battle?.id);
@@ -46,7 +53,7 @@ function Header() {
   useEffect(() => {
     if (typeof opponentId !== 'number') return;
 
-    onValue(
+    const cleanUp = onValue(
       ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}/level`),
       (snapshot) => {
         const level = snapshot.val();
@@ -63,6 +70,7 @@ function Header() {
     );
 
     return () => {
+      cleanUp();
       dispatch(saveOpponentLevel(1));
       dispatch(
         saveId({
@@ -106,27 +114,44 @@ function Header() {
       }
     };
 
+    const countBreaking = async () => {
+      dispatch(showMessage(BREAK[`Lv${level}`]));
+      await countToZero(TIME_LIMIT_BREAK);
+      dispatch(showMessage(ANSWER[`Lv${level}`]));
+      dispatch(showForm(true));
+    };
+
+    const countAnswerTime = async () => {
+      // await waitForOneSecond();
+      await countToZero(
+        currentSecond > 0 ? currentSecond : TIME_LIMIT_ANSWER + currentSecond,
+      );
+      dispatch(showResult(true));
+      dispatch(rememberSecond(0));
+    };
+
     (async () => {
-      if (!isImageLoaded) return;
+      if (!isImgLoaded) return;
 
       if (isTimeOver) {
-        dispatch(toggleForm(false));
-        document.querySelector('.second').classList.remove('answer');
+        dispatch(showForm(false));
         return clearTimeout(timer);
       }
 
+      if (isOpenedHint) {
+        dispatch(rememberSecond(second));
+        return clearTimeout(timer);
+      }
+
+      if (isClosedHint || isAttacked) {
+        await countAnswerTime();
+        dispatch(rememberSecond(0));
+        return dispatch(countAgain(false));
+      }
+
       try {
-        dispatch(showMessage(BREAK[`Lv${level}`]));
-        await countToZero(TIME_LIMIT_BREAK);
-
-        dispatch(showMessage(ANSWER[`Lv${level}`]));
-        dispatch(toggleForm(true));
-
-        document.querySelector('.second').classList.add('answer');
-        await waitForOneSecond();
-        await countToZero(TIME_LIMIT_ANSWER);
-
-        dispatch(toggleAnswer(true));
+        await countBreaking();
+        await countAnswerTime();
       } catch (err) {
         dispatch(onError(ERROR.UNKNOWN));
         history.push(ROUTE.ERROR);
@@ -134,7 +159,16 @@ function Header() {
     })();
 
     return () => clearTimeout(timer);
-  }, [dispatch, level, isTimeOver, isImageLoaded, history, TIME_LIMIT_BREAK]);
+  }, [
+    dispatch,
+    level,
+    isTimeOver,
+    isImgLoaded,
+    history,
+    TIME_LIMIT_BREAK,
+    isOpenedHint,
+    isClosedHint,
+  ]);
 
   return (
     <Container>
@@ -161,7 +195,9 @@ function Header() {
       </StateBox>
       <Time>
         <span className="clock">⏰</span>
-        <span className="second">{second < 10 ? `0${second}` : second}</span>
+        <span className={isAnswerTime ? 'second' : 'breaking second'}>
+          {second < 10 ? `0${second}` : second}
+        </span>
       </Time>
     </Container>
   );
@@ -213,6 +249,10 @@ const Time = styled.div`
     font-size: 1.7em;
     color: ${({ theme }) => theme.purple};
     animation: ${pounding} 1.1s infinite linear;
+  }
+
+  .second.breaking {
+    color: ${({ theme }) => theme.red};
   }
 
   .answer {

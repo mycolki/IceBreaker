@@ -8,10 +8,13 @@ import { getDatabase, ref, onValue, update } from 'firebase/database';
 import {
   showMessage,
   showAnswerBoxByInput,
-  toggleAnswer,
+  loadImage,
+  showResult,
   passNextLevel,
-  activateBreaking,
+  showForm,
+  takeHint,
 } from '../../store/quizSlice';
+import { receiveAttack } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
 import { RESET } from '../../constants/messages';
@@ -31,19 +34,28 @@ function Breaking() {
   const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
   const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
   const level = useSelector((state) => state.quiz?.currentQuestion?.level);
+  const currentSecond = useSelector((state) => state.quiz?.currentSecond);
+
+  const id = useSelector((state) => state.battle?.id);
+  const isAttacked = useSelector((state) => state.battle?.isAttacked);
   const userInput = useSelector((state) => state.quiz?.userInput);
   const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
   const isAnswer = userInput ? answer === userInput : null;
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(
-    typeof Audio !== 'undefined' && new Audio('audio/breaking.mp3'),
+    typeof Audio !== 'undefined' &&
+      new Audio(
+        'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/breaking.mp3',
+      ),
   );
 
   useEffect(() => {
     return () => {
       dispatch(showMessage(RESET));
       dispatch(showAnswerBoxByInput(''));
-      dispatch(toggleAnswer(false));
+      dispatch(showResult(false));
+      dispatch(showForm(false));
+      dispatch(takeHint(5));
     };
   }, [dispatch]);
 
@@ -55,6 +67,25 @@ function Breaking() {
 
       history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
     });
+  }, [roomId]);
+
+  useEffect(() => {
+    if (!roomId) return;
+
+    const cleanUp = onValue(
+      ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}/isAttacked`),
+      (snapshot) => {
+        if (!snapshot.val()) return;
+
+        dispatch(receiveAttack(true));
+      },
+    );
+
+    // update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
+    //   isAttacked: false,
+    // });
+
+    return () => cleanUp();
   }, [roomId]);
 
   useEffect(() => {
@@ -81,10 +112,10 @@ function Breaking() {
   };
 
   const goToNextLevel = () => {
-    dispatch(toggleAnswer(false));
+    dispatch(showResult(false));
     dispatch(showAnswerBoxByInput(''));
     dispatch(passNextLevel());
-    dispatch(activateBreaking(false));
+    dispatch(loadImage(false));
   };
 
   return (

@@ -23,29 +23,25 @@ function GameOver() {
   const score = useSelector((state) => state.quiz?.score);
   const isWin = score ? score === 500 : null;
   const [rankModalOpen, setRankModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [hasRank, setHasRank] = useState(false);
   const [play] = useSound('/audio/click.mp3');
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(
     typeof Audio !== 'undefined' &&
-      new Audio(score >= 140 ? 'audio/won.mp3' : 'audio/lost.mp3'),
+      new Audio(score >= 140 ? '/audio/won.mp3' : '/audio/lost.mp3'),
   );
 
   useEffect(() => {
-    if (score && isWin) setLoading(false);
+    setLoading(true);
+    setIsPlaying(true);
 
     return () => {
       dispatch(resetScore());
       dispatch(showMessage(RESET));
+      audio.pause();
     };
-  }, [score, isWin]);
-
-  useEffect(() => {
-    setIsPlaying(true);
-
-    return () => audio.pause();
-  }, []);
+  }, [score]);
 
   useEffect(() => {
     if (isPlaying) audio.play();
@@ -70,14 +66,10 @@ function GameOver() {
 
   return (
     <Container isWin={isWin} isWebp={detectWebp()}>
-      {loading ? (
-        <TitleWrapper isWin={isWin}>
-          <h1 className="title">GAME OVER</h1>
-          <h2 className="score">{score}</h2>
-        </TitleWrapper>
-      ) : (
-        <BarSpinner />
-      )}
+      <TitleWrapper isWin={isWin}>
+        <h1 className="title">GAME OVER</h1>
+        {loading ? <h2 className="score">{score}</h2> : <BarSpinner />}
+      </TitleWrapper>
       <Buttons>
         <li className="button">
           <Button

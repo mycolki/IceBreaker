@@ -8,8 +8,8 @@ const initialState = {
   quiz: {},
   questions: [],
   currentQuestion: null,
-  isImageLoaded: false,
-  isNotBreaking: false,
+  isImgLoaded: false,
+  isAnswerTime: false,
   isTimeOver: false,
   userInput: '',
   message: {
@@ -18,6 +18,10 @@ const initialState = {
   },
   score: 0,
   error: null,
+  hints: 5,
+  currentSecond: 0,
+  isOpenedHint: false,
+  isClosedHint: false,
 };
 
 const quizSlice = createSlice({
@@ -36,13 +40,13 @@ const quizSlice = createSlice({
       state.currentQuestion = state.questions.pop();
       state.currentQuestion.level = 1;
     },
-    activateBreaking(state, action) {
-      state.isImageLoaded = action.payload;
+    loadImage(state, action) {
+      state.isImgLoaded = action.payload;
     },
-    toggleForm(state, action) {
-      state.isNotBreaking = action.payload;
+    showForm(state, action) {
+      state.isAnswerTime = action.payload;
     },
-    toggleAnswer(state, action) {
+    showResult(state, action) {
       state.isTimeOver = action.payload;
     },
     showMessage(state, action) {
@@ -63,11 +67,32 @@ const quizSlice = createSlice({
       const currentLevel = state.currentQuestion.level;
       state.score += SCORES[`Lv${currentLevel}`];
     },
-    onError(state, action) {
-      state.error = action.payload;
+    takeHint(state, action) {
+      if (action.payload === 5) {
+        void (state.hints = 5);
+        return;
+      }
+
+      if (action.payload === 1) {
+        state.currentSecond += 10;
+      }
+
+      state.hints -= action.payload;
+    },
+    stopCount(state, action) {
+      state.isOpenedHint = action.payload;
+    },
+    countAgain(state, action) {
+      state.isClosedHint = action.payload;
+    },
+    rememberSecond(state, action) {
+      state.currentSecond = action.payload;
     },
     resetScore(state) {
       state.score = 0;
+    },
+    onError(state, action) {
+      state.error = action.payload;
     },
   },
 });
@@ -76,13 +101,17 @@ export const {
   saveQuizData,
   replaceQuestions,
   getFirstLevel,
-  activateBreaking,
-  toggleForm,
-  toggleAnswer,
+  loadImage,
+  showForm,
+  showResult,
   showMessage,
   showAnswerBoxByInput,
   passNextLevel,
   addScore,
+  takeHint,
+  stopCount,
+  countAgain,
+  rememberSecond,
   resetScore,
   onError,
 } = quizSlice.actions;

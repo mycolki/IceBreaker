@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getDatabase, ref, update } from 'firebase/database';
-import { showMessage } from '../../../store/quizSlice';
+import { getDatabase, ref, get, child, update } from 'firebase/database';
+import { showMessage, onError } from '../../../store/quizSlice';
 import { saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
 import { ROUTE, ROOMS } from '../../../constants/game';
+import { ERROR } from '../../../constants/error';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
@@ -29,12 +30,26 @@ function EnterRoomModal({ onClose }) {
     return () => dispatch(showMessage(RESET));
   }, [dispatch, history]);
 
-  const enterRoom = (ev) => {
+  const enterRoom = async (ev) => {
     ev.preventDefault();
 
     if (name.length === 0) {
       setName('');
       return dispatch(showMessage(ENTER_ROOM.FILL_NAME));
+    }
+
+    try {
+      const snapshot = await get(
+        child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers/0/name`),
+      );
+
+      if (snapshot.val() === name) {
+        setName('');
+        return dispatch(showMessage(ENTER_ROOM.EXIST_NAME));
+      }
+    } catch (err) {
+      dispatch(onError(ERROR.LOAD_DATA));
+      history.push(ROUTE.ERROR);
     }
 
     window.sessionStorage.setItem(
@@ -65,10 +80,7 @@ function EnterRoomModal({ onClose }) {
     setInput('');
   };
 
-  const handleNameInput = (ev) => {
-    setName(ev.target.value.trim());
-  };
-
+  const handleNameInput = (ev) => setName(ev.target.value.trim());
   const handleRoomIdInput = (ev) => setInput(ev.target.value.trim());
 
   return (
