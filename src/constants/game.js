@@ -2,7 +2,7 @@ export const QUIZ = 'quiz';
 export const ROOMS = 'rooms';
 export const RANKERS = 'rankers';
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 7;
+export const QUIZ_LENGTH = 5;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
