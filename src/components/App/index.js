@@ -14,6 +14,7 @@ const Room = lazy(() => import('../Room'));
 const GameOver = lazy(() => import('../GameOver'));
 const BattleOver = lazy(() => import('../BattleOver'));
 const Ranking = lazy(() => import('../Ranking'));
+const GameRules = lazy(() => import('../GameRules'));
 const ErrorBox = lazy(() => import('../ErrorBox'));
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path={ROUTE.GAME_OVER} component={GameOver} />
           <Route path={ROUTE.BATTLE_OVER_ID} component={BattleOver} />
           <Route path={ROUTE.RANKING} component={Ranking} />
+          <Route path={ROUTE.GAME_RULES} component={GameRules} />
           <Route path={ROUTE.ERROR} component={ErrorBox} />
         </Switch>
       </Suspense>

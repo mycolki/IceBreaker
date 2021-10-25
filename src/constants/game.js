@@ -16,6 +16,7 @@ export const ROUTE = {
   BATTLE_OVER_ID: '/battleover/:roomId',
   BATTLE_OVER: '/battleover',
   RANKING: '/ranking',
+  GAME_RULES: '/gamerules',
   ERROR: '/error',
 };
 

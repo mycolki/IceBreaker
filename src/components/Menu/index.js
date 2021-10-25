@@ -75,9 +75,16 @@ function Menu() {
             />
           </li>
         </Link>
-        <li className="button">
-          <Button text="게임 방법" size="large" color="purple" onClick={play} />
-        </li>
+        <Link to={ROUTE.GAME_RULES}>
+          <li className="button">
+            <Button
+              text="게임 방법"
+              size="large"
+              color="purple"
+              onClick={play}
+            />
+          </li>
+        </Link>
       </MenuButtons>
     </Container>
   );
