@@ -1,40 +1,14 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { getDatabase, ref, get, child } from '@firebase/database';
-import { saveQuizData, onError } from '../../store/quizSlice';
 import { smallPounding } from '../../styles/share/animation';
-import { ROUTE, QUIZ } from '../../constants/game';
-import { ERROR } from '../../constants/error';
+import { ROUTE } from '../../constants/game';
 
 import Button from '../share/Button';
 
 function Menu() {
-  const dispatch = useDispatch();
-  const history = useHistory();
   const [play] = useSound('/audio/click.mp3');
-
-  useEffect(() => {
-    const getQuiz = async () => {
-      try {
-        const snapshot = await get(child(ref(getDatabase()), QUIZ));
-
-        const quiz = snapshot.val();
-
-        if (quiz) {
-          dispatch(saveQuizData(quiz));
-        }
-      } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
-      }
-    };
-
-    getQuiz();
-  }, [dispatch, history]);
 
   return (
     <Container>
@@ -50,7 +24,7 @@ function Menu() {
             <Button
               text="혼자 얼음깨기"
               size="large"
-              color="skyBlue"
+              backgroundColor="skyBlue"
               onClick={play}
             />
           </Link>
@@ -60,7 +34,7 @@ function Menu() {
             <Button
               text="같이 얼음깨기"
               size="large"
-              color="skyBlue"
+              backgroundColor="skyBlue"
               onClick={play}
             />
           </Link>
@@ -70,7 +44,7 @@ function Menu() {
             <Button
               text="랭킹보기"
               size="large"
-              color="purple"
+              backgroundColor="purple"
               onClick={play}
             />
           </li>
@@ -80,7 +54,7 @@ function Menu() {
             <Button
               text="게임 방법"
               size="large"
-              color="purple"
+              backgroundColor="purple"
               onClick={play}
             />
           </li>

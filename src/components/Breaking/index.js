@@ -1,23 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
+import { getDatabase, ref, onValue, update } from 'firebase/database';
 import styled from 'styled-components';
 
-import { getDatabase, ref, onValue, update } from 'firebase/database';
-
 import {
-  showMessage,
-  showAnswerBoxByInput,
-  loadImage,
-  showResult,
-  passNextLevel,
-  showForm,
-  takeHint,
+  changeGameStatus,
+  decreaseTime,
+  goToNextStep,
+  endGame,
 } from '../../store/quizSlice';
-import { receiveAttack } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
-import { QUIZ_LENGTH, ROUTE, ROOMS } from '../../constants/game';
-import { RESET } from '../../constants/messages';
+import { ROUTE, ROOMS, GAME_STATUS, QUIZ_LENGTH } from '../../constants/game';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
@@ -31,16 +25,15 @@ function Breaking() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
-  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
-  const level = useSelector((state) => state.quiz?.currentQuestion?.level);
-  const currentSecond = useSelector((state) => state.quiz?.currentSecond);
-
-  const id = useSelector((state) => state.battle?.id);
-  const isAttacked = useSelector((state) => state.battle?.isAttacked);
-  const userInput = useSelector((state) => state.quiz?.userInput);
-  const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
-  const isAnswer = userInput ? answer === userInput : null;
+  const quizCollection = useSelector((state) => state.quiz.quizCollection);
+  const currentQuizIndex = useSelector((state) => state.quiz.currentQuizIndex);
+  const currentQuizId = quizCollection.allIds[currentQuizIndex];
+  const currentQuiz = quizCollection.byId[currentQuizId];
+  const gameStatus = useSelector((state) => state.quiz.gameStatus);
+  const remainingTime = useSelector((state) => state.quiz.remainingTime);
+  const isGamePaused = useSelector((state) => state.quiz.isGamePaused);
+  const userInput = useSelector((state) => state.quiz.userInput);
+  const { answer, imgUrl } = currentQuiz;
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(
     typeof Audio !== 'undefined' &&
@@ -50,49 +43,38 @@ function Breaking() {
   );
 
   useEffect(() => {
-    return () => {
-      dispatch(showMessage(RESET));
-      dispatch(showAnswerBoxByInput(''));
-      dispatch(showResult(false));
-      dispatch(showForm(false));
-      dispatch(takeHint(5));
-    };
-  }, [dispatch]);
+    let timer;
+
+    if (isGamePaused) return;
+
+    if (gameStatus === GAME_STATUS.ICE_BREAKING_TIME && remainingTime === 0) {
+      return dispatch(changeGameStatus(GAME_STATUS.ANSWER_GUESS_TIME));
+    }
+
+    if (gameStatus === GAME_STATUS.ANSWER_GUESS_TIME && remainingTime === 0) {
+      return dispatch(changeGameStatus(GAME_STATUS.RESULT_DISPLAY_TIME));
+    }
+
+    if (
+      gameStatus === GAME_STATUS.ICE_BREAKING_TIME ||
+      gameStatus === GAME_STATUS.ANSWER_GUESS_TIME
+    ) {
+      timer = setTimeout(() => dispatch(decreaseTime()), 1000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [dispatch, gameStatus, remainingTime, isGamePaused]);
 
   useEffect(() => {
     if (!roomId) return;
 
-    onValue(ref(getDatabase(), `${ROOMS}/${roomId}/isPlaying`), (snapshot) => {
-      if (snapshot.val()) return;
-
-      history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
+    onValue(ref(getDatabase(), `${ROOMS}/${roomId}/onBattle`), (snapshot) => {
+      if (!snapshot.val()) {
+        dispatch(endGame());
+        history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
+      }
     });
-  }, [roomId]);
-
-  useEffect(() => {
-    if (!roomId) return;
-
-    const cleanUp = onValue(
-      ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}/isAttacked`),
-      (snapshot) => {
-        if (!snapshot.val()) return;
-
-        dispatch(receiveAttack(true));
-      },
-    );
-
-    // update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
-    //   isAttacked: false,
-    // });
-
-    return () => cleanUp();
-  }, [roomId]);
-
-  useEffect(() => {
-    setIsPlaying(true);
-
-    return () => audio.pause();
-  }, []);
+  }, [history, roomId]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -101,32 +83,35 @@ function Breaking() {
     }
   }, [isPlaying]);
 
-  const goToLastPage = () => {
+  useEffect(() => {
+    setIsPlaying(true);
+
+    return () => audio.pause();
+  }, []);
+
+  const goToNextQuiz = () => dispatch(goToNextStep());
+  const goToEnding = () => {
+    dispatch(endGame());
+
     if (roomId) {
-      return update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
-        isPlaying: false,
+      update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
+        onBattle: false,
       });
+    } else {
+      history.push(ROUTE.GAME_OVER);
     }
-
-    return history.push(ROUTE.GAME_OVER);
-  };
-
-  const goToNextLevel = () => {
-    dispatch(showResult(false));
-    dispatch(showAnswerBoxByInput(''));
-    dispatch(passNextLevel());
-    dispatch(loadImage(false));
-    dispatch(showMessage(RESET));
   };
 
   return (
     <Container isWebp={detectWebp()}>
       <Header />
       <AnswerDisplayBox />
-      {isTimeOver && (
+      {gameStatus === GAME_STATUS.RESULT_DISPLAY_TIME && (
         <Answer>
           <div className="result">
-            <span className="result-text">{isAnswer ? '정답' : '얼음땡'}</span>
+            <span className="result-text">
+              {answer === userInput ? '정답' : '얼음땡'}
+            </span>
             <img
               className="img"
               src={imgUrl}
@@ -138,8 +123,10 @@ function Breaking() {
               text="NEXT"
               className="button"
               size="medium"
-              color="lightPurple"
-              onClick={level === QUIZ_LENGTH ? goToLastPage : goToNextLevel}
+              backgroundColor="lightPurple"
+              onClick={
+                currentQuizIndex + 1 === QUIZ_LENGTH ? goToEnding : goToNextQuiz
+              }
             />
           </div>
         </Answer>
@@ -156,7 +143,6 @@ export default Breaking;
 
 const Container = styled.div`
   height: 100%;
-
   background-image: ${({ isWebp }) =>
     isWebp
       ? 'url(/background/floatCubeBg.webp)'

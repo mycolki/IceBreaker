@@ -11,7 +11,7 @@ const theme = {
   deepBlue: '#0285cf',
   purple: '#7879f1',
   lightPurple: '#8ba5ff',
-  lightGray: '#e0d6d6',
+  lightGray: '#c1c1c1',
   deepGray: '#373737',
   icePlate:
     'linear-gradient(180deg, rgba(114, 112, 219, 0.26) 11.27%, rgba(252, 146, 216, 0.39) 48.77%, rgba(130, 210, 255, 0.92) 98.77%)',

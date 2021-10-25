@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Group, RegularPolygon } from 'react-konva';
+import PropTypes from 'prop-types';
 import useSound from 'use-sound';
 
 import { getRandomIndexes } from '../../../utils/getRandomIndexes';
@@ -9,7 +10,7 @@ import {
   UNBREAKABLE_ICE,
 } from '../../../constants/ice';
 
-function Cubes({ level, isAnswerTime, isImgLoaded }) {
+function Cubes({ level, isAnswerTime }) {
   const cubesRef = useRef(null);
   const colorIndexes = getRandomIndexes(CUBES_LENGTH, CUBES_LENGTH / 2);
   const [positions, setPositions] = useState([{ x: 0, y: 0 }]);
@@ -41,7 +42,7 @@ function Cubes({ level, isAnswerTime, isImgLoaded }) {
 
     let randomIndexes;
 
-    const MIN_LENGTH = UNBREAKABLE_ICE[`Lv${level}`];
+    const MIN_LENGTH = UNBREAKABLE_ICE[level];
     randomIndexes = getRandomIndexes(CUBES_LENGTH, MIN_LENGTH);
 
     cubesRef.current?.children.forEach((cube, i) => {
@@ -50,7 +51,7 @@ function Cubes({ level, isAnswerTime, isImgLoaded }) {
         cube.on('click touchstart mousedown', null);
       }
     });
-  }, [level, isImgLoaded, positions]);
+  }, [level, positions]);
 
   const hideNewCube = (ev) => ev.target.hide();
   const hideCube = (ev) => {
@@ -161,3 +162,8 @@ function Cubes({ level, isAnswerTime, isImgLoaded }) {
 }
 
 export default Cubes;
+
+Cubes.propTypes = {
+  level: PropTypes.number.isRequired,
+  isAnswerTime: PropTypes.bool.isRequired,
+};

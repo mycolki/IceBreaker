@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Image } from 'react-konva';
 import styled from 'styled-components';
 
-import bearSrc from '../../asset/bear.png';
-import { loadImage } from '../../store/quizSlice';
+import { changeGameStatus } from '../../store/quizSlice';
+import { GAME_STATUS } from '../../constants/game';
 
 import PlateLayer from '../Ice/PlateLayer';
 import Cubes from '../Ice/Cubes';
@@ -13,29 +13,26 @@ import DotSpinner from '../share/LoadingSpinner/DotSpinner';
 
 function IcePlate() {
   const dispatch = useDispatch();
-  const imgUrl = useSelector((state) => state.quiz?.currentQuestion?.imgUrl);
-  const level = useSelector((state) => state.quiz?.currentQuestion?.level);
-  const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
-  const isImgLoaded = useSelector((state) => state.quiz?.isImgLoaded);
-  const [bearImage, setBearImage] = useState(null);
+  const quizCollection = useSelector((state) => state.quiz?.quizCollection);
+  const currentQuizIndex = useSelector((state) => state.quiz?.currentQuizIndex);
+  const currentQuizId = quizCollection.allIds[currentQuizIndex];
+  const currentQuiz = quizCollection.byId[currentQuizId];
+  const gameStatus = useSelector((state) => state.quiz?.gameStatus);
   const [image, setImage] = useState(null);
-  const bearRef = useRef(null);
+  const { imgUrl } = currentQuiz;
 
   useEffect(() => {
     const img = new window.Image();
     img.src = imgUrl;
-
     img.addEventListener('load', () => {
-      dispatch(loadImage(true));
+      dispatch(changeGameStatus(GAME_STATUS.ICE_BREAKING_TIME));
       setImage(img);
     });
-
-    return () => dispatch(loadImage(false));
   }, [imgUrl, dispatch]);
 
   return (
     <Container>
-      {isImgLoaded ? (
+      {gameStatus !== GAME_STATUS.BEFORE_START ? (
         <Stage width={375} height={400}>
           <PlateLayer />
           <Layer>
@@ -43,16 +40,15 @@ function IcePlate() {
           </Layer>
           <Layer>
             <Cubes
-              level={level}
-              isAnswerTime={isAnswerTime}
-              isImgLoaded={isImgLoaded}
+              level={currentQuizIndex + 1}
+              isAnswerTime={gameStatus === GAME_STATUS.ANSWER_GUESS_TIME}
             />
           </Layer>
         </Stage>
       ) : (
         <DotSpinner color="purple" />
       )}
-      {!isImgLoaded && (
+      {gameStatus === GAME_STATUS.BEFORE_START && (
         <Stage width={375} height={400}>
           <LoadingPlateLayer />
         </Stage>

@@ -87,7 +87,12 @@ function Ranking() {
       </Rankers>
       <ButtonArea>
         <Link to={ROUTE.MENU}>
-          <Button text="처음으로" color="purple" size="large" onClick={play} />
+          <Button
+            text="처음으로"
+            backgroundColor="purple"
+            size="large"
+            onClick={play}
+          />
         </Link>
       </ButtonArea>
     </Container>

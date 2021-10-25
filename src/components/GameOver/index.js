@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { showMessage, resetScore } from '../../store/quizSlice';
+import { changeMessage, resetQuizForGameOver } from '../../store/quizSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE } from '../../constants/game';
@@ -13,7 +13,6 @@ import { RESET, GAME } from '../../constants/messages';
 import Button from '../share/Button';
 import Message from '../share/Message';
 import BarSpinner from '../share/LoadingSpinner/BarSpinner';
-
 const Portal = lazy(() => import('../Portal'));
 const Modal = lazy(() => import('../Modal'));
 const RegisterRankModal = lazy(() => import('../Modal/RegisterRankModal'));
@@ -21,12 +20,10 @@ const RegisterRankModal = lazy(() => import('../Modal/RegisterRankModal'));
 function GameOver() {
   const dispatch = useDispatch();
   const score = useSelector((state) => state.quiz?.score);
-  const isWin = score ? score === 500 : null;
   const [rankModalOpen, setRankModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasRank, setHasRank] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const [isPlaying, setIsPlaying] = useState(false);
   const [audio] = useState(
     typeof Audio !== 'undefined' &&
       new Audio(score >= 140 ? '/audio/won.mp3' : '/audio/lost.mp3'),
@@ -34,39 +31,37 @@ function GameOver() {
 
   useEffect(() => {
     setLoading(true);
-    setIsPlaying(true);
 
     return () => {
-      dispatch(resetScore());
-      dispatch(showMessage(RESET));
+      dispatch(resetQuizForGameOver());
       audio.pause();
     };
   }, [score]);
 
   useEffect(() => {
-    if (isPlaying) audio.play();
-  }, [isPlaying]);
+    if (loading) audio.play();
+  }, [loading]);
 
   const shareGameURL = () => {
-    copyToClipboard('https://icebreaker.colki.me');
-    dispatch(showMessage(GAME.SHARE));
     play();
+    copyToClipboard(process.env.REACT_APP_ICE_BREAKER_URL);
+    dispatch(changeMessage(GAME.SHARE));
   };
 
   const openRankModal = () => {
-    setRankModalOpen(true);
     play();
+    setRankModalOpen(true);
   };
 
   const closeRankModal = () => {
-    setRankModalOpen(false);
-    dispatch(showMessage(RESET));
     play();
+    setRankModalOpen(false);
+    dispatch(changeMessage(RESET));
   };
 
   return (
-    <Container isWin={isWin} isWebp={detectWebp()}>
-      <TitleWrapper isWin={isWin}>
+    <Container isWebp={detectWebp()}>
+      <TitleWrapper>
         <h1 className="title">GAME OVER</h1>
         {loading ? <h2 className="score">{score}</h2> : <BarSpinner />}
       </TitleWrapper>
@@ -75,7 +70,7 @@ function GameOver() {
           <Button
             text="공유하기"
             size="large"
-            color="pink"
+            backgroundColor="pink"
             onClick={shareGameURL}
           />
         </li>
@@ -83,14 +78,14 @@ function GameOver() {
           <Button
             text="랭킹 등록"
             size="large"
-            color="purple"
+            backgroundColor="purple"
             onClick={openRankModal}
             disabled={hasRank}
           />
           {rankModalOpen && (
             <Suspense fallback={null}>
               <Portal>
-                <Modal onClose={closeRankModal} dimmed={true}>
+                <Modal onClose={closeRankModal} background="orange">
                   <RegisterRankModal
                     onClose={closeRankModal}
                     hasRank={setHasRank}
@@ -102,7 +97,7 @@ function GameOver() {
         </li>
         <li className="button">
           <Link to={ROUTE.MENU}>
-            <Button text="처음으로" size="large" color="skyBlue" />
+            <Button text="처음으로" size="large" backgroundColor="skyBlue" />
           </Link>
         </li>
       </Buttons>

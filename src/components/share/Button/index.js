@@ -23,24 +23,16 @@ const SIZE_PRESET = {
   `,
 };
 
-const COLOR_PRESET = {
-  skyBlue: css`
-    background-color: ${({ theme }) => theme.skyBlue};
-  `,
-  purple: css`
-    background-color: ${({ theme }) => theme.purple};
-  `,
-  pink: css`
-    background-color: ${({ theme }) => theme.pink};
-  `,
-  lightPurple: css`
-    background-color: ${({ theme }) => theme.lightPurple};
-  `,
-};
-
-function Button({ children, text, type, disabled, size, color, onClick }) {
+function Button({
+  children,
+  text,
+  type,
+  disabled,
+  size,
+  backgroundColor,
+  onClick,
+}) {
   const sizePreset = SIZE_PRESET[size];
-  const colorPreset = COLOR_PRESET[color];
 
   return (
     <StyledButton
@@ -48,7 +40,7 @@ function Button({ children, text, type, disabled, size, color, onClick }) {
       type={type}
       disabled={disabled}
       sizePreset={sizePreset}
-      colorPreset={colorPreset}
+      backgroundColor={backgroundColor}
       onClick={onClick}
     >
       {text}
@@ -88,9 +80,9 @@ const StyledButton = styled.button`
   color: ${({ theme }) => theme.white};
   transition: all 100ms ease-out;
   animation: ${pounding} 1.2s infinite;
-
+  background-color: ${({ backgroundColor, theme }) =>
+    backgroundColor && theme[backgroundColor]};
   ${({ sizePreset }) => sizePreset}
-  ${({ colorPreset }) => colorPreset}
 
   &:active,
   &:hover {

@@ -1,54 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
-import styled from 'styled-components';
-import theme from '../../styles/theme';
-
 import { getDatabase, ref, onValue, update } from 'firebase/database';
-import {
-  showForm,
-  showResult,
-  showMessage,
-  rememberSecond,
-  countAgain,
-  onError,
-} from '../../store/quizSlice';
-import { saveOpponentLevel, saveId } from '../../store/battleSlice';
-import { pounding } from '../../styles/share/animation';
-import {
-  ROUTE,
-  ROOMS,
-  SECONDS_PER_LEVEL,
-  TIME_LIMIT_ANSWER,
-} from '../../constants/game';
-import { ERROR } from '../../constants/error';
-import { ANSWER, BREAK } from '../../constants/messages';
+import styled from 'styled-components';
+
+import { receiveAttack, updateWarningMessage } from '../../store/quizSlice';
 import { flexCenter } from '../../styles/share/common';
-import { emergency } from '../../styles/share/animation';
+import theme from '../../styles/theme';
+import {
+  pounding,
+  emergency,
+  rightAndLeft,
+} from '../../styles/share/animation';
+import { ROOMS, GAME_STATUS, ATTACK } from '../../constants/game';
 
 function Header() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
-  const history = useHistory();
-  const level = useSelector((state) => state.quiz?.currentQuestion?.level);
-  const score = useSelector((state) => state.quiz?.score);
-  const isImgLoaded = useSelector((state) => state.quiz?.isImgLoaded);
-  const isAnswerTime = useSelector((state) => state.quiz?.isAnswerTime);
-  const isTimeOver = useSelector((state) => state.quiz?.isTimeOver);
-  const isOpenedHint = useSelector((state) => state.quiz?.isOpenedHint);
-  const isClosedHint = useSelector((state) => state.quiz?.isClosedHint);
-  const currentSecond = useSelector((state) => state.quiz?.currentSecond);
-  const isAttacked = useSelector((state) => state.battle?.isAttacked);
-
-  const name = useSelector((state) => state.battle?.name);
-  const id = useSelector((state) => state.battle?.id);
-  const opponentId = useSelector((state) => state.battle?.opponentId);
-  const opponentLevel = useSelector((state) => state.battle?.opponentLevel);
-
-  const TIME_LIMIT_BREAK = SECONDS_PER_LEVEL[`Lv${level}`];
-  const [second, setSecond] = useState(TIME_LIMIT_BREAK);
-  const [showWarning, setShowWarning] = useState(false);
+  const currentQuizIndex = useSelector((state) => state.quiz.currentQuizIndex);
+  const gameStatus = useSelector((state) => state.quiz.gameStatus);
+  const remainingTime = useSelector((state) => state.quiz.remainingTime);
+  const score = useSelector((state) => state.quiz.score);
+  const level = currentQuizIndex + 1;
+  const userName = useSelector((state) => state.battle.userName);
+  const id = useSelector((state) => state.battle.id);
+  const opponentId = useSelector((state) => state.battle.opponentId);
+  const warningMessage = useSelector((state) => state.quiz.warningMessage);
 
   useEffect(() => {
     if (typeof opponentId !== 'number') return;
@@ -56,125 +34,66 @@ function Header() {
     const cleanUp = onValue(
       ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}/level`),
       (snapshot) => {
-        const level = snapshot.val();
+        const updatedLevel = snapshot.val();
 
-        if (level === 1) return;
+        if (updatedLevel === 1) return;
 
-        dispatch(saveOpponentLevel(level));
-
-        setShowWarning(true);
-        setTimeout(() => {
-          setShowWarning(false);
-        }, 3000);
+        dispatch(
+          updateWarningMessage(`상대 브레이커 레벨 ${updatedLevel} 진입!`),
+        );
+        setTimeout(() => dispatch(updateWarningMessage('RESET')), 3000);
       },
     );
 
-    return () => {
-      cleanUp();
-      dispatch(saveOpponentLevel(1));
-      dispatch(
-        saveId({
-          id: null,
-          opponentId: null,
-        }),
-      );
-    };
-  }, [opponentId]);
+    return () => cleanUp();
+  }, [dispatch, roomId, opponentId]);
 
   useEffect(() => {
-    if (!name || !level) return;
+    if (
+      typeof id !== 'number' &&
+      gameStatus !== GAME_STATUS.ANSWER_GUESS_TIME
+    ) {
+      return;
+    }
 
-    update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
-      level,
-    });
+    const cleanUp = onValue(
+      ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}/attack`),
+      (snapshot) => {
+        const attack = snapshot.val();
+
+        if (attack !== null) {
+          dispatch(receiveAttack(attack));
+          setTimeout(() => dispatch(updateWarningMessage('RESET')), 3000);
+        }
+
+        update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
+          attack: null,
+        });
+      },
+    );
+
+    return () => cleanUp();
+  }, [dispatch, roomId, id, gameStatus]);
+
+  useEffect(() => {
+    if (userName && level) {
+      update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
+        level,
+      });
+    }
   }, [level]);
 
   useEffect(() => {
-    if (!name || !score) return;
-
-    update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
-      score,
-    });
-  }, [score]);
-
-  useEffect(() => {
-    if (!level) return;
-
-    let timer;
-    const waitForOneSecond = () => {
-      return new Promise((resolve) => {
-        timer = setTimeout(() => resolve(), 1000);
+    if (userName && score) {
+      update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${id}`), {
+        score,
       });
-    };
-
-    const countToZero = async (from) => {
-      for (let i = from; i >= 0; i--) {
-        setSecond(i);
-        await waitForOneSecond();
-      }
-    };
-
-    const countBreaking = async () => {
-      dispatch(showMessage(BREAK[`Lv${level}`]));
-      await countToZero(TIME_LIMIT_BREAK);
-      dispatch(showMessage(ANSWER[`Lv${level}`]));
-      dispatch(showForm(true));
-    };
-
-    const countAnswerTime = async () => {
-      // await waitForOneSecond();
-      await countToZero(
-        currentSecond > 0 ? currentSecond : TIME_LIMIT_ANSWER + currentSecond,
-      );
-      dispatch(showResult(true));
-      dispatch(rememberSecond(0));
-    };
-
-    (async () => {
-      if (!isImgLoaded) return;
-
-      if (isTimeOver) {
-        dispatch(showForm(false));
-        return clearTimeout(timer);
-      }
-
-      if (isOpenedHint) {
-        dispatch(rememberSecond(second));
-        return clearTimeout(timer);
-      }
-
-      if (isClosedHint || isAttacked) {
-        await countAnswerTime();
-        dispatch(rememberSecond(0));
-        return dispatch(countAgain(false));
-      }
-
-      try {
-        await countBreaking();
-        await countAnswerTime();
-      } catch (err) {
-        dispatch(onError(ERROR.UNKNOWN));
-        history.push(ROUTE.ERROR);
-      }
-    })();
-
-    return () => clearTimeout(timer);
-  }, [
-    dispatch,
-    level,
-    isTimeOver,
-    isImgLoaded,
-    history,
-    TIME_LIMIT_BREAK,
-    isOpenedHint,
-    isClosedHint,
-  ]);
+    }
+  }, [score]);
 
   return (
     <Container>
-      {showWarning && (
-        <BattleMessage>상대 브레이커 레벨 {opponentLevel} 진입!</BattleMessage>
-      )}
+      {warningMessage !== '' && <BattleMessage>{warningMessage}</BattleMessage>}
       <StateBox>
         <Stage width={100} height={64}>
           <Layer>
@@ -194,9 +113,21 @@ function Header() {
         </UserScore>
       </StateBox>
       <Time>
-        <span className="clock">⏰</span>
-        <span className={isAnswerTime ? 'second' : 'breaking second'}>
-          {second < 10 ? `0${second}` : second}
+        <span
+          className={
+            warningMessage === ATTACK.REDUCE.message ? 'clock warning' : 'clock'
+          }
+        >
+          ⏰
+        </span>
+        <span
+          className={
+            gameStatus === GAME_STATUS.ICE_BREAKING_TIME
+              ? 'time breaking-time'
+              : 'time answer-time'
+          }
+        >
+          {remainingTime < 10 ? `0${remainingTime}` : remainingTime}
         </span>
       </Time>
     </Container>
@@ -237,6 +168,7 @@ const UserScore = styled.div`
 `;
 
 const Time = styled.div`
+  display: flex;
   width: 25%;
 
   .clock {
@@ -244,19 +176,24 @@ const Time = styled.div`
     margin-right: 5px;
   }
 
-  .second {
-    position: absolute;
+  .clock.warning {
+    display: block;
+    animation: ${emergency} 200ms infinite linear;
+  }
+
+  .time {
+    display: block;
     font-size: 1.7em;
     color: ${({ theme }) => theme.purple};
     animation: ${pounding} 1.1s infinite linear;
   }
 
-  .second.breaking {
+  .time.breaking-time {
     color: ${({ theme }) => theme.red};
   }
 
-  .answer {
-    color: ${({ theme }) => theme.red};
+  .time.answer-time {
+    color: ${({ theme }) => theme.purple};
   }
 `;
 
@@ -270,5 +207,4 @@ const BattleMessage = styled.div`
   text-align: center;
   font-family: 'Do Hyeon';
   color: ${({ theme }) => theme.deepPink};
-  animation: ${emergency} 1s infinite;
 `;
