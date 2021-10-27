@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
+
 import theme from '../../../styles/theme';
 
 const STYLES = {
@@ -51,7 +53,7 @@ export default Message;
 
 const Wrapper = styled.div`
   width: 100%;
-  height: ${({ height }) => (height ? height : '5%')};
+  height: ${({ height }) => height};
   text-align: center;
 `;
 
@@ -66,3 +68,11 @@ const Text = styled.p`
 
   ${({ messageStyle }) => messageStyle};
 `;
+
+Message.propTypes = {
+  height: PropTypes.string,
+};
+
+Message.defaultProps = {
+  height: '5%',
+};

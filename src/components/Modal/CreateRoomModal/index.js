@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import useSound from 'use-sound';
-import { sampleSize } from 'lodash';
-
 import { getDatabase, ref, set, get, child } from '@firebase/database';
+import { sampleSize } from 'lodash';
+import useSound from 'use-sound';
+import PropTypes from 'prop-types';
+
 import { changeMessage, onError } from '../../../store/quizSlice';
 import { saveRoomId, saveUserName } from '../../../store/battleSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
@@ -153,3 +154,7 @@ function CreateRoomModal({ onClose }) {
 }
 
 export default CreateRoomModal;
+
+CreateRoomModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-
 import { getDatabase, ref, get, child, update } from 'firebase/database';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { changeMessage, onError } from '../../../store/quizSlice';
 import { saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
@@ -127,3 +128,8 @@ function EnterRoomModal({ onClose }) {
 }
 
 export default EnterRoomModal;
+
+EnterRoomModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  hasRank: PropTypes.func.isRequired,
+};

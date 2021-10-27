@@ -57,7 +57,7 @@ Button.propTypes = {
   type: PropTypes.string,
   disabled: PropTypes.bool,
   size: PropTypes.string,
-  color: PropTypes.string,
+  backgroundColor: PropTypes.string,
   onClick: PropTypes.func,
 };
 
@@ -66,7 +66,7 @@ Button.defaultProps = {
   type: 'button',
   disabled: false,
   size: 'small',
-  color: 'transparent',
+  backgroundColor: 'lightPurple',
 };
 
 const StyledButton = styled.button`
