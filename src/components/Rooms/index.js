@@ -1,17 +1,15 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import useSound from 'use-sound';
-
 import { getDatabase, ref, set, onValue } from 'firebase/database';
 import { RiGamepadFill } from 'react-icons/ri';
 import { IoCaretBack } from 'react-icons/io5';
+import styled from 'styled-components';
+import useSound from 'use-sound';
 
-import { showMessage } from '../../store/quizSlice';
+import { changeMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
-
 import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -45,7 +43,7 @@ function Rooms() {
   );
 
   useEffect(() => {
-    dispatch(showMessage(BATTLE.WAITING));
+    dispatch(changeMessage(BATTLE.WAITING));
 
     const cleanUp = onValue(ref(getDatabase(), ROOMS), (snapshot) => {
       const rooms = snapshot.val();
@@ -57,7 +55,7 @@ function Rooms() {
     });
 
     return () => {
-      dispatch(showMessage(RESET));
+      dispatch(changeMessage(RESET));
       dispatch(saveRoomId(''));
       cleanUp();
     };
@@ -82,19 +80,19 @@ function Rooms() {
   const openEnterModal = () => {
     play();
     setEnterModalOpen(true);
-    dispatch(showMessage(RESET));
+    dispatch(changeMessage(RESET));
   };
 
   const closeEnterModal = () => {
     play();
     setEnterModalOpen(false);
-    dispatch(showMessage(RESET));
+    dispatch(changeMessage(RESET));
   };
 
   const openCreateModal = () => {
     play();
     setCreateModalOpen(true);
-    dispatch(showMessage(RESET));
+    dispatch(changeMessage(RESET));
   };
 
   const closeCreateModal = () => {
@@ -105,7 +103,7 @@ function Rooms() {
     }
 
     setCreateModalOpen(false);
-    dispatch(showMessage(RESET));
+    dispatch(changeMessage(RESET));
   };
 
   return (
@@ -125,7 +123,7 @@ function Rooms() {
       <RoomList>
         {rooms
           ? Object.entries(rooms).map(([id, room]) => {
-              return room.isPlaying ? (
+              return room.onBattle ? (
                 <RoomItem
                   key={id}
                   onClick={() => enterRoom(id)}
@@ -162,13 +160,13 @@ function Rooms() {
         <Button
           text="방 ID로 입장"
           size="medium"
-          color="skyBlue"
+          backgroundColor="skyBlue"
           onClick={openEnterModal}
         />
         {enterModalOpen && (
           <Suspense fallback={null}>
             <Portal>
-              <Modal onClose={closeEnterModal} dimmed={true}>
+              <Modal onClose={closeEnterModal}>
                 <EnterRoomModal onClose={closeEnterModal} />
               </Modal>
             </Portal>
@@ -177,13 +175,13 @@ function Rooms() {
         <Button
           text="방 만들기"
           size="medium"
-          color="pink"
+          backgroundColor="pink"
           onClick={openCreateModal}
         />
         {createModalOpen && (
           <Suspense fallback={null}>
             <Portal>
-              <Modal onClose={closeCreateModal} dimmed={true}>
+              <Modal onClose={closeCreateModal}>
                 <CreateRoomModal onClose={closeCreateModal} />
               </Modal>
             </Portal>

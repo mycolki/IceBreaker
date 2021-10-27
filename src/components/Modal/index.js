@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { flexCenterColumn } from '../../styles/share/common';
 
-export default function Modal({ children, dimmed, onClose, background }) {
+function Modal({ children, onClose, dimmed, background }) {
   return (
     <Wrapper>
       <Dimmed data-testid="dimmed" dimmed={dimmed} onClick={onClose} />
@@ -15,6 +16,20 @@ export default function Modal({ children, dimmed, onClose, background }) {
     </Wrapper>
   );
 }
+
+export default Modal;
+
+Modal.propTypes = {
+  children: PropTypes.any.isRequired,
+  onClose: PropTypes.func.isRequired,
+  dimmed: PropTypes.bool,
+  background: PropTypes.string,
+};
+
+Modal.defaultProps = {
+  dimmed: true,
+  background: 'lightPurple',
+};
 
 const Wrapper = styled.div`
   position: absolute;
@@ -49,7 +64,7 @@ const StyledModal = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 25px;
   background-color: ${({ background, theme }) =>
-    background ? theme[background] : `${theme.lightPurple}`};
+    background && theme[background]};
   box-shadow: ${({ theme }) => theme.boxShadow};
 `;
 

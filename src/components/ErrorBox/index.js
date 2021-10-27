@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { ROUTE } from '../../constants/game';
 import { flexCenterColumn } from '../../styles/share/common';
+import { ROUTE } from '../../constants/game';
 
 import Button from '../share/Button';
 
@@ -19,7 +19,7 @@ function ErrorBox() {
         <Button
           text="메뉴로 돌아가기"
           size="large"
-          color="pink"
+          backgroundColor="pink"
           onClick={play}
         />
       </Link>

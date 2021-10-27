@@ -1,95 +1,129 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { shuffle } from 'lodash';
-import { QUIZ, QUIZ_LENGTH, SCORES } from '../constants/game';
+import { sampleSize } from 'lodash';
+import {
+  QUIZ,
+  QUIZ_LENGTH,
+  SCORES,
+  GAME_STATUS,
+  ANSWER_TIME,
+  BREAKING_TIME,
+  INITIAL_ITEMS_COUNTS,
+  ITEM,
+  ATTACK,
+} from '../constants/game';
+import { RESET, BREAK, ANSWER } from '../constants/messages';
 
 const name = QUIZ;
+
 const initialState = {
-  quiz: {},
-  questions: [],
-  currentQuestion: null,
-  isImgLoaded: false,
-  isAnswerTime: false,
-  isTimeOver: false,
+  quizCollection: { byId: {}, allIds: [] },
+  currentQuizIndex: 0,
+  gameStatus: '',
+  isGamePaused: false,
+  remainingTime: 0,
   userInput: '',
+  score: 0,
+  itemsCount: 5,
   message: {
     type: '',
     text: '',
   },
-  score: 0,
-  error: null,
-  hints: 5,
-  currentSecond: 0,
-  isOpenedHint: false,
-  isClosedHint: false,
+  warningMessage: '',
 };
 
 const quizSlice = createSlice({
   name,
   initialState,
   reducers: {
-    saveQuizData(state, action) {
-      state.quiz = action.payload;
-      const allQuestions = Object.values(state.quiz);
-      state.questions = shuffle(allQuestions).slice(0, QUIZ_LENGTH);
+    saveQuizCollection(state, action) {
+      if (action.payload.length === QUIZ_LENGTH) {
+        state.quizCollection.byId = { ...action.payload };
+      } else {
+        state.quizCollection.byId = {
+          ...sampleSize(action.payload, QUIZ_LENGTH),
+        };
+      }
+
+      state.quizCollection.allIds = Array(QUIZ_LENGTH)
+        .fill(null)
+        .map((v, i) => v + i);
     },
     replaceQuestions(state, action) {
-      state.questions = action.payload;
+      state.quizCollection = action.payload;
     },
-    getFirstLevel(state) {
-      state.currentQuestion = state.questions.pop();
-      state.currentQuestion.level = 1;
+    changeGameStatus(state, action) {
+      state.gameStatus = action.payload;
+
+      if (
+        action.payload ===
+        (GAME_STATUS.ICE_BREAKING_TIME || GAME_STATUS.BEFORE_START)
+      ) {
+        state.remainingTime = BREAKING_TIME[state.currentQuizIndex + 1];
+        state.message = BREAK[state.currentQuizIndex + 1];
+      } else if (action.payload === GAME_STATUS.ANSWER_GUESS_TIME) {
+        state.remainingTime = ANSWER_TIME;
+        state.message = ANSWER[state.currentQuizIndex + 1];
+      } else if (action.payload === GAME_STATUS.END) {
+        state.currentQuizIndex = 0;
+        state.message = RESET;
+      }
     },
-    loadImage(state, action) {
-      state.isImgLoaded = action.payload;
+    decreaseTime(state) {
+      state.remainingTime -= 1;
     },
-    showForm(state, action) {
-      state.isAnswerTime = action.payload;
+    pauseGameProgress(state, action) {
+      state.isGamePaused = action.payload;
     },
-    showResult(state, action) {
-      state.isTimeOver = action.payload;
-    },
-    showMessage(state, action) {
+    changeMessage(state, action) {
       const { type, text } = action.payload;
       state.message.type = type;
       state.message.text = text;
     },
-    showAnswerBoxByInput(state, action) {
+    saveUserAnswer(state, action) {
       state.userInput = action.payload;
     },
-    passNextLevel(state) {
-      const currentLevel = state.currentQuestion.level;
-      const nextQuestion = state.questions.pop();
-      nextQuestion.level = currentLevel + 1;
-      state.currentQuestion = nextQuestion;
-    },
     addScore(state) {
-      const currentLevel = state.currentQuestion.level;
-      state.score += SCORES[`Lv${currentLevel}`];
+      state.score += SCORES[state.currentQuizIndex + 1];
     },
-    takeHint(state, action) {
-      if (action.payload === 5) {
-        void (state.hints = 5);
-        return;
+    takeSelectedItem(state, action) {
+      if (action.payload === ITEM.EFFECT.ADD_USER_TIME) {
+        state.remainingTime += 10;
+        state.itemsCount -= 1;
+      } else if (action.payload === ITEM.EFFECT.REDUCE_OPPONENT_TIME) {
+        state.itemsCount -= 2;
       }
-
-      if (action.payload === 1) {
-        state.currentSecond += 10;
+    },
+    receiveAttack(state, action) {
+      if (state.gameStatus === GAME_STATUS.ANSWER_GUESS_TIME) {
+        state.remainingTime =
+          state.remainingTime < 5 ? 0 : state.remainingTime - 5;
+        state.warningMessage = ATTACK[action.payload].message;
       }
-
-      state.hints -= action.payload;
     },
-    stopCount(state, action) {
-      state.isOpenedHint = action.payload;
+    updateWarningMessage(state, action) {
+      if (action.payload === 'RESET') {
+        state.warningMessage = '';
+      } else {
+        state.warningMessage = action.payload;
+      }
     },
-    countAgain(state, action) {
-      state.isClosedHint = action.payload;
+    goToNextStep(state) {
+      state.currentQuizIndex += 1;
+      state.gameStatus = GAME_STATUS.BEFORE_START;
+      state.userInput = '';
+      state.message = RESET;
     },
-    rememberSecond(state, action) {
-      state.currentSecond = action.payload;
+    endGame(state) {
+      state.gameStatus = GAME_STATUS.END;
+      state.userInput = '';
+      state.message = RESET;
     },
-    resetScore(state) {
+    resetQuizForGameOver(state) {
       state.score = 0;
+      state.currentQuizIndex = 0;
+      state.message = RESET;
+      state.itemsCount = INITIAL_ITEMS_COUNTS;
     },
     onError(state, action) {
       state.error = action.payload;
@@ -98,21 +132,20 @@ const quizSlice = createSlice({
 });
 
 export const {
-  saveQuizData,
+  saveQuizCollection,
   replaceQuestions,
-  getFirstLevel,
-  loadImage,
-  showForm,
-  showResult,
-  showMessage,
-  showAnswerBoxByInput,
-  passNextLevel,
+  changeGameStatus,
+  decreaseTime,
+  pauseGameProgress,
+  changeMessage,
+  saveUserAnswer,
   addScore,
-  takeHint,
-  stopCount,
-  countAgain,
-  rememberSecond,
-  resetScore,
+  takeSelectedItem,
+  receiveAttack,
+  updateWarningMessage,
+  goToNextStep,
+  endGame,
+  resetQuizForGameOver,
   onError,
 } = quizSlice.actions;
 

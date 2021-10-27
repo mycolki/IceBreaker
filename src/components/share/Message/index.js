@@ -6,7 +6,7 @@ const STYLES = {
   game: css`
     background-color: ${theme.purple};
   `,
-  hint: css`
+  item: css`
     background-color: ${theme.deepGray};
   `,
   battle: css`
@@ -34,8 +34,8 @@ const STYLES = {
 };
 
 function Message({ height }) {
-  const type = useSelector((state) => state.quiz?.message?.type);
-  const text = useSelector((state) => state.quiz?.message?.text);
+  const type = useSelector((state) => state.quiz.message.type);
+  const text = useSelector((state) => state.quiz.message.text);
   const messageStyle = type ? STYLES[type] : null;
 
   return (

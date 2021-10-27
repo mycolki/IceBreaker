@@ -2,13 +2,21 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useSound from 'use-sound';
+import { sampleSize } from 'lodash';
 
-import { getDatabase, ref, set } from '@firebase/database';
-import { saveRoomId, saveName } from '../../../store/battleSlice';
-import { showMessage } from '../../../store/quizSlice';
+import { getDatabase, ref, set, get, child } from '@firebase/database';
+import { changeMessage, onError } from '../../../store/quizSlice';
+import { saveRoomId, saveUserName } from '../../../store/battleSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
-import { MODAL_TITLE, ROOMS, ROUTE } from '../../../constants/game';
+import {
+  MODAL_TITLE,
+  ROOMS,
+  ROUTE,
+  QUIZ,
+  QUIZ_LENGTH,
+} from '../../../constants/game';
 import { MAKE_ROOM, RESET } from '../../../constants/messages';
+import { ERROR } from '../../../constants/error';
 
 import Message from '../../share/Message';
 import Button from '../../share/Button';
@@ -23,49 +31,55 @@ function CreateRoomModal({ onClose }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const inputRef = useRef();
-  const roomId = useSelector((state) => state.battle?.roomId);
-  const questions = useSelector((state) => state.quiz?.questions);
-  const name = useSelector((state) => state.battle?.name);
+  const roomId = useSelector((state) => state.battle.roomId);
+  const userName = useSelector((state) => state.battle.userName);
   const [title, setTitle] = useState(MODAL_TITLE.INPUT_HOST_NAME);
-  const [input, setInput] = useState('');
+  const [userNameInput, setUserNameInput] = useState('');
   const [play] = useSound('/audio/click.mp3');
 
   useEffect(() => {
     return () => {
       dispatch(saveRoomId(''));
-      dispatch(showMessage(RESET));
+      dispatch(changeMessage(RESET));
     };
   }, [dispatch]);
 
-  const enterRoom = (ev) => {
+  const enterRoom = async (userName, roomId, ev) => {
     ev.preventDefault();
-
-    if (!name) return;
     play();
 
-    const roomId = input;
-    set(ref(getDatabase(), `${ROOMS}/${roomId}`), {
-      questions,
-      active: true,
-      isAllReady: false,
-      isPlaying: true,
-      breakers: [
-        {
-          name,
-          isReady: false,
-          level: 1,
-          score: 0,
-          isWinner: false,
-        },
-        {
-          name: '',
-          isReady: false,
-          level: 1,
-          score: 0,
-          isWinner: false,
-        },
-      ],
-    });
+    try {
+      const totalQuizCollection = (
+        await get(child(ref(getDatabase()), QUIZ))
+      ).val();
+      const newQuizCollection = sampleSize(totalQuizCollection, QUIZ_LENGTH);
+
+      set(ref(getDatabase(), `${ROOMS}/${roomId}`), {
+        quizCollection: newQuizCollection,
+        active: true,
+        isAllReady: false,
+        onBattle: true,
+        breakers: [
+          {
+            name: userName,
+            isReady: false,
+            level: 1,
+            score: 0,
+            isWinner: false,
+          },
+          {
+            name: '',
+            isReady: false,
+            level: 1,
+            score: 0,
+            isWinner: false,
+          },
+        ],
+      });
+    } catch (err) {
+      dispatch(onError(ERROR.LOAD_DATA));
+      history.push(ROUTE.ERROR);
+    }
 
     history.push(`${ROUTE.ROOM}/${roomId}`);
   };
@@ -74,30 +88,31 @@ function CreateRoomModal({ onClose }) {
     play();
     ev.preventDefault();
 
-    if (input.length === 0) {
-      setInput('');
-      return dispatch(showMessage(MAKE_ROOM.FILL_BLANK));
+    if (userNameInput.length === 0) {
+      setUserNameInput('');
+      return dispatch(changeMessage(MAKE_ROOM.FILL_BLANK));
     }
 
     const roomId = Date.now();
 
-    dispatch(saveName(input));
+    dispatch(saveUserName(userNameInput));
     window.sessionStorage.setItem(
       'userName',
-      JSON.stringify({ userName: input }),
+      JSON.stringify({ userName: userNameInput }),
     );
 
-    setInput(roomId);
+    setUserNameInput(roomId);
     copyToClipboard(roomId);
 
     dispatch(saveRoomId(roomId));
-    dispatch(showMessage(MAKE_ROOM.URL_COPIED));
+    dispatch(changeMessage(MAKE_ROOM.URL_COPIED));
 
     inputRef.current.setAttribute('readOnly', true);
     setTitle(MODAL_TITLE.PASS_ROOM_ID);
   };
 
-  const handleInput = (ev) => setInput(ev.target.value.trim());
+  const handleInputByUserName = (ev) =>
+    setUserNameInput(ev.target.value.trim());
 
   return (
     <Container>
@@ -105,12 +120,14 @@ function CreateRoomModal({ onClose }) {
         <Message height="10" />
       </MessageArea>
       <Title className="title">{title}</Title>
-      <Form onSubmit={roomId ? enterRoom : makeRoom}>
+      <Form
+        onSubmit={roomId ? enterRoom.bind(null, userName, roomId) : makeRoom}
+      >
         <input
           className="input"
           type="text"
-          value={input}
-          onChange={handleInput}
+          value={userNameInput}
+          onChange={handleInputByUserName}
           ref={inputRef}
           maxLength={roomId ? null : '7'}
           autoFocus
@@ -119,14 +136,14 @@ function CreateRoomModal({ onClose }) {
           <Button
             text={roomId ? '방 삭제하기' : '뒤로 가기'}
             size="small"
-            color="purple"
+            backgroundColor="purple"
             onClick={onClose}
           />
           <Button
             text={roomId ? '입장하기' : '방 만들기'}
             type="submit"
             size="small"
-            color="purple"
+            backgroundColor="purple"
             onClick={play}
           />
         </div>

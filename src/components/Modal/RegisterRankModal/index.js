@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import useSound from 'use-sound';
-
 import { getDatabase, ref, get, set, child } from '@firebase/database';
-import { onError, showMessage } from '../../../store/quizSlice';
+import useSound from 'use-sound';
+import PropTypes from 'prop-types';
+
+import { onError, changeMessage } from '../../../store/quizSlice';
 import {
   Container,
   MessageArea,
@@ -21,31 +22,28 @@ import Button from '../../share/Button';
 function RegisterRankModal({ onClose, hasRank }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const score = useSelector((state) => state.quiz?.score);
+  const score = useSelector((state) => state.quiz.score);
   const [name, setName] = useState('');
   const [play] = useSound('/audio/click.mp3');
 
-  const close = () => {
-    setName('');
-    onClose();
-  };
+  const handleInput = (ev) => setName(ev.target.value.trim());
 
   const submitName = async (ev) => {
     ev.preventDefault();
-
     play();
+
     if (!name) {
-      dispatch(showMessage(GAME.FILL_BLANK));
+      dispatch(changeMessage(GAME.FILL_BLANK));
       return setName('');
     }
 
     try {
-      const snapshot = await get(
-        child(ref(getDatabase()), `${RANKERS}/${name}`),
-      );
+      const rankedName = (
+        await get(child(ref(getDatabase()), `${RANKERS}/${name}`))
+      ).val();
 
-      if (snapshot.val() !== null) {
-        dispatch(showMessage(GAME.EXIST_RANK));
+      if (rankedName !== null) {
+        dispatch(changeMessage(GAME.EXIST_RANK));
         return setName('');
       }
     } catch (err) {
@@ -59,10 +57,8 @@ function RegisterRankModal({ onClose, hasRank }) {
     });
 
     hasRank(true);
-    close();
+    onClose();
   };
-
-  const handleInput = (ev) => setName(ev.target.value.trim());
 
   return (
     <Container>
@@ -80,8 +76,18 @@ function RegisterRankModal({ onClose, hasRank }) {
           autoFocus
         />
         <div className="button-area">
-          <Button text="뒤로가기" size="small" color="purple" onClick={close} />
-          <Button text="등록하기" type="submit" size="small" color="purple" />
+          <Button
+            text="뒤로가기"
+            size="small"
+            backgroundColor="lightGray"
+            onClick={onClose}
+          />
+          <Button
+            text="등록하기"
+            type="submit"
+            size="small"
+            backgroundColor="red"
+          />
         </div>
       </Form>
     </Container>
@@ -89,3 +95,8 @@ function RegisterRankModal({ onClose, hasRank }) {
 }
 
 export default RegisterRankModal;
+
+RegisterRankModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  hasRank: PropTypes.func.isRequired,
+};

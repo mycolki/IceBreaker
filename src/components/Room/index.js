@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
 import { cloneDeep, filter } from 'lodash';
 import { GiBearFace } from 'react-icons/gi';
+import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { showMessage, onError } from '../../store/quizSlice';
-import { saveRoomData, saveName } from '../../store/battleSlice';
+import { changeMessage, onError } from '../../store/quizSlice';
+import { saveRoomData, saveUserName } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
 
 import iceBear from '../../asset/iceBear.png';
@@ -27,8 +26,8 @@ function Room() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { roomId } = useParams();
-  const rooms = useSelector((state) => state.battle?.rooms);
-  const name = useSelector((state) => state.battle?.name);
+  const rooms = useSelector((state) => state.battle.rooms);
+  const userName = useSelector((state) => state.battle.userName);
   const [isReady, setIsReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
@@ -50,24 +49,24 @@ function Room() {
       }
     });
 
-    dispatch(showMessage(BATTLE.PLEASE_READY));
+    dispatch(changeMessage(BATTLE.PLEASE_READY));
 
     try {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
       );
 
-      dispatch(saveName(userName));
+      dispatch(saveUserName(userName));
     } catch (err) {
       dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
 
     return () => {
-      dispatch(showMessage(RESET));
+      dispatch(changeMessage(RESET));
       cleanUp();
     };
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   useEffect(() => {
     if (!rooms) return;
@@ -81,7 +80,7 @@ function Room() {
     }
 
     for (const breaker of rooms[roomId].breakers) {
-      if (breaker.name === name && breaker.isReady) {
+      if (breaker.name === userName && breaker.isReady) {
         return setIsReady(true);
       }
     }
@@ -93,7 +92,7 @@ function Room() {
     if (!rooms) return;
 
     if (rooms[roomId].isAllReady) {
-      dispatch(showMessage(BATTLE.START));
+      dispatch(changeMessage(BATTLE.START));
       timer = setTimeout(() => {
         history.push(`${ROUTE.READY}/${roomId}`);
       }, 3000);
@@ -106,7 +105,7 @@ function Room() {
     setIsPlaying(true);
 
     return () => audio.pause();
-  }, []);
+  }, [dispatch, history]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -127,14 +126,14 @@ function Room() {
 
     const clone = cloneDeep([...rooms[roomId].breakers]);
 
-    if (clone[0].name === name) {
+    if (clone[0].name === userName) {
       [clone[0], clone[1]] = [clone[1], clone[0]];
     }
 
     const breakers = clone.map((breaker) => {
       breaker.isReady = false;
 
-      if (breaker.name === name) {
+      if (breaker.name === userName) {
         breaker.name = '';
       }
 
@@ -154,7 +153,7 @@ function Room() {
     play();
     const clone = cloneDeep([...rooms[roomId].breakers]);
     const breakers = clone.map((breaker) => {
-      if (breaker.name === name) {
+      if (breaker.name === userName) {
         breaker.isReady = !breaker.isReady;
         setIsReady(false);
       }
@@ -193,11 +192,11 @@ function Room() {
                   <Breaker
                     key={breaker.name + i}
                     isReady={breaker.isReady}
-                    isUser={breaker.name === name}
+                    isUser={breaker.name === userName}
                   >
                     <span className="name">
                       {breaker.name ? breaker.name : ''}
-                      {breaker.name === name && (
+                      {breaker.name === userName && (
                         <GiBearFace className="user-icon" />
                       )}
                     </span>
@@ -217,14 +216,14 @@ function Room() {
         <Button
           text="READY"
           size="medium"
-          color="purple"
+          backgroundColor="purple"
           disabled={rooms && rooms[roomId].isAllReady}
           onClick={readyBattle}
         />
         <Button
           text="나가기"
           size="medium"
-          color="pink"
+          backgroundColor="pink"
           disabled={rooms && (isReady || rooms[roomId].isAllReady)}
           onClick={exitRoom}
         />

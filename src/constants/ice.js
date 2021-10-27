@@ -13,8 +13,8 @@ export const CUBE_ROWS = [
 ];
 
 export const UNBREAKABLE_ICE = {
-  Lv4: 10,
-  Lv5: 10,
-  Lv6: 15,
-  Lv7: 15,
+  4: 10,
+  5: 10,
+  6: 15,
+  7: 15,
 };

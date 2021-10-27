@@ -2,7 +2,9 @@ export const QUIZ = 'quiz';
 export const ROOMS = 'rooms';
 export const RANKERS = 'rankers';
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 5;
+export const QUIZ_LENGTH = 2;
+export const INITIAL_OPPONENT_LEVEL = 1;
+export const INITIAL_ITEMS_COUNTS = 5;
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
@@ -16,31 +18,53 @@ export const ROUTE = {
   BATTLE_OVER_ID: '/battleover/:roomId',
   BATTLE_OVER: '/battleover',
   RANKING: '/ranking',
+  GAME_RULES: '/gamerules',
   ERROR: '/error',
 };
 
-export const SCORES = {
-  Lv1: 20,
-  Lv2: 30,
-  Lv3: 40,
-  Lv4: 50,
-  Lv5: 60,
-  Lv6: 70,
-  Lv7: 230,
+export const GAME_STATUS = {
+  BEFORE_START: 'BEFORE START',
+  ICE_BREAKING_TIME: 'ICE BREAKING TIME',
+  ANSWER_GUESS_TIME: 'ANSWER GUESS TIME',
+  RESULT_DISPLAY_TIME: 'RESULT TIME',
+  END: 'END',
 };
 
-export const TIME_LIMIT_ANSWER = 15;
-export const SECONDS_PER_LEVEL = {
-  Lv1: 15,
-  Lv2: 10,
-  Lv3: 10,
-  Lv4: 10,
-  Lv5: 7,
-  Lv6: 7,
-  Lv7: 5,
+export const ITEM = {
+  EFFECT: {
+    ADD_USER_TIME: 'ADD USER TIME',
+    REDUCE_OPPONENT_TIME: 'REDUCE OPPONENT TIME',
+  },
+};
+
+export const ATTACK = {
+  REDUCE: {
+    message: '😱 -5초 공격을 받았습니다',
+  },
 };
 
 export const MODAL_TITLE = {
   INPUT_HOST_NAME: '방에 참가할 닉네임을 입력해주세요',
   PASS_ROOM_ID: '친구에게 방ID를 전달해주세요😀',
+};
+
+export const SCORES = {
+  1: 20,
+  2: 30,
+  3: 40,
+  4: 50,
+  5: 60,
+  6: 70,
+  7: 230,
+};
+
+export const ANSWER_TIME = 20;
+export const BREAKING_TIME = {
+  1: 5,
+  2: 10,
+  3: 10,
+  4: 10,
+  5: 7,
+  6: 7,
+  7: 5,
 };

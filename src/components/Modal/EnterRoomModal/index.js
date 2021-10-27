@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { getDatabase, ref, get, child, update } from 'firebase/database';
-import { showMessage, onError } from '../../../store/quizSlice';
+import { changeMessage, onError } from '../../../store/quizSlice';
 import { saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
 import { ROUTE, ROOMS } from '../../../constants/game';
@@ -21,21 +21,25 @@ import {
 function EnterRoomModal({ onClose }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const rooms = useSelector((state) => state.battle?.rooms);
-  const roomId = useSelector((state) => state.battle?.roomId);
-  const [input, setInput] = useState('');
-  const [name, setName] = useState('');
+  const rooms = useSelector((state) => state.battle.rooms);
+  const roomId = useSelector((state) => state.battle.roomId);
+  const [sharedRoomId, setSharedRoomId] = useState('');
+  const [userName, setUserNameInput] = useState('');
 
-  useEffect(() => {
-    return () => dispatch(showMessage(RESET));
-  }, [dispatch, history]);
+  useEffect(() => () => dispatch(changeMessage(RESET)), [dispatch]);
+
+  const handleInputByUserName = (ev) =>
+    setUserNameInput(ev.target.value.trim());
+
+  const handleInputBySharedRoomId = (ev) =>
+    setSharedRoomId(ev.target.value.trim());
 
   const enterRoom = async (ev) => {
     ev.preventDefault();
 
-    if (name.length === 0) {
-      setName('');
-      return dispatch(showMessage(ENTER_ROOM.FILL_NAME));
+    if (userName.length === 0) {
+      setUserNameInput('');
+      return dispatch(changeMessage(ENTER_ROOM.FILL_NAME));
     }
 
     try {
@@ -43,22 +47,25 @@ function EnterRoomModal({ onClose }) {
         child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers/0/name`),
       );
 
-      if (snapshot.val() === name) {
-        setName('');
-        return dispatch(showMessage(ENTER_ROOM.EXIST_NAME));
+      if (snapshot.val() === userName) {
+        setUserNameInput('');
+        return dispatch(changeMessage(ENTER_ROOM.EXIST_NAME));
       }
     } catch (err) {
       dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
 
-    window.sessionStorage.setItem(
-      'userName',
-      JSON.stringify({ userName: name }),
-    );
+    window.sessionStorage.setItem('userName', JSON.stringify({ userName }));
 
     update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers`), {
-      1: { name, isReady: false, level: 1, score: 0, isWinner: false },
+      1: {
+        name: userName,
+        isReady: false,
+        level: 1,
+        score: 0,
+        isWinner: false,
+      },
     });
 
     history.push(`${ROUTE.ROOM}/${roomId}`);
@@ -67,21 +74,18 @@ function EnterRoomModal({ onClose }) {
   const checkRoomId = (ev) => {
     ev.preventDefault();
 
-    if (input === 0) {
-      return dispatch(showMessage(ENTER_ROOM.FILL_BLANK));
+    if (sharedRoomId.length === 0) {
+      return dispatch(changeMessage(ENTER_ROOM.FILL_BLANK));
     }
 
-    if (!rooms[input]) {
-      setInput('');
-      return dispatch(showMessage(ENTER_ROOM.INVALID_ID));
+    if (!rooms[sharedRoomId]) {
+      setSharedRoomId('');
+      return dispatch(changeMessage(ENTER_ROOM.INVALID_ID));
     }
 
-    dispatch(saveRoomId(input));
-    setInput('');
+    dispatch(saveRoomId(sharedRoomId));
+    setSharedRoomId('');
   };
-
-  const handleNameInput = (ev) => setName(ev.target.value.trim());
-  const handleRoomIdInput = (ev) => setInput(ev.target.value.trim());
 
   return (
     <Container>
@@ -97,9 +101,9 @@ function EnterRoomModal({ onClose }) {
         <input
           className="input"
           type={roomId ? 'text' : 'number'}
-          value={roomId ? name : input}
+          value={roomId ? userName : sharedRoomId}
           pattern={roomId ? null : '[0-9]*'}
-          onChange={roomId ? handleNameInput : handleRoomIdInput}
+          onChange={roomId ? handleInputByUserName : handleInputBySharedRoomId}
           maxLength={roomId ? '7' : null}
           autoFocus
         />
@@ -107,14 +111,14 @@ function EnterRoomModal({ onClose }) {
           <Button
             text="뒤로가기"
             size="small"
-            color="purple"
+            backgroundColor="purple"
             onClick={onClose}
           />
           <Button
             text={roomId ? '입장하기' : 'ID확인'}
             type="submit"
             size="small"
-            color="purple"
+            backgroundColor="purple"
           />
         </div>
       </Form>

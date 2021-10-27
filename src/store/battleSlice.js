@@ -4,12 +4,10 @@ const name = 'battle';
 const initialState = {
   rooms: null,
   roomId: '',
-  breakers: null,
-  name: '',
-  id: '',
+  breakers: [],
+  userName: '',
+  id: null,
   opponentId: null,
-  opponentLevel: 1,
-  isAttacked: false,
 };
 
 const battleSlice = createSlice({
@@ -25,23 +23,20 @@ const battleSlice = createSlice({
     saveBreakers(state, action) {
       state.breakers = action.payload;
     },
-    saveName(state, action) {
-      state.name = action.payload;
+    saveUserName(state, action) {
+      state.userName = action.payload;
     },
     saveId(state, action) {
       const { id, opponentId } = action.payload;
       state.opponentId = opponentId;
       state.id = id;
     },
-    saveOpponentLevel(state, action) {
-      state.opponentLevel = action.payload;
-    },
-    receiveAttack(state, action) {
-      if (action.payload === true) {
-        state.currentSecond -= 5;
-      }
-
-      state.isAttacked = action.payload;
+    resetBattleForGameOver(state) {
+      state.breakers = [];
+      state.userName = '';
+      state.id = null;
+      state.opponentId = null;
+      state.opponentLevel = null;
     },
   },
 });
@@ -50,10 +45,11 @@ export const {
   saveRoomData,
   saveRoomId,
   saveBreakers,
-  saveName,
+  saveUserName,
   saveId,
   saveOpponentLevel,
   receiveAttack,
+  resetBattleForGameOver,
 } = battleSlice.actions;
 
 export default battleSlice.reducer;

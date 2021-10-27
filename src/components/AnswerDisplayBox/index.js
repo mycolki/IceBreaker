@@ -4,8 +4,12 @@ import styled from 'styled-components';
 import { flexCenter } from '../../styles/share/common';
 
 function AnswerDisplayBox() {
-  const answer = useSelector((state) => state.quiz?.currentQuestion?.answer);
+  const quizCollection = useSelector((state) => state.quiz?.quizCollection);
+  const currentQuizIndex = useSelector((state) => state.quiz?.currentQuizIndex);
+  const currentQuizId = quizCollection.allIds[currentQuizIndex];
+  const currentQuiz = quizCollection.byId[currentQuizId];
   const userInput = useSelector((state) => state.quiz?.userInput);
+  const { answer } = currentQuiz;
 
   return (
     <Wrapper>
@@ -28,7 +32,6 @@ export default AnswerDisplayBox;
 
 const Wrapper = styled.div`
   ${flexCenter}
-
   height: 11%;
 
   .answer {

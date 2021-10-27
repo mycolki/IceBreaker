@@ -57,15 +57,15 @@ export const rightAndLeft = keyframes`
 `;
 
 export const emergency = keyframes`
-  0% {
-    color: ${({ theme }) => theme.deepPink};
+ 0% {
+    transform: rotate(-10deg) scale(1);
   }
 
   50% {
-    color: ${({ theme }) => theme.white};
+    transform: scale(1.3);
   }
 
   100% {
-    color: ${({ theme }) => theme.deepGray};
+    transform: rotate(10deg) scale(1);
   }
 `;

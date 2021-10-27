@@ -1,54 +1,41 @@
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
-
 import { getDatabase, ref, update } from 'firebase/database';
-import { takeHint, showMessage } from '../../../store/quizSlice';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
+import { takeSelectedItem, changeMessage } from '../../../store/quizSlice';
 import hintCokeWeb from '../../../asset/hintCoke.webp';
 import hintCoke from '../../../asset/hintCoke.png';
 import { rightAndLeft } from '../../../styles/share/animation';
 import { flexCenter } from '../../../styles/share/common';
-import { ROOMS } from '../../../constants/game';
-import { HINT, RESET } from '../../../constants/messages';
+import { ROOMS, ITEM } from '../../../constants/game';
+import { USE_ITEM } from '../../../constants/messages';
 
 import ImgWithFallback from '../../ImgWithFallback';
 import Message from '../../share/Message';
 
-function HintModal({ onClose }) {
+function ItemModal({ onClose }) {
   const { roomId } = useParams();
   const dispatch = useDispatch();
-  const opponentId = useSelector((state) => state.battle?.opponentId);
-  const hints = useSelector((state) => state.quiz?.hints);
+  const opponentId = useSelector((state) => state.battle.opponentId);
+  const itemsCount = useSelector((state) => state.quiz.itemsCount);
 
-  useEffect(() => {
-    dispatch(showMessage(HINT.GUIDE));
+  const useItem2Coke = () => {
+    if (itemsCount < 2) return dispatch(changeMessage(USE_ITEM.NOPE));
 
-    return () => dispatch(showMessage(RESET));
-  }, []);
-
-  const attackOpponent = () => {
     update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}`), {
-      isAttacked: true,
+      attack: 'REDUCE',
     });
-  };
 
-  const useHint2Coke = () => {
-    if (hints < 2) {
-      return dispatch(showMessage(HINT.NOPE));
-    }
-
-    attackOpponent();
-    dispatch(takeHint(2));
+    dispatch(takeSelectedItem(ITEM.EFFECT.REDUCE_OPPONENT_TIME));
     onClose();
   };
 
-  const useHint1Coke = () => {
-    if (hints === 0) {
-      return dispatch(showMessage(HINT.NOPE));
-    }
+  const useItem1Coke = () => {
+    if (itemsCount === 0) return dispatch(changeMessage(USE_ITEM.NOPE));
 
-    dispatch(takeHint(1));
+    dispatch(takeSelectedItem(ITEM.EFFECT.ADD_USER_TIME));
     onClose();
   };
 
@@ -57,7 +44,7 @@ function HintModal({ onClose }) {
       <MessageArea>
         <Message height="15" />
       </MessageArea>
-      <Hint>
+      <Item>
         <div className="cokes">
           <ImgWithFallback
             src={hintCokeWeb}
@@ -65,12 +52,12 @@ function HintModal({ onClose }) {
             alt="coke"
             width="40px"
             height="75px"
-            onClick={useHint1Coke}
+            onClick={useItem1Coke}
           />
         </div>
         <span className="hint-comment">정답 맞추는 시간 +10초</span>
-      </Hint>
-      <Hint>
+      </Item>
+      <Item>
         <div className="cokes">
           <ImgWithFallback
             src={hintCokeWeb}
@@ -78,7 +65,7 @@ function HintModal({ onClose }) {
             alt="coke"
             width="40px"
             height="75px"
-            onClick={useHint2Coke}
+            onClick={useItem2Coke}
           />
           <ImgWithFallback
             src={hintCokeWeb}
@@ -86,16 +73,20 @@ function HintModal({ onClose }) {
             alt="coke"
             width="40px"
             height="75px"
-            onClick={useHint2Coke}
+            onClick={useItem2Coke}
           />
         </div>
-        <span className="hint-comment">상대브레이커 시간 -5초</span>
-      </Hint>
+        <span className="item-comment">상대브레이커 시간 -5초</span>
+      </Item>
     </Container>
   );
 }
 
-export default HintModal;
+export default ItemModal;
+
+ItemModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
 
 const Container = styled.div`
   height: 100%;
@@ -122,7 +113,7 @@ const MessageArea = styled.div`
   }
 `;
 
-const Hint = styled.div`
+const Item = styled.div`
   ${flexCenter}
   height: 37%;
   padding: 0 15px;
@@ -139,7 +130,7 @@ const Hint = styled.div`
     }
   }
 
-  .hint-comment {
+  .item-comment {
     width: 60%;
     font-size: 18px;
     color: ${({ theme }) => theme.deepGray};

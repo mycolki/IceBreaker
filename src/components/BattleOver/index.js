@@ -1,21 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import styled from 'styled-components';
+import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { sortBy, cloneDeep } from 'lodash';
+import { GiBearFace } from 'react-icons/gi';
+import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { getDatabase, ref, set, get, child, update } from 'firebase/database';
-import { GiBearFace } from 'react-icons/gi';
-
-import { onError, resetScore, showMessage } from '../../store/quizSlice';
-import { saveBreakers, saveName } from '../../store/battleSlice';
+import {
+  changeMessage,
+  resetQuizForGameOver,
+  onError,
+} from '../../store/quizSlice';
+import {
+  saveBreakers,
+  saveUserName,
+  resetBattleForGameOver,
+} from '../../store/battleSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 import { detectWebp } from '../../utils/detectWebp';
 
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
-import { GAME, RESET } from '../../constants/messages';
+import { GAME } from '../../constants/messages';
 import { ERROR } from '../../constants/error';
 
 import Button from '../share/Button';
@@ -26,48 +33,49 @@ function BattleOver() {
   const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const breakers = useSelector((state) => state.battle?.breakers);
-  const name = useSelector((state) => state.battle?.name);
+  const breakers = useSelector((state) => state.battle.breakers);
+  const userName = useSelector((state) => state.battle.userName);
   const [isWinner, setIsWinner] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const [isPlaying, setIsPlaying] = useState(false);
-
   const audio =
     typeof Audio !== 'undefined' &&
     new Audio(isWinner ? '/audio/won.mp3' : '/audio/lost.mp3');
+
+  useEffect(() => {
+    return () => {
+      audio.pause();
+      window.sessionStorage.removeItem('userName');
+      dispatch(resetQuizForGameOver());
+      dispatch(resetBattleForGameOver());
+    };
+  }, []);
 
   useEffect(() => {
     try {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
       );
-      dispatch(saveName(userName));
+      dispatch(saveUserName(userName));
     } catch (err) {
       dispatch(onError(ERROR.LOAD_DATA));
       history.push(ROUTE.ERROR);
     }
-
-    return () => {
-      window.sessionStorage.removeItem('userName');
-      dispatch(resetScore());
-      dispatch(saveName(''));
-    };
-  }, [dispatch]);
+  }, [dispatch, history]);
 
   useEffect(() => {
     const getBreakers = async () => {
       try {
-        const snapshot = await get(
-          child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers`),
-        );
+        const finalBreakers = (
+          await get(child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers`))
+        ).val();
 
-        const sorted = sortBy(cloneDeep(snapshot.val()), 'score');
+        const sorted = sortBy(cloneDeep(finalBreakers, 'score'));
 
         if (sorted[0].score === sorted[1].score) {
           setIsDraw(true);
-        } else if (sorted[1].name === name) {
+        } else if (sorted[1].name === userName) {
           setIsWinner(true);
           sorted[1].isWinner = true;
         }
@@ -85,29 +93,16 @@ function BattleOver() {
     };
 
     getBreakers();
-
-    return () => {
-      dispatch(saveBreakers(null));
-      dispatch(showMessage(RESET));
-    };
-  }, [dispatch, roomId, name]);
+  }, [dispatch, roomId, userName]);
 
   useEffect(() => {
-    if (loading) setIsPlaying(true);
-
-    return () => audio.pause();
+    if (loading) audio.play();
   }, [loading]);
-
-  useEffect(() => {
-    if (isPlaying) {
-      audio.play();
-    }
-  }, [isPlaying]);
 
   const shareGameURL = () => {
     play();
-    copyToClipboard('https://icebreaker.colki.me');
-    dispatch(showMessage(GAME.SHARE));
+    copyToClipboard(process.env.REACT_APP_ICE_BREAKER_URL);
+    dispatch(changeMessage(GAME.SHARE));
   };
 
   const goToMenu = () => {
@@ -135,14 +130,16 @@ function BattleOver() {
       </Result>
       <Scores>
         <div className="vs">vs</div>
-        {breakers
+        {breakers.length !== 0
           ? breakers.map((breaker, i) => (
               <ScoreBox
                 key={breaker.name + i}
                 isWinner={breaker.isWinner}
-                isUser={breaker.name === name}
+                isUser={breaker.name === userName}
               >
-                {breaker.name === name && <GiBearFace className="user-icon" />}
+                {breaker.name === userName && (
+                  <GiBearFace className="user-icon" />
+                )}
                 {loading ? (
                   <>
                     <div className="score">{breaker.score}</div>
@@ -161,7 +158,7 @@ function BattleOver() {
           <Button
             text="공유하기"
             size="large"
-            color="pink"
+            backgroundColor="pink"
             onClick={shareGameURL}
           />
         </li>
@@ -170,7 +167,7 @@ function BattleOver() {
             <Button
               text="처음으로"
               size="large"
-              color="skyBlue"
+              backgroundColor="skyBlue"
               onClick={goToMenu}
             />
           </Link>

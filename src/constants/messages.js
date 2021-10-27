@@ -1,3 +1,8 @@
+export const RESET = {
+  type: '',
+  text: '',
+};
+
 export const GAME = {
   SHARE: {
     type: 'game',
@@ -13,20 +18,15 @@ export const GAME = {
   },
 };
 
-export const HINT = {
+export const USE_ITEM = {
   GUIDE: {
-    type: 'hint',
-    text: '원하는 힌트의 콜라를 눌러주세요',
+    type: 'item',
+    text: '원하는 콜라아이템을 눌러주세요',
   },
   NOPE: {
-    type: 'hint',
-    text: '콜라가 부족합니다',
+    type: 'item',
+    text: '콜라아이템이 부족합니다',
   },
-};
-
-export const RESET = {
-  type: '',
-  text: '',
 };
 
 export const BATTLE = {
@@ -99,63 +99,63 @@ export const VALIDATION_ANSWER = {
 };
 
 export const BREAK = {
-  Lv1: {
+  1: {
     type: 'break',
     text: '시간 내에 최대한 많은 얼음을 깨주세요!',
   },
-  Lv2: {
+  2: {
     type: 'break',
-    text: '자 얼음을 깰 시간이예요!',
+    text: '시간 내에 최대한 많은 얼음을 깨주세요!',
   },
-  Lv3: {
+  3: {
     type: 'break',
     text: '이번엔 한 번에 깨기 어려울 거에요',
   },
-  Lv4: {
+  4: {
     type: 'break',
     text: '열번 찍어도 안 깨지는 얼음이 있다?',
   },
-  Lv5: {
+  5: {
     type: 'break',
-    text: '시간 내에 최대한 많은 얼음을 깨주세요!',
+    text: '조심하세요! 여러 얼음들이 섞여 있어요',
   },
-  Lv6: {
+  6: {
     type: 'break',
-    text: '시간 내에 최대한 많은 얼음을 깨주세요!',
+    text: '얼음 깨기에 시간이 부족할 수도 있어요',
   },
-  Lv7: {
+  7: {
     type: 'break',
     text: '이번 얼음만 깨면 아이스브레이커가 될 수 있어요!',
   },
 };
 
 export const ANSWER = {
-  Lv1: {
+  1: {
     type: 'answer',
     text: '⏰ 제한 시간 내에 정답을 맞춰주세요 ⏰ ',
   },
-  Lv2: {
+  2: {
     type: 'answer',
     text: '⏰ 제한 시간 내에 정답을 맞춰주세요 ⏰ ',
   },
-  Lv3: {
+  3: {
     type: 'answer',
-    text: '⏰ 제한 시간 내에 정답을 맞춰주세요 ⏰ ',
+    text: '🥤 어렵다면 아이템를 사용해보세요 🥤 ',
   },
-  Lv4: {
+  4: {
     type: 'answer',
-    text: '🥤 어렵다면 힌트를 사용해보세요 🥤',
+    text: '🥤 상대방의 정답시간을 줄이는 아이템도 있어요  🥤',
   },
-  Lv5: {
+  5: {
     type: 'answer',
-    text: '🥤 어렵다면 힌트를 사용해보세요 🥤',
+    text: '🧊 깰수록 브레이킹 실력이 늘어요! 🔨',
   },
-  Lv6: {
+  6: {
     type: 'answer',
-    text: '🥤 어렵다면 힌트를 사용해보세요 🥤',
+    text: '🧊 깰수록 브레이킹 실력이 늘어요! 🔨',
   },
-  Lv7: {
+  7: {
     type: 'answer',
-    text: '⏰ 마지막 문제! 제한 시간 내에 정답을 맞춰주세요 ⏰',
+    text: '🥤 정답시간 늘이기 아이템를 사용해보세요 🥤 ',
   },
 };
