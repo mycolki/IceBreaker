@@ -22,6 +22,7 @@ function ItemModal({ onClose }) {
   const itemsCount = useSelector((state) => state.quiz.itemsCount);
 
   const useItem2Coke = () => {
+    if (roomId) return dispatch(changeMessage(USE_ITEM.ONLY_BATTLE));
     if (itemsCount < 2) return dispatch(changeMessage(USE_ITEM.NOPE));
 
     update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}`), {

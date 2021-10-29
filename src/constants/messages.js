@@ -27,6 +27,10 @@ export const USE_ITEM = {
     type: 'item',
     text: '콜라아이템이 부족합니다',
   },
+  ONLY_BATTLE: {
+    type: 'item',
+    text: '같이 얼음깨기 모드에서만 사용 가능합니다',
+  },
 };
 
 export const BATTLE = {

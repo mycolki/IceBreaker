@@ -53,7 +53,7 @@ function Rooms() {
       dispatch(saveRoomData(rooms));
       setLoading(true);
     });
-
+    console.log(cleanUp);
     return () => {
       dispatch(changeMessage(RESET));
       dispatch(saveRoomId(''));
@@ -308,3 +308,11 @@ const RoomFooter = styled.div`
     }
   }
 `;
+useEffect(() => {
+  if (!roomId) dispatch(getFirstLevel());
+
+  onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+    //do something
+    dispatch(getFirstLevel());
+  });
+}, [dispatch, roomId]);
