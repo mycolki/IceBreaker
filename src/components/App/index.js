@@ -18,6 +18,8 @@ const GameRules = lazy(() => import('../GameRules'));
 const ErrorBox = lazy(() => import('../ErrorBox'));
 
 function App() {
+  // console.log(Rooms);
+  console.log(Menu);
   useEffect(() => {
     window.Modernizr.on('webp', function (result) {
       if (result) {

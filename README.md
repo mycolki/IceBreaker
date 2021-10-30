@@ -1,16 +1,22 @@
-# <span style="color:#6bcdff"> **ICE BREAKER**
+# <span style="color:#6bcdff"> **🧊 ICE BREAKER 🔨**
 
-![menu]('../../src/readme/playGame.gif)
+<p>
+  <img src="readme.asset/playGame.gif" alt="ice-breaker" width="47%" />
+  <img src="readme.asset/01-menu.png"  alt="menu" width="47%" />
+</p>
 
-### **❄️ Guess what's inside the ice!**
+### **❄️ <i>Guess what's inside the ice!**</i>
 
-아이스 브레이커는 망치로 얼음 큐브를 깨면서,
-얼음 아래로 보이는 그림이 무엇인지 맞추는 Web게임입니다.
+**아이스 브레이커**는 망치로 얼음 큐브를 깨면서,
+얼음 아래로 보이는 그림이 무엇인지 맞추는 **Web App 게임**입니다.
 
-### **❄️ Motivation**
+### **❄️ <i>Motivation**</i>
 
 스크래치 북과, 펭귄 얼음깨기 보드게임에서 모티브를 얻어 기획한 **아케이드** 게입니다.
-재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 도전할 수 있도록 만들었습니다.
+재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 즐길 수 있도록 만들었습니다.
+
+### ❄️ <i>**[DEPLOY URL](https://icebreaker.colki.me/)**</i>
+
 <br>
 <br>
 <br>
@@ -20,9 +26,9 @@
 
 ### **프로젝트 기간**
 
-2021.9.27 ~ 2021.10.16 ( 3week )
+2021.9.27 ~ 2021.10.16 ( 3Week )
 
-> 09.27 ~ 10.03 : 아이디어, 기획, 기능정리, Kanban<br />
+> 09.27 ~ 10.03 : 아이디어 기획 및 기능 정리 & Kanban분배<br />
 > 10.04 ~ 10.16 : 개발 진행
 
 <br>
@@ -31,21 +37,21 @@
 
 - 🧠 [**Brain Storming**](https://www.notion.so/ideas-be87d168982e47688f7f3cb81f5a0e8d) : 프로젝트 아이디어
 
-- **🎨 [MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업
-
 - **📝 [Features Planning](https://www.notion.so/features-08ed4725b3c345b9ab1bd94ecbdb658d)** : 프로젝트 기능 정리
+
+- **🎨 [MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업 디자인
 
 <br>
 
 ### **프로젝트 진행**
 
-- Figma - MockUp 기획
+- Features : 프로젝트 세부 기능 기획
 
-- Firebase - Schema 설계
+- MockUp by Figma : UI & UX 설계
 
-- Notion Kanban - Task Management
+- Kanban by Notion : Task 일정 분배
 
-- Git - 기능별 브랜치 관리
+- Git Flow : 기능별 브랜치 Merge Strategy
   <br>
   <br>
   <br>
@@ -99,26 +105,31 @@
 
 <br>
 
-### **🧊🔨 혼자 얼음 깨기 : Single Mode**
+### **🧊🔨 혼자 얼음 깨기 : Solo Mode**
 
-| BREAKING                                | ANSWER                                     | RANKING                                      |
-| --------------------------------------- | ------------------------------------------ | -------------------------------------------- |
-| ![break]('../../src/readme/05-cube.png) | ![answer]('../../src/readme/07-answer.png) | ![ranking]('../../src/readme/10-ranking.png) |
+<div style="display: flex; text-align: center;">
+  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 32%; margin: 5px;"/>
+  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 32%; margin: 5px;" />
+  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 32%; margin: 5px;" />
+</div>
 
-- 경쟁에 대한 부담없이 혼자 게임을 즐길 수 있습니다.
-- 랭킹에 점수를 등록해서 자신의 점수를 널리 자랑할 수도 있습니다.
+- 경쟁에 대한 부담없이 혼자서도 게임을 즐길 수 있습니다.
+- **랭킹**에 점수를 등록해서 자신의 점수를 널리 자랑할 수도 있습니다.
 
 <br>
 
-### **🧊🔨 같이 얼음 깨기 : Multi Mode**
+### **🧊🔨 같이 얼음 깨기 : Battle Mode**
 
-| WAITING                                  | MATCHING                               | GAMEOVER                                   |
-| ---------------------------------------- | -------------------------------------- | ------------------------------------------ |
-| ![rooms]('../../src/readme/02-rooms.png) | ![room]('../../src/readme/03-room.png) | ![gameover]('../../src/readme/09-lost.png) |
-
-| COKE ITEM                               | REDUCE TIME                                          | NEXT LEVEL                                          |
-| --------------------------------------- | ---------------------------------------------------- | --------------------------------------------------- |
-| ![items]('../../src/readme/06-item.png) | ![itemWarning]('../../src/readme/06-item_battle.png) | ![levelWarning]('../../src/readme/06-item_solo.png) |
+<div style="display: flex; text-align: center;">
+  <img src="readme.asset/02-rooms.png" alt="breaking" style="width: 32%; margin: 5px;"/>
+  <img src="readme.asset/03-room.png"  alt="answer" style="width: 32%; margin: 5px;" />
+  <img src="readme.asset/09-lost.png"  alt="ranking" style="width: 32%; margin: 5px;" />
+</div>
+<div style="display: flex; text-align: center;">
+  <img src="readme.asset/06-item.png" alt="breaking" style="width: 32%; margin: 5px;"/>
+  <img src="readme.asset/06-item_battle.png"  alt="answer" style="width: 32%; margin: 5px;" />
+  <img src="readme.asset/06-item_solo.png"  alt="ranking" style="width: 32%; margin: 5px;" />
+</div>
 
 - **1 vs 1 매칭**으로 진행되며, 상대방이 다음 레벨로 넘어갈 때마다 알림이 뜨기 때문에 스릴을 느끼면서 긴장을 놓지 않고 얼음 깨기를 할 수 있습니다.
 - 방 만들기
@@ -126,11 +137,42 @@
 - 방ID로 바로 참여하기
   친구에게 전달받은 ID로 해당 방에 바로 입장할 수 있습니다.
 - 둘 중 한 명이라도 마지막 레벨을 끝내는 순간 게임이 종료되며, 결과 화면에서 최종 점수와 승패를 확인할 수 있습니다.
-- 상대방이 다음 레벨로 넘어가거나 콜라 아이템으로 공격한 순간 경고메시지가 나타납니다.
+  상대방이 다음 레벨로 넘어가거나, 상대방이 콜라 아이템으로 공격하면 **상단에 경고메시지**가 실시간으로 나타납니다.
+  <br>
 
 🧊 **게임 방법 : How to Play**
 
 - 아이스브레이커 게임 규칙에 대한 페이지입니다.
+  <br>
+  <br>
+  <br>
+  <br>
+
+# <span style="color:#7879f1">🏗 **INSTALLATION**
+
+- 프로젝트를 다운받은 후 프로젝트 디렉토리 내부에서 `.env` 파일을 생성하고, 다음 환경 변수를 입력해주세요
+  ```jsREACT_APP_FIREBASE_API_KEY>
+  REACT_APP_FIREBASE_AUTH_DOMAIN>
+  REACT_APP_FIREBASE_DATABASE_URL>
+  REACT_APP_FIREBASE_PROJECT_ID>
+  REACT_APP_FIREBASE_STORAGE_BUCKET>
+  REACT_APP_FIREBASE_MESSAGING_SENDER_ID>
+  REACT_APP_FIREBASE_APP_ID>
+  REACT_APP_ICE_BREAKER_URL=https://icebreaker.colki.me
+  ```
+- 프로젝트를 다운받은 뒤 프로젝트 디렉토리 내부에서 다음 command 를 입력해주세요
+
+  ```js
+  $ npm install
+  ```
+
+- 다음 command를 입력한 후 로컬환경에서 애플리케이션을 실행해주세요
+
+  ```js
+  $ npm start
+  ```
+
+  로컬 URL: `http://localhost:3000`
   <br>
   <br>
   <br>
@@ -203,6 +245,7 @@ useEffect(() => {
 ```
 
 </details>
+<br>
 하지만 firebase가 V9로 업데이트 되고 나서 문서에서는 onValue의 return 값에 대한 부분이나, cleanUp 함수가 명시되어 있지 않았기 때문에, 직접 <b>return값</b> 을 확인한 후에 버그를 개선할 수 있었습니다.
 <details>
   <summary><span style="color:#c1c1c1">onValue의 return값 확인</summary>
@@ -234,6 +277,7 @@ useEffect(() => {
 ```
 
 </details>
+<br>
 onValue는 db가 바뀌는 순간을 듣고 있다가 callback을 실행하는 함수인데, 수정 전 코드에서는 return을 함으로써 cleanUp함수를 반환하므로 의도치않게 이벤트리스너를 제거하는 효과를 얻었지만, 수정 후 코드에서는 제거되지 않은 리스너가 언마운트 이후에도  이벤트를 듣고있기 때문에 발생헀던 버그였습니다. 리액트는 개발자가 의도했을 수 있기 때문에 메모리가 누수되더라도 별다른 조치를 하지 않는 다는 사실도 알게 되었습니다.
 비록 시간은 딜레이 되었으나, 지난 경험을 바탕으로 문제를 회피하지 않고 직접 부딪치고, 근본적인 원리에 다가서서 문제를 해결하는 방법을 깨우치는 유익한 시간이었습니다.
 
@@ -244,6 +288,6 @@ onValue는 db가 바뀌는 순간을 듣고 있다가 callback을 실행하는 �
 
 # <span style="color:#e95353">**🍟 AFTER PROJECT**
 
-처음 기획했던 아이스브레이커는 솔로모드로 혼자 게임하는 Web game이었습니다. 먼저 얼음깨기를 구현하고 나서 게임만들기 기능을 추가하려고 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들었습니다. 실시간 기능을 갑자기 추가하는 바람에 원래의 스케줄이 많이 달라지게 되었습니다.
+🥤 처음 기획했던 아이스브레이커는 솔로모드로 혼자 게임하는 Web game이었습니다. 먼저 얼음깨기를 구현하고 나서 게임만들기 기능을 추가하려고 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들어서 배틀 모드를 추가하게 되었고, 갑자기 변동된 계획으로 원래의 스케줄이 많이 달라지게 되었습니다.
 
 하지만 결과적으로는 SideEffect를 일으키는 FirebaseApi에 대한 이해도가 깊어졌습니다. 또한 혼자하기 모드로 게임진행이 모두 구현되어 있는 상황에서 실시간 소켓 관련한 로직이 추가되면서 기존 코드와 부딪히지 않도록 설계해야 했고, 어떻게 redux로 state를 관리하는 지 효율적일지 깊게 고민하는 시간을 가질 수 있었습니다.
