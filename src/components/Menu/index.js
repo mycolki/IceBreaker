@@ -42,7 +42,7 @@ function Menu() {
         <Link to={ROUTE.RANKING}>
           <li className="button">
             <Button
-              text="랭킹보기"
+              text="랭킹 보기"
               size="large"
               backgroundColor="purple"
               onClick={play}

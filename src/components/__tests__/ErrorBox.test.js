@@ -38,6 +38,7 @@ describe('<ErrorBox /> : render', () => {
     );
 
     const menu = screen.getByText('메뉴로 돌아가기');
+
     expect(menu.closest('a')).toHaveAttribute('href', ROUTE.MENU);
   });
 });

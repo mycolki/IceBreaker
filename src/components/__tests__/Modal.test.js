@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+
 import Modal from '../Modal';
 
 function SampleComponent() {
@@ -8,18 +9,14 @@ function SampleComponent() {
 
 describe('<Modal /> : render children', () => {
   it('should render text children', () => {
-    render(
-      <Modal onClose={() => {}} dimmed="true" background="orange">
-        Sample Test
-      </Modal>,
-    );
+    render(<Modal onClose={() => {}}>Sample Test</Modal>);
 
     expect(screen.getByText('Sample Test')).toBeInTheDocument();
   });
 
   it('should render component children', () => {
     render(
-      <Modal onClose={() => {}} dimmed="true" background="orange">
+      <Modal onClose={() => {}}>
         <SampleComponent />
       </Modal>,
     );
@@ -33,7 +30,7 @@ describe('<Modal /> : execute onClose when clicked', () => {
 
   it('should execute onClose function when clicked dimmed or close button', () => {
     render(
-      <Modal onClose={closeModal} dimmed="true" background="orange">
+      <Modal onClose={closeModal}>
         <SampleComponent />
       </Modal>,
     );
