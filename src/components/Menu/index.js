@@ -19,7 +19,7 @@ function Menu() {
         </h1>
       </TitleWrapper>
       <MenuButtons>
-        <li className="button">
+        <li>
           <Link to={ROUTE.READY}>
             <Button
               text="혼자 얼음깨기"
@@ -29,7 +29,7 @@ function Menu() {
             />
           </Link>
         </li>
-        <li className="button">
+        <li>
           <Link to={ROUTE.ROOMS}>
             <Button
               text="같이 얼음깨기"
@@ -40,7 +40,7 @@ function Menu() {
           </Link>
         </li>
         <Link to={ROUTE.RANKING}>
-          <li className="button">
+          <li>
             <Button
               text="랭킹 보기"
               size="large"
@@ -50,7 +50,7 @@ function Menu() {
           </li>
         </Link>
         <Link to={ROUTE.GAME_RULES}>
-          <li className="button">
+          <li>
             <Button
               text="게임 방법"
               size="large"
@@ -72,20 +72,16 @@ const Container = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-  position: relative;
   height: 53%;
   text-align: center;
+  padding-top: 210px;
 
   .app-title {
-    position: absolute;
-    top: 73%;
-    left: 50%;
     width: 100%;
     line-height: 1.6em;
     font-size: 40px;
     color: white;
     -webkit-text-stroke: 2px ${({ theme }) => theme.deepBlue};
-    transform: translate(-50%, -50%);
   }
 `;
 

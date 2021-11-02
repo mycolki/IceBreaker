@@ -24,10 +24,10 @@ function IcePlate() {
   useEffect(() => {
     const img = new window.Image();
     img.src = imgUrl;
-    img.addEventListener('load', () => {
+    img.onload = () => {
       dispatch(changeGameStatus(GAME_STATUS.ICE_BREAKING_TIME));
       setImage(img);
-    });
+    };
   }, [imgUrl, dispatch]);
 
   return (

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
@@ -49,7 +50,16 @@ function Message({ height }) {
   );
 }
 
-export default Message;
+const MemoizedMessage = memo(Message);
+export default MemoizedMessage;
+
+Message.propTypes = {
+  height: PropTypes.string,
+};
+
+Message.defaultProps = {
+  height: '5%',
+};
 
 const Wrapper = styled.div`
   width: 100%;
@@ -68,11 +78,3 @@ const Text = styled.p`
 
   ${({ messageStyle }) => messageStyle};
 `;
-
-Message.propTypes = {
-  height: PropTypes.string,
-};
-
-Message.defaultProps = {
-  height: '5%',
-};

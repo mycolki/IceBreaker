@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import { takeSelectedItem, changeMessage } from '../../../store/quizSlice';
-import hintCokeWeb from '../../../asset/hintCoke.webp';
-import hintCoke from '../../../asset/hintCoke.png';
+import itemCokeWeb from '../../../asset/itemCoke.webp';
+import itemCoke from '../../../asset/itemCoke.png';
 import { rightAndLeft } from '../../../styles/share/animation';
 import { flexCenter } from '../../../styles/share/common';
 import { ROOMS, ITEM } from '../../../constants/game';
@@ -48,8 +48,8 @@ function ItemModal({ onClose }) {
       <Item>
         <div className="cokes">
           <ImgWithFallback
-            src={hintCokeWeb}
-            fallback={hintCoke}
+            src={itemCokeWeb}
+            fallback={itemCoke}
             alt="coke"
             width="40px"
             height="75px"
@@ -61,16 +61,16 @@ function ItemModal({ onClose }) {
       <Item>
         <div className="cokes">
           <ImgWithFallback
-            src={hintCokeWeb}
-            fallback={hintCoke}
+            src={itemCokeWeb}
+            fallback={itemCoke}
             alt="coke"
             width="40px"
             height="75px"
             onClick={useItem2Coke}
           />
           <ImgWithFallback
-            src={hintCokeWeb}
-            fallback={hintCoke}
+            src={itemCokeWeb}
+            fallback={itemCoke}
             alt="coke"
             width="40px"
             height="75px"

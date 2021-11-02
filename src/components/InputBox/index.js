@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import useSound from 'use-sound';
@@ -122,7 +122,8 @@ function InputBox() {
   );
 }
 
-export default InputBox;
+const MemoizedInputBox = memo(InputBox);
+export default MemoizedInputBox;
 
 const Wrapper = styled.div`
   ${flexCenterColumn}

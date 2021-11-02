@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
@@ -120,7 +120,8 @@ function Footer() {
   );
 }
 
-export default Footer;
+const MemoizedFooter = memo(Footer);
+export default MemoizedFooter;
 
 const Wrapper = styled.div`
   ${flexCenter}

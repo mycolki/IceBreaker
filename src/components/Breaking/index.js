@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { getDatabase, ref, onValue, update } from 'firebase/database';
@@ -15,11 +15,11 @@ import { ROUTE, ROOMS, GAME_STATUS, QUIZ_LENGTH } from '../../constants/game';
 
 import Header from '../Header';
 import AnswerDisplayBox from '../AnswerDisplayBox';
-import Message from '../share/Message';
-import InputBox from '../InputBox';
 import Footer from '../Footer';
 import Button from '../share/Button';
 import IcePlate from '../IcePlate';
+const Message = lazy(() => import('../share/Message'));
+const InputBox = lazy(() => import('../InputBox'));
 
 function Breaking() {
   const { roomId } = useParams();
