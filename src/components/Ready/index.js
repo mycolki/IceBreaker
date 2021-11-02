@@ -5,7 +5,7 @@ import { getDatabase, ref, get, child } from 'firebase/database';
 import styled from 'styled-components';
 import gsap from 'gsap';
 
-import { saveQuizCollection, onError } from '../../store/quizSlice';
+import { saveQuizCollection } from '../../store/quizSlice';
 import { saveUserName, saveId, saveBreakers } from '../../store/battleSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE, QUIZ, ROOMS } from '../../constants/game';
@@ -34,8 +34,9 @@ function Ready() {
           dispatch(saveQuizCollection(quizCollection));
         }
       } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.LOAD_DATA,
+        });
       }
     };
 
@@ -56,8 +57,9 @@ function Ready() {
           dispatch(saveBreakers(room.breakers));
         }
       } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.LOAD_DATA,
+        });
       }
     };
 
@@ -87,8 +89,9 @@ function Ready() {
       );
       dispatch(saveUserName(userName));
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
   }, [dispatch, history]);
 
@@ -111,8 +114,9 @@ function Ready() {
         await waitForOneSecond();
         setTime((prev) => prev - 1);
       } catch (err) {
-        dispatch(onError(ERROR.UNKNOWN));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.UNKNOWN,
+        });
       }
     })();
 

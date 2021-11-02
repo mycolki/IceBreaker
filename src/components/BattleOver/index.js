@@ -7,11 +7,7 @@ import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import {
-  changeMessage,
-  resetQuizForGameOver,
-  onError,
-} from '../../store/quizSlice';
+import { changeMessage, resetQuizForGameOver } from '../../store/quizSlice';
 import {
   saveBreakers,
   saveUserName,
@@ -57,10 +53,12 @@ function BattleOver() {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
       );
+
       dispatch(saveUserName(userName));
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
   }, [dispatch, history]);
 
@@ -87,8 +85,9 @@ function BattleOver() {
           breakers: sorted,
         });
       } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.LOAD_DATA,
+        });
       }
     };
 

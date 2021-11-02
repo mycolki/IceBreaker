@@ -4,7 +4,7 @@ import { getDatabase, ref, get, child, update } from 'firebase/database';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { changeMessage, onError } from '../../../store/quizSlice';
+import { changeMessage } from '../../../store/quizSlice';
 import { saveRoomId } from '../../../store/battleSlice';
 import { ENTER_ROOM, RESET } from '../../../constants/messages';
 import { ROUTE, ROOMS } from '../../../constants/game';
@@ -53,8 +53,9 @@ function EnterRoomModal({ onClose }) {
         return dispatch(changeMessage(ENTER_ROOM.EXIST_NAME));
       }
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
 
     window.sessionStorage.setItem('userName', JSON.stringify({ userName }));

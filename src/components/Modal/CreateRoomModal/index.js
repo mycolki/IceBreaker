@@ -6,7 +6,7 @@ import { sampleSize } from 'lodash';
 import useSound from 'use-sound';
 import PropTypes from 'prop-types';
 
-import { changeMessage, onError } from '../../../store/quizSlice';
+import { changeMessage } from '../../../store/quizSlice';
 import { saveRoomId, saveUserName } from '../../../store/battleSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import {
@@ -78,8 +78,9 @@ function CreateRoomModal({ onClose }) {
         ],
       });
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
 
     history.push(`${ROUTE.ROOM}/${roomId}`);

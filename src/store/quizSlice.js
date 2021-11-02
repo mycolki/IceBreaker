@@ -125,9 +125,6 @@ const quizSlice = createSlice({
       state.message = RESET;
       state.itemsCount = INITIAL_ITEMS_COUNTS;
     },
-    onError(state, action) {
-      state.error = action.payload;
-    },
   },
 });
 
@@ -146,7 +143,6 @@ export const {
   goToNextStep,
   endGame,
   resetQuizForGameOver,
-  onError,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { getDatabase, ref, get, child } from '@firebase/database';
+import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { getDatabase, ref, get, child } from '@firebase/database';
-import { GiBearFace } from 'react-icons/gi';
-
-import { onError } from '../../store/quizSlice';
 import { detectWebp } from '../../utils/detectWebp';
 import { flexCenter } from '../../styles/share/common';
 import { smallPounding } from '../../styles/share/animation';
@@ -42,8 +40,9 @@ function Ranking() {
         setRankers(rankerList);
         setLoading(true);
       } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.LOAD_DATA,
+        });
       }
     };
 

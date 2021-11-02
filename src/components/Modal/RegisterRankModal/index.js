@@ -5,7 +5,7 @@ import { getDatabase, ref, get, set, child } from '@firebase/database';
 import useSound from 'use-sound';
 import PropTypes from 'prop-types';
 
-import { onError, changeMessage } from '../../../store/quizSlice';
+import { changeMessage } from '../../../store/quizSlice';
 import {
   Container,
   MessageArea,
@@ -47,8 +47,9 @@ function RegisterRankModal({ onClose, hasRank }) {
         return setName('');
       }
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
 
     set(ref(getDatabase(), `${RANKERS}/${name}`), {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { createMemoryHistory } from 'history';
 import { render, screen } from '@testing-library/react';
 
@@ -9,25 +8,19 @@ import ErrorBox from '../ErrorBox';
 
 describe('<ErrorBox /> : render', () => {
   const history = createMemoryHistory();
+  const MOCK_ERROR_MESSAGE = '에러가 발생했습니다';
+  history.push(ROUTE.ERROR, {
+    error: MOCK_ERROR_MESSAGE,
+  });
 
   it('should render error message', () => {
-    const MOCK_ERR_MESSAGE = '에러가 발생했습니다';
-
-    useSelector.mockImplementation((selector) =>
-      selector({
-        quiz: {
-          error: MOCK_ERR_MESSAGE,
-        },
-      }),
-    );
-
     render(
       <Router history={history}>
         <ErrorBox />
       </Router>,
     );
 
-    expect(screen.getByText(`🙈${MOCK_ERR_MESSAGE}`)).toBeInTheDocument();
+    expect(screen.getByText(`🙈${MOCK_ERROR_MESSAGE}`)).toBeInTheDocument();
   });
 
   it('should be rendered menu when clicked button', () => {
