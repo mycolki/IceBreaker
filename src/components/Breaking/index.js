@@ -10,7 +10,6 @@ import {
   goToNextStep,
   endGame,
 } from '../../store/quizSlice';
-import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE, ROOMS, GAME_STATUS, QUIZ_LENGTH } from '../../constants/game';
 
 import Header from '../Header';
@@ -103,7 +102,7 @@ function Breaking() {
   };
 
   return (
-    <Container isWebp={detectWebp()}>
+    <Container>
       <Header />
       <AnswerDisplayBox />
       {gameStatus === GAME_STATUS.RESULT_DISPLAY_TIME && (
@@ -143,10 +142,7 @@ export default Breaking;
 
 const Container = styled.div`
   height: 100%;
-  background-image: ${({ isWebp }) =>
-    isWebp
-      ? 'url(/background/floatCubeBg.webp)'
-      : 'url(/background/floatCubeBg.png)'};
+  background-image: url(/background/floatCubeBg.webp);
 `;
 
 const Answer = styled.div`

@@ -9,7 +9,6 @@ import useSound from 'use-sound';
 
 import { changeMessage } from '../../store/quizSlice';
 import { saveRoomData, saveUserName } from '../../store/battleSlice';
-import { detectWebp } from '../../utils/detectWebp';
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
@@ -175,7 +174,7 @@ function Room() {
   };
 
   return (
-    <Container isWebp={detectWebp()}>
+    <Container>
       <RoomHeader>
         <h1 className="title">
           BREAKER <br />
@@ -200,7 +199,12 @@ function Room() {
                         <GiBearFace className="user-icon" />
                       )}
                     </span>
-                    <img src={iceBear} alt="bear" width="160" height="auto" />
+                    <img
+                      src={iceBear}
+                      alt="bear"
+                      width="160px"
+                      height="123px"
+                    />
                     <span className="ready">
                       {breaker.isReady ? 'READY' : ' '}
                     </span>

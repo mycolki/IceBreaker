@@ -6,7 +6,6 @@ import useSound from 'use-sound';
 
 import { changeMessage, resetQuizForGameOver } from '../../store/quizSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
-import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE } from '../../constants/game';
 import { RESET, GAME } from '../../constants/messages';
 
@@ -60,7 +59,7 @@ function GameOver() {
   };
 
   return (
-    <Container isWebp={detectWebp()}>
+    <Container>
       <TitleWrapper>
         <h1 className="title">GAME OVER</h1>
         {loading ? <h2 className="score">{score}</h2> : <BarSpinner />}
@@ -110,8 +109,7 @@ export default GameOver;
 
 const Container = styled.div`
   height: 100%;
-  background-image: ${({ isWebp }) =>
-    isWebp ? 'url(/background/solo.webp)' : 'url(/background/solo.png)'};
+  background-image: url(/background/solo.png);
 `;
 
 const TitleWrapper = styled.div`

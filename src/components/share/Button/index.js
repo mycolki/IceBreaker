@@ -25,12 +25,12 @@ const SIZE_PRESET = {
 
 function Button({
   children,
+  onClick,
   text,
   type,
   disabled,
   size,
   backgroundColor,
-  onClick,
 }) {
   const sizePreset = SIZE_PRESET[size];
 
@@ -53,12 +53,12 @@ export default Button;
 
 Button.propTypes = {
   children: PropTypes.any,
+  onClick: PropTypes.func,
   text: PropTypes.string,
   type: PropTypes.string,
   disabled: PropTypes.bool,
   size: PropTypes.string,
   backgroundColor: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 Button.defaultProps = {

@@ -96,9 +96,9 @@
 
 - Netlify
 - Lodash
-- modernizr
-- react-fastclick
-- use-sound
+- React-fastclick
+- Use-sound
+- PropTypes
 - Jest
 - React-testing
 - EsLint
@@ -229,7 +229,7 @@
 - **Image**<br />저장소를 Firebase Store 에서 S3로 변경<br />▸ 네트워크 요청 시간 95% 단축<br />Modernizr 함수로 브라우저 지원 여부 확인 후 Webp 포맷 동적으로 선택<br />▸ 로딩 시간 4.3s 감소
 - **Tree-Shaking** : 미사용 모듈 제거 및 번들 파일의 용량 최소화<br />▸ Lodash 라이브러리 Dynamic Import
 - **CSS Sprite** : 아이템, 북극곰 이미지들을 하나의 파일로 병합하여 Http 다운로드 요청 횟수 최소화
-- **CDN 사용** : 가장 빠른 응답시간의 서버를 선택하여 구성 요소 다운로드 시간 단축
+- **Reflow 방지** : 레이아웃 단계를 재발생 시키는 css 스타일링 변경하여 Reflow 제거 및 최소화
 - **React 성능 최적화** : React Hooks API 를 적절하게 사용하여 불필요한 렌더링 방지
   <br>
   <br>

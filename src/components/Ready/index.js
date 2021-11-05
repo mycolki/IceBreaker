@@ -7,7 +7,6 @@ import gsap from 'gsap';
 
 import { saveQuizCollection } from '../../store/quizSlice';
 import { saveUserName, saveId, saveBreakers } from '../../store/battleSlice';
-import { detectWebp } from '../../utils/detectWebp';
 import { ROUTE, QUIZ, ROOMS } from '../../constants/game';
 import { ERROR } from '../../constants/error';
 import { READY } from '../../styles/gsapStyle';
@@ -137,7 +136,7 @@ function Ready() {
   }, [time]);
 
   return (
-    <Container className="background" isWebp={detectWebp()}>
+    <Container className="background">
       <div className="circle">
         <span className="ready">READY</span>
         <span className="time">{time}</span>
@@ -151,8 +150,7 @@ export default Ready;
 const Container = styled.div`
   position: relative;
   height: 100%;
-  background-image: ${({ isWebp }) =>
-    isWebp ? 'url(/background/readyBg.webp)' : 'url(/background/readyBg.png)'};
+  background-image: url(/background/readyBg.png);
 
   .circle {
     ${flexCenterColumn}
