@@ -1,10 +1,13 @@
 export const QUIZ = 'quiz';
 export const ROOMS = 'rooms';
 export const RANKERS = 'rankers';
+
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 2;
+export const QUIZ_LENGTH = 5;
+
 export const INITIAL_OPPONENT_LEVEL = 1;
 export const INITIAL_ITEMS_COUNTS = 5;
+
 export const ROUTE = {
   MENU: '/',
   READY: '/ready',
@@ -20,6 +23,27 @@ export const ROUTE = {
   RANKING: '/ranking',
   GAME_RULES: '/gamerules',
   ERROR: '/error',
+};
+
+export const ANSWER_TIME = 10;
+export const BREAKING_TIME = {
+  1: 5,
+  2: 10,
+  3: 10,
+  4: 10,
+  5: 7,
+  6: 7,
+  7: 5,
+};
+
+export const SCORES = {
+  1: 20,
+  2: 30,
+  3: 40,
+  4: 50,
+  5: 60,
+  6: 70,
+  7: 230,
 };
 
 export const GAME_STATUS = {
@@ -46,25 +70,4 @@ export const ATTACK = {
 export const MODAL_TITLE = {
   INPUT_HOST_NAME: '방에 참가할 닉네임을 입력해주세요',
   PASS_ROOM_ID: '친구에게 방ID를 전달해주세요😀',
-};
-
-export const SCORES = {
-  1: 20,
-  2: 30,
-  3: 40,
-  4: 50,
-  5: 60,
-  6: 70,
-  7: 230,
-};
-
-export const ANSWER_TIME = 20;
-export const BREAKING_TIME = {
-  1: 5,
-  2: 10,
-  3: 10,
-  4: 10,
-  5: 7,
-  6: 7,
-  7: 5,
 };

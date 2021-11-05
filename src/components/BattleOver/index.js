@@ -7,18 +7,13 @@ import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import {
-  changeMessage,
-  resetQuizForGameOver,
-  onError,
-} from '../../store/quizSlice';
+import { changeMessage, resetQuizForGameOver } from '../../store/quizSlice';
 import {
   saveBreakers,
   saveUserName,
   resetBattleForGameOver,
 } from '../../store/battleSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
-import { detectWebp } from '../../utils/detectWebp';
 
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { ROUTE, ROOMS } from '../../constants/game';
@@ -57,10 +52,12 @@ function BattleOver() {
       const { userName } = JSON.parse(
         window.sessionStorage.getItem('userName'),
       );
+
       dispatch(saveUserName(userName));
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
   }, [dispatch, history]);
 
@@ -87,8 +84,9 @@ function BattleOver() {
           breakers: sorted,
         });
       } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.LOAD_DATA,
+        });
       }
     };
 
@@ -112,7 +110,7 @@ function BattleOver() {
   };
 
   return (
-    <Container isWinner={isWinner} isDraw={isDraw} isWebp={detectWebp()}>
+    <Container isWinner={isWinner} isDraw={isDraw}>
       <Result isWinner={isWinner} isDraw={isDraw}>
         {loading ? (
           <>
@@ -152,7 +150,6 @@ function BattleOver() {
             ))
           : null}
       </Scores>
-
       <Buttons>
         <li className="button">
           <Button
@@ -183,18 +180,9 @@ export default BattleOver;
 const Container = styled.div`
   height: 100%;
   text-align: center;
-  background: ${({ isDraw, isWebp }) =>
-    isDraw && isWebp && 'url(/background/draw.webp)'};
-  background: ${({ isDraw, isWebp }) =>
-    isDraw && !isWebp && 'url(/background/draw.png)'};
-  background: ${({ isWinner, isWebp }) =>
-    isWinner && isWebp && 'url(/background/won.webp)'};
-  background: ${({ isWinner, isWebp }) =>
-    isWinner && !isWebp && 'url(/background/won.png)'};
-  background: ${({ isWinner, isWebp }) =>
-    !isWinner && isWebp && 'url(/background/lost.webp)'};
-  background: ${({ isWinner, isWebp }) =>
-    !isWinner && !isWebp && 'url(/background/lost.png)'};
+  background: ${({ isDraw }) => isDraw && 'url(/background/draw.webp)'};
+  background: ${({ isWinner }) =>
+    isWinner ? 'url(/background/won.webp)' : 'url(/background/lost.webp)'};
 `;
 
 const Result = styled.div`

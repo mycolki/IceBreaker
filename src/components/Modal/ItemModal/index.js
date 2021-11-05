@@ -5,14 +5,12 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import { takeSelectedItem, changeMessage } from '../../../store/quizSlice';
-import hintCokeWeb from '../../../asset/hintCoke.webp';
-import hintCoke from '../../../asset/hintCoke.png';
+import itemCokeWeb from '../../../asset/itemCoke.webp';
 import { rightAndLeft } from '../../../styles/share/animation';
 import { flexCenter } from '../../../styles/share/common';
 import { ROOMS, ITEM } from '../../../constants/game';
 import { USE_ITEM } from '../../../constants/messages';
 
-import ImgWithFallback from '../../ImgWithFallback';
 import Message from '../../share/Message';
 
 function ItemModal({ onClose }) {
@@ -22,6 +20,7 @@ function ItemModal({ onClose }) {
   const itemsCount = useSelector((state) => state.quiz.itemsCount);
 
   const useItem2Coke = () => {
+    if (roomId) return dispatch(changeMessage(USE_ITEM.ONLY_BATTLE));
     if (itemsCount < 2) return dispatch(changeMessage(USE_ITEM.NOPE));
 
     update(ref(getDatabase(), `${ROOMS}/${roomId}/breakers/${opponentId}`), {
@@ -46,9 +45,8 @@ function ItemModal({ onClose }) {
       </MessageArea>
       <Item>
         <div className="cokes">
-          <ImgWithFallback
-            src={hintCokeWeb}
-            fallback={hintCoke}
+          <img
+            src={itemCokeWeb}
             alt="coke"
             width="40px"
             height="75px"
@@ -59,22 +57,18 @@ function ItemModal({ onClose }) {
       </Item>
       <Item>
         <div className="cokes">
-          <ImgWithFallback
-            src={hintCokeWeb}
-            fallback={hintCoke}
-            alt="coke"
-            width="40px"
-            height="75px"
-            onClick={useItem2Coke}
-          />
-          <ImgWithFallback
-            src={hintCokeWeb}
-            fallback={hintCoke}
-            alt="coke"
-            width="40px"
-            height="75px"
-            onClick={useItem2Coke}
-          />
+          {Array(2)
+            .fill(null)
+            .map((_, i) => (
+              <img
+                key={i}
+                src={itemCokeWeb}
+                alt="coke"
+                width="40px"
+                height="75px"
+                onClick={useItem2Coke}
+              />
+            ))}
         </div>
         <span className="item-comment">상대브레이커 시간 -5초</span>
       </Item>

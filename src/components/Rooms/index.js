@@ -9,7 +9,6 @@ import useSound from 'use-sound';
 
 import { changeMessage } from '../../store/quizSlice';
 import { saveRoomData, saveRoomId } from '../../store/battleSlice';
-import { detectWebp } from '../../utils/detectWebp';
 import { bounce, pounding } from '../../styles/share/animation';
 import { flexCenter, flexCenterColumn } from '../../styles/share/common';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
@@ -107,7 +106,7 @@ function Rooms() {
   };
 
   return (
-    <Container isWebp={detectWebp()}>
+    <Container>
       <RoomHeader>
         <h1 className="title">
           BREAKER <br />

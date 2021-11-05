@@ -1,5 +1,4 @@
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
@@ -9,12 +8,12 @@ import { ROUTE } from '../../constants/game';
 import Button from '../share/Button';
 
 function ErrorBox() {
-  const error = useSelector((state) => state.quiz?.error);
+  const location = useLocation();
   const [play] = useSound('/audio/click.mp3');
 
   return (
     <Container>
-      <h1 className="error-message">🙈{error}</h1>
+      <h1 className="error-message">🙈{location.state.error}</h1>
       <Link to={ROUTE.MENU}>
         <Button
           text="메뉴로 돌아가기"

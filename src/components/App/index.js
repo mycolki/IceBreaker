@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,18 +18,6 @@ const GameRules = lazy(() => import('../GameRules'));
 const ErrorBox = lazy(() => import('../ErrorBox'));
 
 function App() {
-  useEffect(() => {
-    window.Modernizr.on('webp', function (result) {
-      if (result) {
-        document
-          .getElementsByClassName('no-webp')[0]
-          .classList.remove('no-webp');
-      } else {
-        document.getElementsByClassName('webp')[0].classList.remove('webp');
-      }
-    });
-  }, []);
-
   return (
     <AppContainer>
       <Suspense fallback={<DotSpinner color="purple" />}>

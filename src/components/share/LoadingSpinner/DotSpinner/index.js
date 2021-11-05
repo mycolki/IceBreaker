@@ -1,4 +1,6 @@
 import DotLoader from 'react-spinners/DotLoader';
+import PropTypes from 'prop-types';
+
 import theme from '../../../../styles/theme';
 import { Wrapper } from '../../../../styles/share/spinnerStyle';
 
@@ -18,3 +20,11 @@ function DotSpinner({ color = 'white' }) {
 }
 
 export default DotSpinner;
+
+DotSpinner.propTypes = {
+  color: PropTypes.string,
+};
+
+DotSpinner.defaultProps = {
+  color: theme.white,
+};

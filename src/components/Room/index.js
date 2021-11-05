@@ -7,10 +7,8 @@ import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { changeMessage, onError } from '../../store/quizSlice';
+import { changeMessage } from '../../store/quizSlice';
 import { saveRoomData, saveUserName } from '../../store/battleSlice';
-import { detectWebp } from '../../utils/detectWebp';
-
 import iceBear from '../../asset/iceBear.png';
 import { Container, RoomHeader } from '../../styles/share/roomStyle';
 import { flexCenterColumn } from '../../styles/share/common';
@@ -23,9 +21,9 @@ import Button from '../share/Button';
 import BarSpinner from '../share/LoadingSpinner/BarSpinner';
 
 function Room() {
+  const { roomId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { roomId } = useParams();
   const rooms = useSelector((state) => state.battle.rooms);
   const userName = useSelector((state) => state.battle.userName);
   const [isReady, setIsReady] = useState(false);
@@ -58,8 +56,9 @@ function Room() {
 
       dispatch(saveUserName(userName));
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
 
     return () => {
@@ -175,7 +174,7 @@ function Room() {
   };
 
   return (
-    <Container isWebp={detectWebp()}>
+    <Container>
       <RoomHeader>
         <h1 className="title">
           BREAKER <br />
@@ -200,7 +199,12 @@ function Room() {
                         <GiBearFace className="user-icon" />
                       )}
                     </span>
-                    <img src={iceBear} alt="bear" width="160" height="auto" />
+                    <img
+                      src={iceBear}
+                      alt="bear"
+                      width="160px"
+                      height="123px"
+                    />
                     <span className="ready">
                       {breaker.isReady ? 'READY' : ' '}
                     </span>

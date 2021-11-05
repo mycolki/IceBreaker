@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { getDatabase, ref, get, child } from '@firebase/database';
+import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
-import { getDatabase, ref, get, child } from '@firebase/database';
-import { GiBearFace } from 'react-icons/gi';
-
-import { onError } from '../../store/quizSlice';
-import { detectWebp } from '../../utils/detectWebp';
 import { flexCenter } from '../../styles/share/common';
 import { smallPounding } from '../../styles/share/animation';
 import { ROUTE, RANKERS } from '../../constants/game';
@@ -31,18 +28,20 @@ function Ranking() {
   useEffect(() => {
     const getRanks = async () => {
       try {
-        const snapshot = await get(child(ref(getDatabase()), RANKERS));
+        const rankingData = (
+          await get(child(ref(getDatabase()), RANKERS))
+        ).val();
 
-        if (!snapshot.val()) return setLoading(true);
+        if (!rankingData) return setLoading(true);
 
-        const rankerList = Object.values(snapshot.val());
+        const rankerList = Object.values(rankingData);
         rankerList.sort((a, b) => b.score - a.score);
-
         setRankers(rankerList);
         setLoading(true);
       } catch (err) {
-        dispatch(onError(ERROR.LOAD_DATA));
-        history.push(ROUTE.ERROR);
+        history.push(ROUTE.ERROR, {
+          error: ERROR.LOAD_DATA,
+        });
       }
     };
 
@@ -60,7 +59,7 @@ function Ranking() {
   }, [isPlaying]);
 
   return (
-    <Container isWebp={detectWebp()}>
+    <Container>
       <TitleWrapper>
         <h1 className="title">BREAKER RANKS</h1>
       </TitleWrapper>
@@ -104,8 +103,7 @@ export default Ranking;
 const Container = styled.div`
   height: 100%;
   text-align: center;
-  background-image: ${({ isWebp }) =>
-    isWebp ? 'url(/background/ranks.webp)' : 'url(/background/ranks.png)'};
+  background-image: url(/background/ranks.png);
 `;
 
 const TitleWrapper = styled.div`

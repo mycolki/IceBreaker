@@ -1,17 +1,28 @@
-import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import { render, screen, fireEvent } from '@testing-library/react';
 
+import { GAME_STATUS } from '../../constants/game';
 import * as reducers from '../../store/quizSlice';
 import InputBox from '../InputBox';
+
+const MOCK_URL = '/banana.jpg';
+const MOCK_VALUE = '바나나';
 
 describe('<InputBox /> : render form', () => {
   it('should render form of InputBox', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isAnswerTime: true,
+          quizCollection: {
+            byId: {
+              0: { imgUrl: MOCK_URL, answer: MOCK_VALUE },
+            },
+            allIds: [0],
+          },
+          currentQuizIndex: 0,
+          gameStatus: GAME_STATUS.ANSWER_GUESS_TIME,
         },
       }),
     );
@@ -25,7 +36,14 @@ describe('<InputBox /> : render form', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isAnswerTime: false,
+          quizCollection: {
+            byId: {
+              0: { imgUrl: MOCK_URL, answer: MOCK_VALUE },
+            },
+            allIds: [0],
+          },
+          currentQuizIndex: 0,
+          gameStatus: GAME_STATUS.ICE_BREAKING_TIME,
         },
       }),
     );
@@ -36,53 +54,23 @@ describe('<InputBox /> : render form', () => {
   });
 });
 
-describe('<InputBox /> : toggle submit', () => {
-  it('should disable submit button if image is not rendered ', () => {
-    useSelector.mockImplementation((selector) =>
-      selector({
-        quiz: {
-          isAnswerTime: true,
-          isImgLoaded: false,
-        },
-      }),
-    );
-
-    render(<InputBox />);
-
-    expect(screen.getByRole('button')).toBeDisabled();
-  });
-
-  it('should able submit button if image is rendered ', () => {
-    useSelector.mockImplementation((selector) =>
-      selector({
-        quiz: {
-          isAnswerTime: true,
-          isImgLoaded: true,
-        },
-      }),
-    );
-
-    render(<InputBox />);
-
-    expect(screen.getByRole('button')).not.toBeDisabled();
-  });
-});
-
-describe('<InputBox /> : submit input value', () => {
+describe('<InputBox /> : submit correct value', () => {
   const mockStore = configureStore([]);
   const store = mockStore({});
-  const MOCK_VALUE = '바나나';
 
-  it('should reset value of input if submitted value is same with answer', () => {
+  it('should reset value of input if submitted value is correct with answer', () => {
     useDispatch.mockImplementation(() => function dispatch() {});
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isAnswerTime: true,
-          isImgLoaded: true,
-          currentQuestion: {
-            answer: MOCK_VALUE,
+          quizCollection: {
+            byId: {
+              0: { imgUrl: MOCK_URL, answer: MOCK_VALUE },
+            },
+            allIds: [0],
           },
+          currentQuizIndex: 0,
+          gameStatus: GAME_STATUS.ANSWER_GUESS_TIME,
         },
       }),
     );
@@ -100,26 +88,32 @@ describe('<InputBox /> : submit input value', () => {
     fireEvent.submit(form);
     expect(input).toHaveAttribute('value', '');
 
-    store.dispatch(reducers.addScore());
-    store.dispatch(reducers.showAnswerBoxByInput(MOCK_VALUE));
-    store.dispatch(reducers.showResult(true));
+    store.dispatch(reducers.goToNextStep());
     const actions = store.getActions();
 
-    expect(actions[0].type).toEqual('quiz/addScore');
-    expect(actions[1].type).toEqual('quiz/showAnswerBoxByInput');
-    expect(actions[2].type).toEqual('quiz/showResult');
-  });
+    expect(actions[0].type).toEqual('quiz/goToNextStep');
 
-  it('should reset value of input if submitted value is not korean', () => {
+    store.clearActions();
+  });
+});
+
+describe('<InputBox /> : submit incorrect value', () => {
+  const mockStore = configureStore([]);
+  const store = mockStore({});
+
+  it('should return if submitted value is empty', () => {
     useDispatch.mockImplementation(() => function dispatch() {});
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isAnswerTime: true,
-          isImgLoaded: true,
-          currentQuestion: {
-            answer: MOCK_VALUE,
+          quizCollection: {
+            byId: {
+              0: { imgUrl: MOCK_URL, answer: MOCK_VALUE },
+            },
+            allIds: [0],
           },
+          currentQuizIndex: 0,
+          gameStatus: GAME_STATUS.ANSWER_GUESS_TIME,
         },
       }),
     );
@@ -135,12 +129,51 @@ describe('<InputBox /> : submit input value', () => {
     });
 
     fireEvent.submit(form);
-    expect(input).toHaveAttribute('value', '');
 
-    store.dispatch(reducers.showMessage('Not Korean'));
+    store.dispatch(reducers.changeMessage('Empty Value'));
     const actions = store.getActions();
 
-    expect(actions[0].type).toEqual('quiz/addScore');
+    expect(actions[0].type).toEqual('quiz/changeMessage');
+    expect(actions[0].payload).toEqual('Empty Value');
+
+    store.clearActions();
+  });
+
+  it('should reset value of input if submitted value is not korean', () => {
+    useDispatch.mockImplementation(() => function dispatch() {});
+    useSelector.mockImplementation((selector) =>
+      selector({
+        quiz: {
+          quizCollection: {
+            byId: {
+              0: { imgUrl: MOCK_URL, answer: MOCK_VALUE },
+            },
+            allIds: [0],
+          },
+          currentQuizIndex: 0,
+          gameStatus: GAME_STATUS.ANSWER_GUESS_TIME,
+        },
+      }),
+    );
+    render(<InputBox />);
+
+    const input = screen.getByPlaceholderText('Guess What');
+    const form = screen.getByTestId('form');
+
+    fireEvent.change(input, {
+      target: {
+        value: 'banana',
+      },
+    });
+
+    fireEvent.submit(form);
+    expect(input).toHaveAttribute('value', '');
+
+    store.dispatch(reducers.changeMessage('Not Korean'));
+    const actions = store.getActions();
+
+    expect(actions[0].type).toEqual('quiz/changeMessage');
+    expect(actions[0].payload).toEqual('Not Korean');
 
     store.clearActions();
   });
@@ -150,11 +183,14 @@ describe('<InputBox /> : submit input value', () => {
     useSelector.mockImplementation((selector) =>
       selector({
         quiz: {
-          isAnswerTime: true,
-          isImgLoaded: true,
-          currentQuestion: {
-            answer: MOCK_VALUE,
+          quizCollection: {
+            byId: {
+              0: { imgUrl: MOCK_URL, answer: MOCK_VALUE },
+            },
+            allIds: [0],
           },
+          currentQuizIndex: 0,
+          gameStatus: GAME_STATUS.ANSWER_GUESS_TIME,
         },
       }),
     );
@@ -171,14 +207,13 @@ describe('<InputBox /> : submit input value', () => {
     });
 
     fireEvent.submit(form);
+    expect(input).toHaveAttribute('value', '');
 
-    store.dispatch(reducers.showMessage('All Wrong!'));
-    store.dispatch(reducers.showAnswerBoxByInput(WRONG_ANSWER));
+    store.dispatch(reducers.changeMessage('All Wrong!'));
     const actions = store.getActions();
 
-    expect(actions[0].type).toEqual('quiz/showMessage');
-    expect(actions[1].type).toEqual('quiz/showAnswerBoxByInput');
-    expect(input).toHaveAttribute('value', '');
+    expect(actions[0].type).toEqual('quiz/changeMessage');
+    expect(actions[0].payload).toEqual('All Wrong!');
 
     store.clearActions();
   });

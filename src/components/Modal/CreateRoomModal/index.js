@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import useSound from 'use-sound';
-import { sampleSize } from 'lodash';
-
 import { getDatabase, ref, set, get, child } from '@firebase/database';
-import { changeMessage, onError } from '../../../store/quizSlice';
+import { sampleSize } from 'lodash';
+import useSound from 'use-sound';
+import PropTypes from 'prop-types';
+
+import { changeMessage } from '../../../store/quizSlice';
 import { saveRoomId, saveUserName } from '../../../store/battleSlice';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import {
@@ -77,8 +78,9 @@ function CreateRoomModal({ onClose }) {
         ],
       });
     } catch (err) {
-      dispatch(onError(ERROR.LOAD_DATA));
-      history.push(ROUTE.ERROR);
+      history.push(ROUTE.ERROR, {
+        error: ERROR.LOAD_DATA,
+      });
     }
 
     history.push(`${ROUTE.ROOM}/${roomId}`);
@@ -153,3 +155,7 @@ function CreateRoomModal({ onClose }) {
 }
 
 export default CreateRoomModal;
+
+CreateRoomModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
@@ -8,11 +8,7 @@ import styled from 'styled-components';
 import { receiveAttack, updateWarningMessage } from '../../store/quizSlice';
 import { flexCenter } from '../../styles/share/common';
 import theme from '../../styles/theme';
-import {
-  pounding,
-  emergency,
-  rightAndLeft,
-} from '../../styles/share/animation';
+import { pounding, emergency } from '../../styles/share/animation';
 import { ROOMS, GAME_STATUS, ATTACK } from '../../constants/game';
 
 function Header() {
@@ -134,7 +130,8 @@ function Header() {
   );
 }
 
-export default Header;
+const MemoizedHeader = memo(Header);
+export default MemoizedHeader;
 
 const Container = styled.div`
   position: relative;

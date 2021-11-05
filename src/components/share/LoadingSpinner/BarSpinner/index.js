@@ -1,4 +1,6 @@
 import BarLoader from 'react-spinners/BarLoader';
+import PropTypes from 'prop-types';
+
 import theme from '../../../../styles/theme';
 import { Wrapper } from '../../../../styles/share/spinnerStyle';
 
@@ -17,3 +19,11 @@ function BarSpinner({ color = 'white' }) {
 }
 
 export default BarSpinner;
+
+BarSpinner.propTypes = {
+  color: PropTypes.string,
+};
+
+BarSpinner.defaultProps = {
+  color: theme.white,
+};

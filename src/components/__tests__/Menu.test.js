@@ -33,5 +33,11 @@ describe('<Menu /> : render', () => {
 
     const battleStart = screen.getByText('같이 얼음깨기');
     expect(battleStart.closest('a')).toHaveAttribute('href', ROUTE.ROOMS);
+
+    const ranking = screen.getByText('랭킹 보기');
+    expect(ranking.closest('a')).toHaveAttribute('href', ROUTE.RANKING);
+
+    const gameRules = screen.getByText('게임 방법');
+    expect(gameRules.closest('a')).toHaveAttribute('href', ROUTE.GAME_RULES);
   });
 });

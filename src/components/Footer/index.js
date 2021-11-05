@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
@@ -7,7 +7,6 @@ import theme from '../../styles/theme';
 
 import { pauseGameProgress, changeMessage } from '../../store/quizSlice';
 import usedCokeWeb from '../../asset/usedCoke.webp';
-import usedCoke from '../../asset/usedCoke.png';
 import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
@@ -15,7 +14,6 @@ import { flexCenter } from '../../styles/share/common';
 import { ROUTE, GAME_STATUS } from '../../constants/game';
 import { USE_ITEM, RESET } from '../../constants/messages';
 
-import ImgWithFallback from '../ImgWithFallback';
 const Portal = lazy(() => import('../Portal'));
 const Modal = lazy(() => import('../Modal'));
 const ItemModal = lazy(() => import('../Modal/ItemModal'));
@@ -105,10 +103,9 @@ function Footer() {
           .fill(null)
           .map((_, i) => {
             return (
-              <ImgWithFallback
+              <img
                 key={i}
                 src={i > itemsCount - 1 ? usedCokeWeb : cokeWeb}
-                fallback={i > itemsCount - 1 ? usedCoke : coke}
                 alt="coke"
                 width="27"
                 height="41"
@@ -120,7 +117,8 @@ function Footer() {
   );
 }
 
-export default Footer;
+const MemoizedFooter = memo(Footer);
+export default MemoizedFooter;
 
 const Wrapper = styled.div`
   ${flexCenter}

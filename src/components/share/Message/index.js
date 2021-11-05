@@ -1,5 +1,8 @@
+import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
+
 import theme from '../../../styles/theme';
 
 const STYLES = {
@@ -47,11 +50,20 @@ function Message({ height }) {
   );
 }
 
-export default Message;
+const MemoizedMessage = memo(Message);
+export default MemoizedMessage;
+
+Message.propTypes = {
+  height: PropTypes.string,
+};
+
+Message.defaultProps = {
+  height: '5%',
+};
 
 const Wrapper = styled.div`
   width: 100%;
-  height: ${({ height }) => (height ? height : '5%')};
+  height: ${({ height }) => height};
   text-align: center;
 `;
 
