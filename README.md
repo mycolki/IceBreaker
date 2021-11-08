@@ -1,20 +1,18 @@
 ## <span style="color:#7879f1"> **<i>Contents of Table</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [INTRODUCE PROJECT](#🧊-ICE-BREAKER-🔨)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [INTRODUCE PROJECT](#-ICE-BREAKER-)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [DEVELOPMENT PLAN](#📆-DEVELOPMENT-PLAN)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [DEVELOPMENT PLAN](#-DEVELOPMENT-PLAN)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [STACK](#🥏-STACK)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [STACK](#-STACK)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [FEATURES](#🎮-FEATURES)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [FEATURES](#-FEATURES)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [INSTALLATION](#🏗-INSTALLATION)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [INSTALLATION](#-INSTALLATION)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [PROJECT LOG](#📣-PROJECT-LOG)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [PROJECT LOG](#-PROJECT-LOG)</i>**
 
-  <br>
-  <br>
-  <br>
+<br>
 
 # <span style="color:#6bcdff"> **🧊 ICE BREAKER 🔨**
 
@@ -37,10 +35,8 @@
 
 <br>
 <br>
-<br>
-<br>
 
-# <span style="color:#7879f1">📆 **DEVELOPMENT PLAN**
+# <span style="color:#7879f1">🗒 **DEVELOPMENT PLAN**
 
 ### **프로젝트 기간**
 
@@ -70,12 +66,11 @@
 - Kanban by Notion : Task 일정 분배
 
 - Git Flow : 기능별 브랜치 Merge Strategy
-  <br>
-  <br>
-  <br>
-  <br>
 
-# <span style="color:#7879f1">🥏 **STACK**
+<br>
+<br>
+
+# <span style="color:#7879f1"> **🕋 STACK**
 
 **FrontEnd**
 
@@ -103,12 +98,11 @@
 - React-testing
 - EsLint
 - Git
-  <br>
-  <br>
-  <br>
-  <br>
 
-# <span style="color:#7879f1">🎮 **FEATURES**
+<br>
+<br>
+
+# <span style="color:#7879f1">📸 **FEATURES**
 
 ```
 🧊 얼음깨기 RULES
@@ -131,6 +125,8 @@
   <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 32%; margin: 5px;" />
 </div>
 
+<br>
+
 - 경쟁에 대한 부담없이 혼자서도 게임을 즐길 수 있습니다.
 - **랭킹**에 점수를 등록해서 자신의 점수를 널리 자랑할 수도 있습니다.
 
@@ -149,6 +145,8 @@
   <img src="readme.asset/06-item_solo.png"  alt="ranking" style="width: 32%; margin: 5px;" />
 </div>
 
+<br>
+
 - **1 vs 1 매칭**으로 진행되며, 상대방이 다음 레벨로 넘어갈 때마다 알림이 뜨기 때문에 스릴을 느끼면서 긴장을 놓지 않고 얼음 깨기를 할 수 있습니다.
 - 방 만들기
   방을 만들면 방 고유의 ID가 발급됩니다. 이 ID를 친구에게 공유할 수도 있습니다.
@@ -156,15 +154,15 @@
   친구에게 전달받은 ID로 해당 방에 바로 입장할 수 있습니다.
 - 둘 중 한 명이라도 마지막 레벨을 끝내는 순간 게임이 종료되며, 결과 화면에서 최종 점수와 승패를 확인할 수 있습니다.
   상대방이 다음 레벨로 넘어가거나, 상대방이 콜라 아이템으로 공격하면 **상단에 경고메시지**가 실시간으로 나타납니다.
-  <br>
+
+<br>
 
 🧊 **게임 방법 : How to Play**
 
 - 아이스브레이커 게임 규칙에 대한 페이지입니다.
-  <br>
-  <br>
-  <br>
-  <br>
+
+<br>
+<br>
 
 # <span style="color:#7879f1">🏗 **INSTALLATION**
 
@@ -191,10 +189,9 @@
   ```
 
   로컬 URL: `http://localhost:3000`
-  <br>
-  <br>
-  <br>
-  <br>
+
+<br>
+<br>
 
 # <span style="color:#6bcdff">**📣 PROJECT LOG**
 
@@ -202,13 +199,13 @@
 
 - **firebase를 서버로 사용하게 된 이유**
   imgUrl과 answer로 이루어진 퀴즈데이터의 단순한 구조와, 보안과 관련된 개인 계정을 저장하지 않기 때문에 서버를 따로 만들지 않고 firebase를 이용하는 방향으로 결정했습니다.
-  또한 socket.io로 구현했던 [더빙게임 V-Live프로젝트](https://github.com/voicelive)에 비해 실시간 소통의 비중이 상대적으로 적었고, 새로운 방식으로도 socket을 구현해보고 싶었기 때문에 **firebase** **realtime database**를 선택했습니다.
+  또한 socket.io로 구현했던 [**더빙게임 V-Live프로젝트**](https://github.com/voicelive)에 비해 실시간 소통의 비중이 상대적으로 적었고, 새로운 방식으로도 socket을 구현해보고 싶었기 때문에 **firebase** **realtime database**를 선택했습니다.
 
 ### **<i>🔹 Why Konva?</i>**
 
 - **캔버스 라이브러리를 선택 과정**
 
-  얼음판 위에 그려지는 작은 얼음 큐브 하나하나에 각각 클릭이벤트 및 애니메이션을 조작해줘야 했기 때문에 캔버스를 사용하기로 결정했습니다. HTML5에서 기본으로 제공해주는 canvas API 는 dom element 를 조작해서 그래픽을 구현하는 방식이었기 때문에, 리액트 기반인 아이스브레이커와는 맞지 않다 생각되었습니다. 많은 라이브러리를 조사해보고 Fabric 과 p5 그리고 Konva 를 사용해본 끝에 라이브러리 찾기 유목 생활을 정리할 수 있었습니다.
+  얼음판 위에 그려지는 작은 얼음 큐브 하나하나에 각각 클릭이벤트 및 애니메이션을 조작해줘야 했기 때문에 캔버스를 사용하기로 결정했습니다. HTML5에서 기본으로 제공해주는 canvas API 는 dom element 를 조작해서 그래픽을 구현하는 방식이었기 때문에, 리액트 기반인 아이스브레이커와는 맞지 않다 생각했습니다. 많은 라이브러리를 조사해보고 Fabric 과 p5 그리고 Konva 를 사용해본 끝에 라이브러리 찾기 유목 생활을 정리할 수 있었습니다.
 
 - **React-Konva**
 
@@ -223,33 +220,37 @@
 
 ### **<i>🔸 Mobile Optimization 모바일 최적화</i>**
 
-로컬 브라우저 환경과 달리 배포 후 모바일 환경에서 초기 렌더링 및 화면 전환시 이미지의 로딩이 딜레이되는 문제가 발생했습니다. Javascript Minification 을 적용해 빌드 후 프로덕션 모드 버전으로 배포하고, 초기 렌더링 속도 향상에 중점을 두고 Light House & Web Inspector 툴로 테스트하면서 최적화를 진행했습니다. (Light House 퍼포먼스 성능 27% 향상)
+로컬 브라우저 환경과 달리 배포 후 모바일 환경에서 초기 렌더링 및 화면 전환시 네트워크 요청 속도가 느려지는 문제가 발생되어, 속도 향상에 중점을 두고 다양한 최적화 방법을 시도했습니다.<br>
+( Web Inspector & LightHouse 테스트 → 퍼포먼스 성능 28% 향상 )
 
-- **Code-Splitting** : React.lazy & React.Suspense 로 컴포넌트 지연로딩<br />▸ vendor.chunk 파일 Transfer 사이즈 85% 감소
-- **Image**<br />저장소를 Firebase Store 에서 S3로 변경<br />▸ 네트워크 요청 시간 95% 단축<br />Modernizr 함수로 브라우저 지원 여부 확인 후 Webp 포맷 동적으로 선택<br />▸ 로딩 시간 4.3s 감소
-- **Tree-Shaking** : 미사용 모듈 제거 및 번들 파일의 용량 최소화<br />▸ Lodash 라이브러리 Dynamic Import
-- **CSS Sprite** : 아이템, 북극곰 이미지들을 하나의 파일로 병합하여 Http 다운로드 요청 횟수 최소화
-- **Reflow 방지** : 레이아웃 단계를 재발생 시키는 css 스타일링 변경하여 Reflow 제거 및 최소화
-- **React 성능 최적화** : React Hooks API 를 적절하게 사용하여 불필요한 렌더링 방지
+- **Code-Splitting**<br>React.lazy & React.Suspense 로 컴포넌트 지연 로딩 ‣ vendor.chunk 파일 Transfer 사이즈 85% 감소
+- **Image**<br />저장소를 Firebase Storage 에서 S3로 변경 ‣ 네트워크 요청 시간 95% 단축<br>jpg, png, webp 각 이미지 형식으로 렌더링 속도 비교 후 webp 포맷 선택 ‣ 로딩 시간 4.3s 감소
+- **Tree-Shaking**<br>Lodash ‣ 빌드시간을 고려하여 플러그인 없이 Default Import 방식으로 번들 사이즈 89% 감소 <br>트리셰이킹이 적용된 Firebase V9 SDK 사용 ‣ Database Module 번들 사이즈 60% 감소
+- **Reflow 방지**<br>레이아웃 단계를 재발생 시키는 css 속성을 변경하여 Reflow 제거 및 최소화
+- **React 최적화**<br>React Hooks API 를 적절하게 사용하여 불필요한 렌더링 방지
   <br>
   <br>
 
 ### **<i>🔸 CleanUp Error</i>**
 
-게임화면에서 다음 문제 버튼을 클릭했을 때, 문제가 바뀌지 않고 계속 레벨 1의 문제만 나오는 버그가 발생했습니다. 하지만 현재 렌더링 된 컴포넌트가 아닌, 이미 이전에 언마운트된 Ready 컴포넌트 useEffect 내부 dispatch 함수가 버튼을 누를때마다 호출이 되고 있었습니다.
-roomId 가 있을 경우에 첫번째 문제를 할당하는 action 을 보내는 코드에서 roomId 가 없을 경우 early return 방식으로 **분기처리 순서만** 수정했을 뿐이었어서 처음에는 코드에 문제가 없다고 생각했고 **디버깅을 해도** 원인을 찾기 어려웠습니다, 지난 프로젝트에서도 에러를 많이 발생했던 부분이 peer 연결을 제대로 remove해주고 있지 않았었던 부분이었던지라 cleanUp 키워드를 떠올렸습니다.
+게임 진행을 테스트하던 중 이미 언마운트 된 컴포넌트의 함수가 호출되는 버그를 발견했습니다. 해당 컴포넌트에서 퀴즈 데이터를 받아오는 Firebase 함수의 분기 처리만 바꿔줬던 부분이기 때문에 코드에서는 문제가 없다고 생각했습니다.
 
 <details>
-  <summary><span style="color:#c1c1c1">수정 전 후 코드</summary>
+  <summary>분기처리 수정 전 후</summary>
 
-Before
+<br>
+roomId : URL의 파라미터, 배틀 모드일 때 존재하는 방 ID
+
+<br>
+<br>
+
+**Before**
 
 ```js
 useEffect(() => {
   if (roomId) {
-    return onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+    return onValue(ref(getDatabase(), ...), (snapshot) => {
       //do something
-      dispatch(getFirstLevel());
     });
   }
 
@@ -257,55 +258,29 @@ useEffect(() => {
 }, [dispatch, roomId]);
 ```
 
-After
+**After**
 
 ```js
 useEffect(() => {
   if (!roomId) dispatch(getFirstLevel());
 
-  onValue(ref(getDatabase(), `${ROOM}/${roomId}`), (snapshot) => {
+  onValue(ref(getDatabase(), ...), (snapshot) => {
     //do something
-    dispatch(getFirstLevel());
   });
 }, [dispatch, roomId]);
 ```
 
 </details>
 <br>
-하지만 Firebase 가 V9로 업데이트 되고 나서 문서에서는 onValue 의 return 값에 대한 부분이나, cleanUp 함수가 명시되어 있지 않았기 때문에, 직접 <b>return 값</b> 을 확인한 후에 버그를 개선할 수 있었습니다.
-<details>
-  <summary><span style="color:#c1c1c1">onValue의 return값 확인</summary>
+
+Firebase의 onValue 함수는 DB가 업데이트 되는지 계속해서 리스닝하는 메서드인데 return 을 해주는 방식에서, 분기 처리 수정 후에 return 되지 않으면서 발생한 이벤트 누수였습니다. Firebase 가 V9 SDK 문서에는 onValue 의 return 값에 대한 부분이 명시하지 않았기 때문에, 직접 <b>return 값</b> 을 확인한 후에 버그를 개선할 수 있었습니다.
 
 ```js
-useEffect(() => {
-  if (roomId) {
-    const cleanup = onValue(
-      ref(getDatabase(), `${ROOM}/${roomId}`),
-      (snapshot) => {
-        const data = snapshot.val();
-
-        if (!data) return;
-
-        dispatch(replaceQuestions(data.questions));
-        dispatch(getFirstLevel());
-      },
-    );
-
-    console.log(cleanup);
-
-    return cleanup;
-  }
-
-  dispatch(getFirstLevel());
-}, [dispatch, roomId]);
-
-//`() => repoRemoveEventCallbackForQuery(query._repo, query, container)`
+// onValue의 반환값
+() => repoRemoveEventCallbackForQuery(query._repo, query, container);
 ```
 
-</details>
-<br>
-Firebase 의 onValue는 DB 가 바뀌는 순간을 듣고 있다가 callback 을 실행하는 함수인데, 수정 전 코드에서는 return 을 함으로써 cleanUp 함수를 반환하므로 의도치않게 이벤트리스너를 제거하는 효과를 얻었지만, 수정 후 코드에서는 제거되지 않은 리스너가 언마운트 이후에도  이벤트를 듣고있기 때문에 발생헀던 버그였습니다. 리액트는 개발자가 의도했을 수 있기 때문에 메모리가 누수되더라도 별다른 조치를 하지 않는 다는 사실도 알게 되었습니다.
-비록 시간은 딜레이 되었으나, 지난 경험을 바탕으로 문제를 회피하지 않고 직접 부딪치고, 근본적인 원리에 다가서서 문제를 해결하는 방법을 깨우치는 유익한 시간이었습니다.
+리액트는 개발자가 의도했을 수 있기 때문에 메모리가 누수되더라도 별다른 조치를 하지 않는 다는 사실도 알게 되었고, 문서에만 의지하지 않고 근본적인 원리를 파고들어 문제를 해결하는 방법을 깨우치는 유익한 시간이었습니다.
 
 <br>
 <br>
@@ -314,4 +289,4 @@ Firebase 의 onValue는 DB 가 바뀌는 순간을 듣고 있다가 callback 을
 
 처음 기획했던 아이스브레이커는 솔로 모드로만 진행되는 포맷이었습니다. 원래 계획대로라면 게임만들기 기능을 추가해야 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들어서 배틀 모드를 추가하게 되었습니다.
 
-이미 솔로 모드로 게임 로직이 모두 구현되어 있는 상황에서 실시간 소켓 관련한 로직이 추가되면서 기존 코드와 부딪히는 부분에 대한 보완도 해야 했지만, 기존 코드의 확장성과 유연성에 대해서 생각을 많이 할 수 있었습니다.
+게임의 진행 상태를 명시한 State로 확장성과 유연성이 보장되도록 디자인했기 때문에, 이미 솔로 모드를 기반으로 구현된 로직에 다른 사용자와 게임하는 배틀 기능을 추가했음에도 불구하고 두 로직이 의존성없이 작동할 수 있었습니다.

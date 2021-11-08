@@ -132,5 +132,4 @@ export default EnterRoomModal;
 
 EnterRoomModal.propTypes = {
   onClose: PropTypes.func.isRequired,
-  hasRank: PropTypes.func.isRequired,
 };

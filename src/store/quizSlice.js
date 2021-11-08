@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import sampleSize from 'lodash/sampleSize';
 
-import { sampleSize } from 'lodash';
 import {
   QUIZ,
   QUIZ_LENGTH,
