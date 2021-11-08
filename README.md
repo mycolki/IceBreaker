@@ -1,37 +1,38 @@
-## <span style="color:#7879f1"> **<i>Contents of Table</i>**
-
-**<i><span style="color:#7879f1"> ▶︎ [INTRODUCE PROJECT](#-ICE-BREAKER-)</i>**
-
-**<i><span style="color:#7879f1"> ▶︎ [DEVELOPMENT PLAN](#-DEVELOPMENT-PLAN)</i>**
-
-**<i><span style="color:#7879f1"> ▶︎ [STACK](#-STACK)</i>**
-
-**<i><span style="color:#7879f1"> ▶︎ [FEATURES](#-FEATURES)</i>**
-
-**<i><span style="color:#7879f1"> ▶︎ [INSTALLATION](#-INSTALLATION)</i>**
-
-**<i><span style="color:#7879f1"> ▶︎ [PROJECT LOG](#-PROJECT-LOG)</i>**
-
-<br>
-
-# <span style="color:#6bcdff"> **🧊 ICE BREAKER 🔨**
+# <span style="color:#0285cf"> **🧊 ICE BREAKER**
 
 <p>
   <img src="readme.asset/playGame.gif" alt="ice-breaker" width="47%" />
   <img src="readme.asset/01-menu.png"  alt="menu" width="47%" />
 </p>
 
-### **❄️ <i>Guess what's inside the ice!**</i>
+### **🔨 <i>Guess what's inside the ice!**</i>
 
 **아이스 브레이커**는 망치로 얼음 큐브를 깨면서,
 얼음 아래로 보이는 그림이 무엇인지 맞추는 **Web App 게임**입니다.
 
-### **❄️ <i>Motivation**</i>
+### **🔨 <i>Motivation**</i>
 
 스크래치 북과, 펭귄 얼음깨기 보드게임에서 모티브를 얻어 기획한 **아케이드** 게입니다.
 재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 체험할 수 있도록 만들었습니다.
 
-### ❄️ <i>**[Demo LINK](https://icebreaker.colki.me/)**</i>
+### ⚒️ <i>**[Demo LINK](https://icebreaker.colki.me/)**</i>
+
+<br>
+<br>
+
+# <span style="color:#7879f1"> **<i>🏎 SHORTCUT</i>**
+
+**<i><span style="color:#7879f1"> ▶︎ [🗒 DEVELOPMENT PLAN](#-DEVELOPMENT-PLAN)</i>**
+
+**<i><span style="color:#7879f1"> ▶︎ [🛍 STACK](#-STACK)</i>**
+
+**<i><span style="color:#7879f1"> ▶︎ [📸 FEATURES](#-FEATURES)</i>**
+
+**<i><span style="color:#7879f1"> ▶︎ [🏗 INSTALLATION](#-INSTALLATION)</i>**
+
+**<i><span style="color:#7879f1"> ▶︎ [📘 PROJECT LOG](#-PROJECT-LOG)</i>**
+
+**<i><span style="color:#7879f1"> ▶︎ [💡 CHALLENGE](#-CHALLENGE)</i>**
 
 <br>
 <br>
@@ -70,17 +71,17 @@
 <br>
 <br>
 
-# <span style="color:#7879f1">**🕋 STACK**
+# <span style="color:#7879f1">**🛍 STACK**
 
 **FrontEnd**
 
 - JavaScript ES2015+
 - React
-- React-router-dom
-- Redux (Redux-toolkit)
+- React Router Dom
+- Redux (Redux-Toolkit)
 - Konva.js
 - Gsap
-- Styled-component
+- Styled-Component
 
 **BackEnd**
 
@@ -91,11 +92,11 @@
 
 - Netlify
 - Lodash
-- React-fastclick
-- Use-sound
+- React-Fastclick
+- Use-Sound
 - PropTypes
 - Jest
-- React-testing
+- React Testing Library
 - EsLint
 - Git
 
@@ -193,7 +194,7 @@
 <br>
 <br>
 
-# <span style="color:#6bcdff">**📣 PROJECT LOG**
+# <span style="color:#0285cf">**📘 PROJECT LOG**
 
 ### **<i>🔹 Why Firebase?</i>**
 
@@ -201,11 +202,13 @@
   imgUrl과 answer로 이루어진 퀴즈데이터의 단순한 구조와, 보안과 관련된 개인 계정을 저장하지 않기 때문에 서버를 따로 만들지 않고 firebase를 이용하는 방향으로 결정했습니다.
   또한 socket.io로 구현했던 [**더빙게임 V-Live프로젝트**](https://github.com/voicelive)에 비해 실시간 소통의 비중이 상대적으로 적었고, 새로운 방식으로도 socket을 구현해보고 싶었기 때문에 **firebase** **realtime database**를 선택했습니다.
 
+<br>
+
 ### **<i>🔹 Why Konva?</i>**
 
 - **캔버스 라이브러리를 선택 과정**
 
-  얼음판 위에 그려지는 작은 얼음 큐브 하나하나에 각각 클릭이벤트 및 애니메이션을 조작해줘야 했기 때문에 캔버스를 사용하기로 결정했습니다. HTML5에서 기본으로 제공해주는 canvas API 는 dom element 를 조작해서 그래픽을 구현하는 방식이었기 때문에, 리액트 기반인 아이스브레이커와는 맞지 않다 생각했습니다. 많은 라이브러리를 조사해보고 Fabric 과 p5 그리고 Konva 를 사용해본 끝에 라이브러리 찾기 유목 생활을 정리할 수 있었습니다.
+  얼음판 위에 그려지는 작은 얼음 큐브 하나하나에 각각 클릭이벤트 및 애니메이션을 조작해줘야 했기 때문에 캔버스를 사용하기로 결정했습니다. HTML5에서 기본으로 제공해주는 canvas API 는 dom element 를 조작해서 그래픽을 구현하는 방식이었기 때문에, 리액트 기반인 아이스브레이커와는 맞지 않다 생각했습니다. 많은 라이브러리를 조사해보고 Fabric 과 p5 그리고 Konva 를 사용해본 끝에 라이브러리 찾기 유목 생활을 정리할 수 있었습니다.q
 
 - **React-Konva**
 
@@ -215,8 +218,11 @@
 - **아쉬운 부분 💦**
 
   다만 캔버스와 엘리먼트간에는 각자 공간을 차지하고 있기 때문에 레이어처럼 쌓아 올려지지 않아서, 게임화면의 점수, 메뉴, 아이템에서 reflow 를 발생시킬 수 있는 스타일 속성들을 사용했던 부분이 있었습니다.
-  <br>
-  <br>
+
+<br>
+<br>
+
+# <span style="color:#0285cf">**💡 CHALLENGE**
 
 ### **<i>🔸 Mobile Optimization 모바일 최적화</i>**
 
@@ -228,21 +234,17 @@
 - **Tree-Shaking**<br>Lodash ‣ 빌드시간을 고려하여 플러그인 없이 Default Import 방식으로 번들 사이즈 89% 감소 <br>트리셰이킹이 적용된 Firebase V9 SDK 사용 ‣ Database Module 번들 사이즈 60% 감소
 - **Reflow 방지**<br>레이아웃 단계를 재발생 시키는 css 속성을 변경하여 Reflow 제거 및 최소화
 - **React 최적화**<br>React Hooks API 를 적절하게 사용하여 불필요한 렌더링 방지
-  <br>
-  <br>
+
+<br>
 
 ### **<i>🔸 CleanUp Error</i>**
 
 게임 진행을 테스트하던 중 이미 언마운트 된 컴포넌트의 함수가 호출되는 버그를 발견했습니다. 해당 컴포넌트에서 퀴즈 데이터를 받아오는 Firebase 함수의 분기 처리만 바꿔줬던 부분이기 때문에 코드에서는 문제가 없다고 생각했습니다.
 
 <details>
-  <summary>분기처리 수정 전 후</summary>
+  <summary>분기처리 수정 전 후 & 반환값 확인</summary>
 
-<br>
 roomId : URL의 파라미터, 배틀 모드일 때 존재하는 방 ID
-
-<br>
-<br>
 
 **Before**
 
@@ -270,23 +272,20 @@ useEffect(() => {
 }, [dispatch, roomId]);
 ```
 
-</details>
-<br>
-
-Firebase의 onValue 함수는 DB가 업데이트 되는지 계속해서 리스닝하는 메서드인데 return 을 해주는 방식에서, 분기 처리 수정 후에 return 되지 않으면서 발생한 이벤트 누수였습니다. Firebase 가 V9 SDK 문서에는 onValue 의 return 값에 대한 부분이 명시하지 않았기 때문에, 직접 <b>return 값</b> 을 확인한 후에 버그를 개선할 수 있었습니다.
+**onValue의 반환값**
 
 ```js
-// onValue의 반환값
 () => repoRemoveEventCallbackForQuery(query._repo, query, container);
 ```
 
+</details>
+
+Firebase의 onValue 함수는 DB가 업데이트 되는지 계속해서 리스닝하는 메서드인데 return 을 해주는 방식에서, 분기 처리 수정 후에 return 되지 않으면서 발생한 이벤트 누수였습니다. Firebase 가 V9 SDK 문서에는 onValue 의 return 값에 대한 부분이 명시하지 않았기 때문에, 직접 <b>return 값</b> 을 확인한 후에 버그를 개선할 수 있었습니다.
 리액트는 개발자가 의도했을 수 있기 때문에 메모리가 누수되더라도 별다른 조치를 하지 않는 다는 사실도 알게 되었고, 문서에만 의지하지 않고 근본적인 원리를 파고들어 문제를 해결하는 방법을 깨우치는 유익한 시간이었습니다.
 
-<br>
 <br>
 
 ### **<i>🔸 Realtime Battle Mode</i>**
 
 처음 기획했던 아이스브레이커는 솔로 모드로만 진행되는 포맷이었습니다. 원래 계획대로라면 게임만들기 기능을 추가해야 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들어서 배틀 모드를 추가하게 되었습니다.
-
 게임의 진행 상태를 명시한 State로 확장성과 유연성이 보장되도록 디자인했기 때문에, 이미 솔로 모드를 기반으로 구현된 로직에 다른 사용자와 게임하는 배틀 기능을 추가했음에도 불구하고 두 로직이 의존성없이 작동할 수 있었습니다.
