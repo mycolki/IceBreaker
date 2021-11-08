@@ -70,7 +70,7 @@
 <br>
 <br>
 
-# <span style="color:#7879f1"> **🕋 STACK**
+# <span style="color:#7879f1">**🕋 STACK**
 
 **FrontEnd**
 
