@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
-import { sortBy, cloneDeep } from 'lodash';
+import sortBy from 'lodash/sortBy';
+import cloneDeep from 'lodash/cloneDeep';
 import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
@@ -45,7 +46,7 @@ function BattleOver() {
       dispatch(resetQuizForGameOver());
       dispatch(resetBattleForGameOver());
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     try {
@@ -91,7 +92,7 @@ function BattleOver() {
     };
 
     getBreakers();
-  }, [dispatch, roomId, userName]);
+  }, [dispatch, history, roomId, userName]);
 
   useEffect(() => {
     if (loading) audio.play();

@@ -2,6 +2,7 @@ import { useState, useEffect, lazy } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { getDatabase, ref, onValue, update } from 'firebase/database';
+
 import styled from 'styled-components';
 
 import {
@@ -73,7 +74,7 @@ function Breaking() {
         history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
       }
     });
-  }, [history, roomId]);
+  }, [dispatch, history, roomId]);
 
   useEffect(() => {
     if (isPlaying) {
