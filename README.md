@@ -120,14 +120,16 @@
 + 랭킹 히스트리 저장 기능
 
 <div style="display: flex; text-align: center;">
-  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 12%; margin: 5px;"/>
-  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 12%; margin: 5px;" />
-  <img src="readme.asset/06-item.png" alt="item" style="width: 12%; margin: 5px;"/>
-  <img src="readme.asset/02-rooms.png" alt="rooms" style="width: 12%; margin: 5px;"/>
-  <img src="readme.asset/03-room.png"  alt="room" style="width: 12%; margin: 5px;" />
-  <img src="readme.asset/06-item_solo.png"  alt="solo-item" style="width: 12%; margin: 5px;" />
-  <img src="readme.asset/06-item_battle.png"  alt="battle-item" style="width: 12%; margin: 5px;" />
-  <img src="readme.asset/09-lost.png"  alt="lost" style="width: 12%; margin: 5px;" />
+  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 18%; margin: 5px;"/>
+  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 18%; margin: 5px;" />
+  <img src="readme.asset/06-item.png" alt="item" style="width: 18%; margin: 5px;"/>
+  <img src="readme.asset/02-rooms.png" alt="rooms" style="width: 18%; margin: 5px;"/>
+</div>
+<div style="display: flex; text-align: center;">
+  <img src="readme.asset/03-room.png"  alt="room" style="width: 18%; margin: 5px;" />
+  <img src="readme.asset/06-item_solo.png"  alt="solo-item" style="width: 18%; margin: 5px;" />
+  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 18%; margin: 5px;" />
+  <img src="readme.asset/08-won.png"  alt="won" style="width: 18%; margin: 5px;" />
 </div>
 
 <br>
@@ -256,4 +258,4 @@ Firebase의 onValue 함수는 DB가 업데이트 되는지 계속해서 리스�
 ### **<i>Realtime Battle Mode</i>**
 
 처음 기획했던 아이스브레이커는 솔로 모드로만 진행되는 포맷이었습니다. 원래 계획대로라면 게임만들기 기능을 추가해야 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들어서 배틀 모드를 추가하게 되었습니다.
-게임의 진행 상태를 명시한 State로 확장성과 유연성이 보장되도록 디자인했기 때문에, 이미 솔로 모드를 기반으로 구현된 로직에 다른 사용자와 게임하는 배틀 기능을 추가했음에도 불구하고 두 로직이 의존성없이 작동할 수 있었습니다.
+게임의 진행 상태를 명시한 Game Status State로 확장성과 유연성이 보장되도록 디자인했기 때문에, 이미 솔로 모드를 기반으로 구현된 로직에 다른 사용자와 게임하는 배틀 기능을 추가했음에도 불구하고 두 로직이 의존성없이 작동할 수 있었습니다.
