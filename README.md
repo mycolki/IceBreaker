@@ -1,18 +1,18 @@
 # <span style="color:#0285cf"> **🧊 ICE BREAKER**
 
 <p>
-  <img src="readme.asset/playGame.gif" alt="ice-breaker" width="47%" />
-  <img src="readme.asset/01-menu.png"  alt="menu" width="47%" />
+  <img src="readme.asset/playGame.gif" alt="ice-breaker" width="35%" />
+  <img src="readme.asset/01-menu.png"  alt="menu" width="35%" />
 </p>
 
-### **🔨 <i>Guess what's inside the ice!**</i>
+### **<i>Guess what's inside the ice!**</i>
 
 **아이스 브레이커**는 망치로 얼음 큐브를 깨면서,
 얼음 아래로 보이는 그림이 무엇인지 맞추는 **Web App 게임**입니다.
 
-### **🔨 <i>Motivation**</i>
+### **<i>Motivation**</i>
 
-스크래치 북과, 펭귄 얼음깨기 보드게임에서 모티브를 얻어 기획한 **아케이드** 게입니다.
+스크래치 북과 펭귄 얼음깨기 보드게임에서 모티브를 얻어 기획한 **아케이드** 게입니다.
 재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 체험할 수 있도록 만들었습니다.
 
 ### ⚒️ <i>**[Demo LINK](https://icebreaker.colki.me/)**</i>
@@ -20,24 +20,24 @@
 <br>
 <br>
 
-# <span style="color:#7879f1"> **<i>🏎 SHORTCUT</i>**
+# <span style="color:#7879f1"> **<i>SHORTCUT</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [🗒 DEVELOPMENT PLAN](#-DEVELOPMENT-PLAN)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [DEVELOPMENT PLAN](#DEVELOPMENT-PLAN)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [🛍 STACK](#-STACK)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [STACK](#STACK)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [📸 FEATURES](#-FEATURES)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [FEATURES](#FEATURES)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [🏗 INSTALLATION](#-INSTALLATION)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [INSTALLATION](#INSTALLATION)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [📘 PROJECT LOG](#-PROJECT-LOG)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [PROJECT LOG](#PROJECT-LOG)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [💡 CHALLENGE](#-CHALLENGE)</i>**
+**<i><span style="color:#7879f1"> ▶︎ [TECHNICAL CHALLENGE](#TECHNICAL-CHALLENGE)</i>**
 
 <br>
 <br>
 
-# <span style="color:#7879f1">🗒 **DEVELOPMENT PLAN**
+# <span style="color:#7879f1">**DEVELOPMENT PLAN**
 
 ### **프로젝트 기간**
 
@@ -50,28 +50,28 @@
 
 ### **프로젝트 준비**
 
-- 🧠 [**Brain Storming**](https://www.notion.so/ideas-be87d168982e47688f7f3cb81f5a0e8d) : 프로젝트 아이디어
+- **[Brain Storming](https://www.notion.so/ideas-be87d168982e47688f7f3cb81f5a0e8d)** : 프로젝트 아이디어
 
-- **📝 [Features Planning](https://www.notion.so/features-08ed4725b3c345b9ab1bd94ecbdb658d)** : 프로젝트 기능 정리
+- **[Features Planning](https://www.notion.so/features-08ed4725b3c345b9ab1bd94ecbdb658d)** : 프로젝트 기능 정리
 
-- **🎨 [MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업 디자인
+- **[MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업 디자인
 
 <br>
 
 ### **프로젝트 진행**
 
-- Features : 프로젝트 세부 기능 기획
+- 프로젝트 세부 기능 기획
 
-- MockUp by Figma : UI & UX 설계
+- 사용자 경험을 고려한 UI & UX 설계 ( Figma Mockup )
 
-- Kanban by Notion : Task 일정 분배
+- 애자일 스프린트 의 태스크 매니지먼트
 
-- Git Flow : 기능별 브랜치 Merge Strategy
+- 기능별 브랜치 Git Merge Strategy
 
 <br>
 <br>
 
-# <span style="color:#7879f1">**🛍 STACK**
+# <span style="color:#7879f1">**STACK**
 
 **FrontEnd**
 
@@ -79,9 +79,9 @@
 - React
 - React Router Dom
 - Redux (Redux-Toolkit)
+- Styled-Component
 - Konva.js
 - Gsap
-- Styled-Component
 
 **BackEnd**
 
@@ -103,69 +103,37 @@
 <br>
 <br>
 
-# <span style="color:#7879f1">📸 **FEATURES**
+# <span style="color:#7879f1">**FEATURES**
 
-```
-🧊 얼음깨기 RULES
- ‣ Breaking Time 동안 최대한 많은 얼음을 깨야 합니다.
- ‣ Breaking Time이 끝나면 15초간 정답을 맞출 수 있습니다.
- ‣ 정답을 맞추면 바로 다음 문제로 넘어갈 수 있습니다.
- ‣ 레벨업 할 때마다 IceCube 의 난이도가 올라갑니다.
- ▾ 북극곰의 최애 콜라 아이템을 사용할 수 있습니다.
-   ‣ 🥤 : 정답 입력 시간이 10초 연장됩니다.
-   ‣ 🥤🥤 : 상대방의 정답 입력 시간을 5초 단축합니다.(같이 얼음깨기)
-```
-
-<br>
-
-### **🧊🔨 혼자 얼음 깨기 : Solo Mode**
++ 솔로 모드와 배틀 모드 제공
++ Firebase Realtime Database 기반으로 소켓 기능 구현
++ 채널 개설에 따른 실시간 채널리스트 업데이트
++ 채널 ID 친구와 공유 및 ID 로 바로 
++ 아이템을 이용한 유저의 정답시간 추가 및 상대 유저의 정답시간 단축 기능
++ 상대유저의 다음 레벨 진입 또는 아이템 공격시 실시간 알림 기능
++ 게임 승패 결과 페이지 공유
++ Amazon S3 저장소로 이미지 로딩 최적화
++ Konva.js 로 아이스 플레이트 & 아이스 큐브 커스터마이징
++ 레벨에 따른 아이스큐브 브레이킹 난이도 세팅
++ 상태를 이용한 얼음 큐브 렌더링
++ Gsap 를 이용한 애니메이션 효과
++ 랭킹 히스트리 저장 기능
 
 <div style="display: flex; text-align: center;">
-  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 32%; margin: 5px;"/>
-  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 32%; margin: 5px;" />
-  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 32%; margin: 5px;" />
+  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 12%; margin: 5px;"/>
+  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 12%; margin: 5px;" />
+  <img src="readme.asset/06-item.png" alt="item" style="width: 12%; margin: 5px;"/>
+  <img src="readme.asset/02-rooms.png" alt="rooms" style="width: 12%; margin: 5px;"/>
+  <img src="readme.asset/03-room.png"  alt="room" style="width: 12%; margin: 5px;" />
+  <img src="readme.asset/06-item_solo.png"  alt="solo-item" style="width: 12%; margin: 5px;" />
+  <img src="readme.asset/06-item_battle.png"  alt="battle-item" style="width: 12%; margin: 5px;" />
+  <img src="readme.asset/09-lost.png"  alt="lost" style="width: 12%; margin: 5px;" />
 </div>
 
 <br>
-
-- 경쟁에 대한 부담없이 혼자서도 게임을 즐길 수 있습니다.
-- **랭킹**에 점수를 등록해서 자신의 점수를 널리 자랑할 수도 있습니다.
-
 <br>
 
-### **🧊🔨 같이 얼음 깨기 : Battle Mode**
-
-<div style="display: flex; text-align: center;">
-  <img src="readme.asset/02-rooms.png" alt="breaking" style="width: 32%; margin: 5px;"/>
-  <img src="readme.asset/03-room.png"  alt="answer" style="width: 32%; margin: 5px;" />
-  <img src="readme.asset/09-lost.png"  alt="ranking" style="width: 32%; margin: 5px;" />
-</div>
-<div style="display: flex; text-align: center;">
-  <img src="readme.asset/06-item.png" alt="breaking" style="width: 32%; margin: 5px;"/>
-  <img src="readme.asset/06-item_battle.png"  alt="answer" style="width: 32%; margin: 5px;" />
-  <img src="readme.asset/06-item_solo.png"  alt="ranking" style="width: 32%; margin: 5px;" />
-</div>
-
-<br>
-
-- **1 vs 1 매칭**으로 진행되며, 상대방이 다음 레벨로 넘어갈 때마다 알림이 뜨기 때문에 스릴을 느끼면서 긴장을 놓지 않고 얼음 깨기를 할 수 있습니다.
-- 방 만들기
-  방을 만들면 방 고유의 ID가 발급됩니다. 이 ID를 친구에게 공유할 수도 있습니다.
-- 방ID로 바로 참여하기
-  친구에게 전달받은 ID로 해당 방에 바로 입장할 수 있습니다.
-- 둘 중 한 명이라도 마지막 레벨을 끝내는 순간 게임이 종료되며, 결과 화면에서 최종 점수와 승패를 확인할 수 있습니다.
-  상대방이 다음 레벨로 넘어가거나, 상대방이 콜라 아이템으로 공격하면 **상단에 경고메시지**가 실시간으로 나타납니다.
-
-<br>
-
-🧊 **게임 방법 : How to Play**
-
-- 아이스브레이커 게임 규칙에 대한 페이지입니다.
-
-<br>
-<br>
-
-# <span style="color:#7879f1">🏗 **INSTALLATION**
+# <span style="color:#7879f1">**INSTALLATION**
 
 - 프로젝트를 다운받은 후 프로젝트 디렉토리 내부에서 `.env` 파일을 생성하고, 다음 환경 변수를 입력해주세요
   ```jsREACT_APP_FIREBASE_API_KEY>
@@ -189,14 +157,14 @@
   $ npm start
   ```
 
-  로컬 URL: `http://localhost:3000`
+  로컬 URL : `http://localhost:3000`
 
 <br>
 <br>
 
-# <span style="color:#0285cf">**📘 PROJECT LOG**
+# <span style="color:#0285cf">**PROJECT LOG**
 
-### **<i>🔹 Why Firebase?</i>**
+### **<i>Why Firebase?</i>**
 
 - **firebase를 서버로 사용하게 된 이유**
   imgUrl과 answer로 이루어진 퀴즈데이터의 단순한 구조와, 보안과 관련된 개인 계정을 저장하지 않기 때문에 서버를 따로 만들지 않고 firebase를 이용하는 방향으로 결정했습니다.
@@ -204,7 +172,7 @@
 
 <br>
 
-### **<i>🔹 Why Konva?</i>**
+### **<i>Why Konva?</i>**
 
 - **캔버스 라이브러리를 선택 과정**
 
@@ -215,16 +183,16 @@
   Konva 깃허브 내부를 살펴봤을 때 리액트 컴포넌트를 상속받는 걸 확인했기 때문에, 기존 리액트를 다루듯이 작업할 수 있어서 이질감이 없었습니다.
   Konva 에서의 canvas 를 담당하는 Stage > Layer > Shape 구조로 레이어별로 나눠서 작업할 수 있고 레이어 순서를 변경하는 일도 용이했습니다. Fabric, P5 와 달리 JSX 에서 Shape 등을 정의함과 동시에 prop 으로 속성을 같이 넣어줄 수 있기 때문에 굉장히 직관적이고 코드도 가벼워졌습니다.
 
-- **아쉬운 부분 💦**
+- **아쉬운 부분**
 
   다만 캔버스와 엘리먼트간에는 각자 공간을 차지하고 있기 때문에 레이어처럼 쌓아 올려지지 않아서, 게임화면의 점수, 메뉴, 아이템에서 reflow 를 발생시킬 수 있는 스타일 속성들을 사용했던 부분이 있었습니다.
 
 <br>
 <br>
 
-# <span style="color:#0285cf">**💡 CHALLENGE**
+# <span style="color:#0285cf">**TECHNICAL CHALLENGE**
 
-### **<i>🔸 Mobile Optimization 모바일 최적화</i>**
+### **<i>Mobile Optimization 모바일 최적화</i>**
 
 로컬 브라우저 환경과 달리 배포 후 모바일 환경에서 초기 렌더링 및 화면 전환시 네트워크 요청 속도가 느려지는 문제가 발생되어, 속도 향상에 중점을 두고 다양한 최적화 방법을 시도했습니다.<br>
 ( Web Inspector & LightHouse 테스트 → 퍼포먼스 성능 28% 향상 )
@@ -237,7 +205,7 @@
 
 <br>
 
-### **<i>🔸 CleanUp Error</i>**
+### **<i>CleanUp Error</i>**
 
 게임 진행을 테스트하던 중 이미 언마운트 된 컴포넌트의 함수가 호출되는 버그를 발견했습니다. 해당 컴포넌트에서 퀴즈 데이터를 받아오는 Firebase 함수의 분기 처리만 바꿔줬던 부분이기 때문에 코드에서는 문제가 없다고 생각했습니다.
 
@@ -285,7 +253,7 @@ Firebase의 onValue 함수는 DB가 업데이트 되는지 계속해서 리스�
 
 <br>
 
-### **<i>🔸 Realtime Battle Mode</i>**
+### **<i>Realtime Battle Mode</i>**
 
 처음 기획했던 아이스브레이커는 솔로 모드로만 진행되는 포맷이었습니다. 원래 계획대로라면 게임만들기 기능을 추가해야 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들어서 배틀 모드를 추가하게 되었습니다.
 게임의 진행 상태를 명시한 State로 확장성과 유연성이 보장되도록 디자인했기 때문에, 이미 솔로 모드를 기반으로 구현된 로직에 다른 사용자와 게임하는 배틀 기능을 추가했음에도 불구하고 두 로직이 의존성없이 작동할 수 있었습니다.
