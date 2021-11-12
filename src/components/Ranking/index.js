@@ -20,10 +20,6 @@ function Ranking() {
   const [rankers, setRankers] = useState(null);
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(
-    typeof Audio !== 'undefined' && new Audio('audio/room.mp3'),
-  );
 
   useEffect(() => {
     const getRanks = async () => {
@@ -47,16 +43,6 @@ function Ranking() {
 
     getRanks();
   }, [dispatch, history]);
-
-  useEffect(() => {
-    setIsPlaying(true);
-
-    return () => audio.pause();
-  }, []);
-
-  useEffect(() => {
-    if (isPlaying) audio.play();
-  }, [isPlaying]);
 
   return (
     <Container>

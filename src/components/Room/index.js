@@ -31,13 +31,6 @@ function Room() {
   const [isReady, setIsReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(
-    typeof Audio !== 'undefined' &&
-      new Audio(
-        'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/room.mp3',
-      ),
-  );
 
   useEffect(() => {
     const cleanUp = onValue(ref(getDatabase(), ROOMS), (snapshot) => {
@@ -101,18 +94,6 @@ function Room() {
 
     return () => clearTimeout(timer);
   });
-
-  useEffect(() => {
-    setIsPlaying(true);
-
-    return () => audio.pause();
-  }, [dispatch, history]);
-
-  useEffect(() => {
-    if (isPlaying) {
-      audio.play();
-    }
-  }, [isPlaying]);
 
   const exitRoom = () => {
     if (!rooms) return;

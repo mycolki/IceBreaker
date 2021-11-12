@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { getDatabase, ref, onValue, update } from 'firebase/database';
@@ -10,6 +10,7 @@ import {
   decreaseTime,
   goToNextStep,
   endGame,
+  changeMessage,
 } from '../../store/quizSlice';
 import { ROUTE, ROOMS, GAME_STATUS, QUIZ_LENGTH } from '../../constants/game';
 
@@ -18,8 +19,12 @@ import AnswerDisplayBox from '../AnswerDisplayBox';
 import Footer from '../Footer';
 import Button from '../share/Button';
 import IcePlate from '../IcePlate';
+import { RESET } from '../../constants/messages';
 const Message = lazy(() => import('../share/Message'));
 const InputBox = lazy(() => import('../InputBox'));
+const Portal = lazy(() => import('../Portal'));
+const Modal = lazy(() => import('../Modal'));
+const PlayAudioModal = lazy(() => import('../Modal/PlayAudioModal'));
 
 function Breaking() {
   const { roomId } = useParams();
@@ -34,7 +39,7 @@ function Breaking() {
   const isGamePaused = useSelector((state) => state.quiz.isGamePaused);
   const userInput = useSelector((state) => state.quiz.userInput);
   const { answer, imgUrl } = currentQuiz;
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioModalOpen, setAudioModalOpen] = useState(true);
   const [audio] = useState(
     typeof Audio !== 'undefined' &&
       new Audio(
@@ -77,17 +82,13 @@ function Breaking() {
   }, [dispatch, history, roomId]);
 
   useEffect(() => {
-    if (isPlaying) {
-      audio.play();
-      audio.loop = true;
-    }
-  }, [isPlaying]);
-
-  useEffect(() => {
-    setIsPlaying(true);
-
     return () => audio.pause();
   }, []);
+
+  const playAudio = () => {
+    audio.play();
+    audio.loop = true;
+  };
 
   const goToNextQuiz = () => dispatch(goToNextStep());
   const goToEnding = () => {
@@ -100,6 +101,11 @@ function Breaking() {
     } else {
       history.push(ROUTE.GAME_OVER);
     }
+  };
+
+  const closeAudioModal = () => {
+    setAudioModalOpen(false);
+    dispatch(changeMessage(RESET));
   };
 
   return (
@@ -132,9 +138,22 @@ function Breaking() {
         </Answer>
       )}
       <Message />
-      <IcePlate />
+      <IcePlate selectedAudio={!audioModalOpen} />
       <InputBox />
       <Footer />
+      {audioModalOpen && (
+        <Suspense fallback={null}>
+          <Portal>
+            <Modal
+              onClose={closeAudioModal}
+              background="lightPink"
+              height="150px"
+            >
+              <PlayAudioModal onClose={closeAudioModal} onPlay={playAudio} />
+            </Modal>
+          </Portal>
+        </Suspense>
+      )}
     </Container>
   );
 }

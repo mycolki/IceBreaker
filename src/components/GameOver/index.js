@@ -23,23 +23,12 @@ function GameOver() {
   const [loading, setLoading] = useState(false);
   const [hasRank, setHasRank] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const [audio] = useState(
-    typeof Audio !== 'undefined' &&
-      new Audio(score >= 140 ? '/audio/won.mp3' : '/audio/lost.mp3'),
-  );
 
   useEffect(() => {
     setLoading(true);
 
-    return () => {
-      dispatch(resetQuizForGameOver());
-      audio.pause();
-    };
+    return () => dispatch(resetQuizForGameOver());
   }, [score]);
-
-  useEffect(() => {
-    if (loading) audio.play();
-  }, [loading]);
 
   const shareGameURL = () => {
     play();

@@ -30,6 +30,7 @@ const initialState = {
     text: '',
   },
   warningMessage: '',
+  isPlayAudio: false,
 };
 
 const quizSlice = createSlice({
@@ -125,6 +126,9 @@ const quizSlice = createSlice({
       state.message = RESET;
       state.itemsCount = INITIAL_ITEMS_COUNTS;
     },
+    playBackgroundAudio(state, action) {
+      state.isPlayAudio = action.payload;
+    },
   },
 });
 
@@ -143,6 +147,7 @@ export const {
   goToNextStep,
   endGame,
   resetQuizForGameOver,
+  playBackgroundAudio,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

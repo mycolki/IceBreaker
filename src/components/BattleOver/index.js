@@ -35,13 +35,9 @@ function BattleOver() {
   const [isDraw, setIsDraw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const audio =
-    typeof Audio !== 'undefined' &&
-    new Audio(isWinner ? '/audio/won.mp3' : '/audio/lost.mp3');
 
   useEffect(() => {
     return () => {
-      audio.pause();
       window.sessionStorage.removeItem('userName');
       dispatch(resetQuizForGameOver());
       dispatch(resetBattleForGameOver());
@@ -93,10 +89,6 @@ function BattleOver() {
 
     getBreakers();
   }, [dispatch, history, roomId, userName]);
-
-  useEffect(() => {
-    if (loading) audio.play();
-  }, [loading]);
 
   const shareGameURL = () => {
     play();

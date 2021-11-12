@@ -33,13 +33,6 @@ function Rooms() {
   const [enterModalOpen, setEnterModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [play] = useSound('/audio/click.mp3');
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(
-    typeof Audio !== 'undefined' &&
-      new Audio(
-        'https://icebreakerquiz.s3.ap-northeast-2.amazonaws.com/audio/rooms.mp3',
-      ),
-  );
 
   useEffect(() => {
     dispatch(changeMessage(BATTLE.WAITING));
@@ -59,16 +52,6 @@ function Rooms() {
       cleanUp();
     };
   }, [dispatch, history]);
-
-  useEffect(() => {
-    setIsPlaying(true);
-
-    return () => audio.pause();
-  }, []);
-
-  useEffect(() => {
-    if (isPlaying) audio.play();
-  }, [isPlaying]);
 
   const enterRoom = (roomId) => {
     play();
