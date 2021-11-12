@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Stage, Layer, Image } from 'react-konva';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { changeGameStatus } from '../../store/quizSlice';
@@ -11,7 +12,7 @@ import Cubes from '../Ice/Cubes';
 import LoadingPlateLayer from '../Ice/LoadingPlateLayer';
 import DotSpinner from '../share/LoadingSpinner/DotSpinner';
 
-function IcePlate() {
+function IcePlate({ selectedAudio }) {
   const dispatch = useDispatch();
   const quizCollection = useSelector((state) => state.quiz?.quizCollection);
   const currentQuizIndex = useSelector((state) => state.quiz?.currentQuizIndex);
@@ -25,10 +26,12 @@ function IcePlate() {
     const img = new window.Image();
     img.src = imgUrl;
     img.onload = () => {
-      dispatch(changeGameStatus(GAME_STATUS.ICE_BREAKING_TIME));
+      if (selectedAudio) {
+        dispatch(changeGameStatus(GAME_STATUS.ICE_BREAKING_TIME));
+      }
       setImage(img);
     };
-  }, [imgUrl, dispatch]);
+  }, [imgUrl, dispatch, selectedAudio]);
 
   return (
     <Container>
@@ -58,6 +61,10 @@ function IcePlate() {
 }
 
 export default IcePlate;
+
+IcePlate.propTypes = {
+  selectedAudio: PropTypes.bool,
+};
 
 const Container = styled.div`
   height: 50%;

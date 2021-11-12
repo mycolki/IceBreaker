@@ -5,75 +5,133 @@
   <img src="readme.asset/01-menu.png"  alt="menu" width="35%" />
 </p>
 
-### **<i>Guess what's inside the ice!**</i>
+## **<i>Guess what's inside the ice!**</i>
 
-**아이스 브레이커**는 망치로 얼음 큐브를 깨면서,
-얼음 아래로 보이는 그림이 무엇인지 맞추는 **Web App 게임**입니다.
-
-### **<i>Motivation**</i>
-
-스크래치 북과 펭귄 얼음깨기 보드게임에서 모티브를 얻어 기획한 **아케이드** 게입니다.
-재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 체험할 수 있도록 만들었습니다.
-
-### ⚒️ <i>**[Demo LINK](https://icebreaker.colki.me/)**</i>
+**아이스 브레이커**는 망치로 얼음 큐브를 깨면서🧊🔨<br>
+얼음 아래로 보이는 그림이 무엇인지 맞추는 아케이드 **Web App 게임** 입니다.<br>
+혼자 얼음을 깨거나 친구와 함께 경쟁하면서 얼음을 깰 수 있습니다.
 
 <br>
 <br>
 
-# <span style="color:#7879f1"> **<i>SHORTCUT</i>**
+# **<i>SHORTCUT</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [DEVELOPMENT PLAN](#DEVELOPMENT-PLAN)</i>**
+**<i>[🗒 DEVELOPMENT PLAN ](#-DEVELOPMENT-PLAN)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [STACK](#STACK)</i>**
+**<i>[🚀 MOTIVATION](#-MOTIVATION)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [FEATURES](#FEATURES)</i>**
+**<i>[📸 FEATURES](#-FEATURES)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [INSTALLATION](#INSTALLATION)</i>**
+**<i>[🧳 STACK](#-STACK)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [PROJECT LOG](#PROJECT-LOG)</i>**
+**<i>[🕹 USAGE](#-USAGE)</i>**
 
-**<i><span style="color:#7879f1"> ▶︎ [TECHNICAL CHALLENGE](#TECHNICAL-CHALLENGE)</i>**
+**<i>[💾 DEPLOY](#-DEPLOY)</i>**
+
+**<i>[📘 PROJECT LOG](#-PROJECT-LOG)</i>**
+
+**<i>[⚒️ TECHNICAL CHALLENGE](#-TECHNICAL-CHALLENGE)</i>**
 
 <br>
 <br>
 
-# <span style="color:#7879f1">**DEVELOPMENT PLAN**
+# **🗒 DEVELOPMENT PLAN**
 
 ### **프로젝트 기간**
 
-2021.9.27 ~ 2021.10.16 ( 3Week )
+- **2021.09.27 ~ 2021.10.03**
 
-> 09.27 ~ 10.03 : 아이디어 기획 및 기능 정리 & 애자일 스프린트 계획<br />
-> 10.04 ~ 10.16 : 개발 진행
+  아이디어 기획
+
+  목업디자인
+
+  세부 기능 설계
+
+  애자일 스프린트 계획 (1주)
+
+- **2021.10.04 ~ 2021.10.16**
+
+  개발 진행 (2주)
+
+<br>
+
+### **프로젝트 진행단계**
+
+- **프로젝트 아이디어 구상**
+
+  - **[🧠 아이디어 리스트](https://www.notion.so/ideas-be87d168982e47688f7f3cb81f5a0e8d)**
+
+- **UI / UX 사용자의 관점에서 생각한 UI 디자인 및 UI 기획**
+
+  - **[📝 Features Planning](https://www.notion.so/features-08ed4725b3c345b9ab1bd94ecbdb658d)**
+
+  - **[🎨 MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업 디자인
+    <img src="readme.asset/mockup.png" alt="mockup" width="80%" />
 
 <br>
 
-### **프로젝트 준비**
+- **애자일 스프린트 방식의 태스크 매니지먼트**
 
-- **[Brain Storming](https://www.notion.so/ideas-be87d168982e47688f7f3cb81f5a0e8d)** : 프로젝트 아이디어
+- **기술 스택 검토**
 
-- **[Features Planning](https://www.notion.so/features-08ed4725b3c345b9ab1bd94ecbdb658d)** : 프로젝트 기능 정리
+- **기능별 브랜치 Git Merge Strategy**
 
-- **[MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업 디자인
+- **Netlify 배포 및 모바일 테스트**
 
-<br>
-
-### **프로젝트 진행**
-
-- 프로젝트 세부 기능 기획
-
-- 사용자 경험을 고려한 UI & UX 설계 ( Figma Mockup )
-
-- 애자일 스프린트 의 태스크 매니지먼트
-
-- 기능별 브랜치 Git Merge Strategy
+- **Unit Test Case 작성**
 
 <br>
 <br>
 
-# <span style="color:#7879f1">**STACK**
+# **🚀 MOTIVATION**
 
-**FrontEnd**
+어린 시절 검은색스케치북에 스크래치를 내서 무지개색으로 그림을 그리던 스크래치북에서 영감을 얻어서 조금씩 보이는 조각을 힌트로 그림을 맞추는 게임을 구상하게 되었습니다. <br> 그림을 그리는 것보다 더 유니크하고 재밌는 방식이 없을까 고민하던 중에 펭귄 얼음깨기 보드게임에서 모티브를 얻어서 얼음을 하나하나 망치로 깨서 들여다 보는 요소를 넣은 **🧊 ICE BREAKER🔨** 를 제작하게 되었습니다. <br>반짝이고 재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 체험할 수 있도록 만들었습니다.
+
+<br>
+<br>
+
+# **📸 FEATURES**
+
+<div style="display: flex; text-align: center;">
+  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 20%; margin: 5px;"/>
+  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 20%; margin: 5px;" />
+  <img src="readme.asset/06-item.png" alt="item" style="width: 20%; margin: 5px;"/>
+  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 18%; margin: 5px;" />
+</div>
+
+<br>
+
+- 솔로 모드( `혼자 얼음깨기` )와 배틀 모드( `같이 얼음깨기` ) 지원
+- Gsap 를 이용한 준비 화면 화면전환시 클로즈업 애니메이션
+- 브레이킹 타임 후 정답입력 시간 : 콜라 아이템 사용 기능
+- 아이템1 : 사용자의 정답 입력 시간 10초 증가
+- 아이템2 : 상대 사용자의 정답 입력 시간 5초 감소
+- 게임 결과 화면 : 점수 확인 및 랭킹 등록 기능
+
+<br>
+
+<div style="display: flex; text-align: center;">
+  <img src="readme.asset/02-rooms.png" alt="rooms" style="width: 20%; margin: 5px;"/>
+  <img src="readme.asset/03-room.png"  alt="room" style="width: 20%; margin: 5px;" />
+  <img src="readme.asset/06-item_solo.png"  alt="solo-item" style="width: 20%; margin: 5px;" />
+  <img src="readme.asset/08-won.png"  alt="won" style="width: 20%; margin: 5px;" />
+</div>
+
+<br>
+
+- Firebase Realtime Database 기반으로 소켓 기능 구현
+- 채널 개설에 따른 실시간 채널리스트 업데이트
+- 채널 ID 친구와 공유 및 ID 로 바로 입장
+- 아이템을 이용한 유저의 정답시간 추가 및 상대 유저의 정답시간 단축 기능
+- 상대유저의 다음 레벨 진입 또는 아이템 공격시 실시간 알림 기능
+- 한 쪽에서 게임 종료시 게임 승패 결과 페이지 동시 이동
+
+<br>
+<br>
+
+# **🧳 STACK**
+
+_**FrontEnd**_
 
 - JavaScript ES2015+
 - React
@@ -83,12 +141,12 @@
 - Konva.js
 - Gsap
 
-**BackEnd**
+_**BackEnd**_
 
 - Firebase Realtime Database
 - Amazon S3
 
-**ThirdParty Stack**
+_**ThirdParty Stack**_
 
 - Netlify
 - Lodash
@@ -103,39 +161,7 @@
 <br>
 <br>
 
-# <span style="color:#7879f1">**FEATURES**
-
-+ 솔로 모드와 배틀 모드 제공
-+ Firebase Realtime Database 기반으로 소켓 기능 구현
-+ 채널 개설에 따른 실시간 채널리스트 업데이트
-+ 채널 ID 친구와 공유 및 ID 로 바로 
-+ 아이템을 이용한 유저의 정답시간 추가 및 상대 유저의 정답시간 단축 기능
-+ 상대유저의 다음 레벨 진입 또는 아이템 공격시 실시간 알림 기능
-+ 게임 승패 결과 페이지 공유
-+ Amazon S3 저장소로 이미지 로딩 최적화
-+ Konva.js 로 아이스 플레이트 & 아이스 큐브 커스터마이징
-+ 레벨에 따른 아이스큐브 브레이킹 난이도 세팅
-+ 상태를 이용한 얼음 큐브 렌더링
-+ Gsap 를 이용한 애니메이션 효과
-+ 랭킹 히스트리 저장 기능
-
-<div style="display: flex; text-align: center;">
-  <img src="readme.asset/05-cube.png" alt="breaking" style="width: 18%; margin: 5px;"/>
-  <img src="readme.asset/07-answer.png"  alt="answer" style="width: 18%; margin: 5px;" />
-  <img src="readme.asset/06-item.png" alt="item" style="width: 18%; margin: 5px;"/>
-  <img src="readme.asset/02-rooms.png" alt="rooms" style="width: 18%; margin: 5px;"/>
-</div>
-<div style="display: flex; text-align: center;">
-  <img src="readme.asset/03-room.png"  alt="room" style="width: 18%; margin: 5px;" />
-  <img src="readme.asset/06-item_solo.png"  alt="solo-item" style="width: 18%; margin: 5px;" />
-  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 18%; margin: 5px;" />
-  <img src="readme.asset/08-won.png"  alt="won" style="width: 18%; margin: 5px;" />
-</div>
-
-<br>
-<br>
-
-# <span style="color:#7879f1">**INSTALLATION**
+# **🕹 USAGE**
 
 - 프로젝트를 다운받은 후 프로젝트 디렉토리 내부에서 `.env` 파일을 생성하고, 다음 환경 변수를 입력해주세요
   ```jsREACT_APP_FIREBASE_API_KEY>
@@ -164,7 +190,21 @@
 <br>
 <br>
 
-# <span style="color:#0285cf">**PROJECT LOG**
+# **💾 DEPLOY**
+
+- Netlify 를 이용한 배포 자동화
+- <i>**[Demo LINK_ICE BREAKER ⚒️](https://icebreaker.colki.me/)**</i>
+
+<br>
+<br>
+
+# **📘 PROJECT LOG**
+
+### **<i>Why React?</i>**
+
+- 프론트엔드 프레임워크 및 라이브러리 중에서 선언적인 방식으로 JSX를 UI를 렌더링할 수 있는 방식의 리액트를 선택했습니다. 라이브러리이기 때문에 다양한 모듈들을 커스터마이징해서 사용할 수 있고, 사용자와의 인터렉션 및 잦은 API 요청에 의한 무분별한 Reflow 와 불필요한 업데이트를 방지할 수 있었습니다. 컴포넌트를 분리함으로써 데이터를 필요한 위치에서만 관리할 수 있어서 상태 관리에 보다 더 집중할 수 있었습니다.
+
+<br>
 
 ### **<i>Why Firebase?</i>**
 
@@ -190,9 +230,15 @@
   다만 캔버스와 엘리먼트간에는 각자 공간을 차지하고 있기 때문에 레이어처럼 쌓아 올려지지 않아서, 게임화면의 점수, 메뉴, 아이템에서 reflow 를 발생시킬 수 있는 스타일 속성들을 사용했던 부분이 있었습니다.
 
 <br>
+
+### **<i>Who are you ?</i>**
+
+진부한 말일 수 있겠지만 사용자의 관점으로 애플리케이션과 서비스를 바라보고 이해하는 데에 남다른 통찰력이 있다고 자신있게 말할 수 있습니다. 사용자들은 보이지 않는 부분에서도 불편을 느끼고 또 지나칠 수 있는 부분에서는 세심한 배려와 센스를 느낍니다. 즐겨 찾는 사이트나 앱을 사용하면서 불편한 부분이나 개선했으면 하는 부분에 대해서 많이 생각하고 제안하는 등 액션을 취해왔습니다. 사용자로써 쌓아온 경험으로 이제 개발자의 경력을 시작하려고 합니다. 🏃🏻‍♀️
+
+<br>
 <br>
 
-# <span style="color:#0285cf">**TECHNICAL CHALLENGE**
+# **⚒️ TECHNICAL CHALLENGE**
 
 ### **<i>Mobile Optimization 모바일 최적화</i>**
 
@@ -201,7 +247,9 @@
 
 - **Code-Splitting**<br>React.lazy & React.Suspense 로 컴포넌트 지연 로딩 ‣ vendor.chunk 파일 Transfer 사이즈 85% 감소
 - **Image**<br />저장소를 Firebase Storage 에서 S3로 변경 ‣ 네트워크 요청 시간 95% 단축<br>jpg, png, webp 각 이미지 형식으로 렌더링 속도 비교 후 webp 포맷 선택 ‣ 로딩 시간 4.3s 감소
-- **Tree-Shaking**<br>Lodash ‣ 빌드시간을 고려하여 플러그인 없이 Default Import 방식으로 번들 사이즈 89% 감소 <br>트리셰이킹이 적용된 Firebase V9 SDK 사용 ‣ Database Module 번들 사이즈 60% 감소
+  - Imagine Webp 플러그인으로도 webp 형식으로 변환이 가능했지만, 프로젝트 특성과 하나의 이미지를 계속적으로 변환하지 않아도 되기 때문에 굳이 무거운 모듈을 추가하여 빌드시간을 늘릴 필요가 없다고 판단하여 CLI 를 이용해서 직접 변환하는 방식을 채택했습니다.
+- **Tree-Shaking**<br>트리셰이킹이 적용된 Firebase V9 SDK 사용 ‣ Database Module 번들 사이즈 60% 감소<br>Lodash ‣ 빌드시간을 고려하여 플러그인 없이 Default Import 방식으로 번들 사이즈 89% 감소 <br>
+  - Lodash-es 버전을 사용했을 때 얻는 빌드 사이즈를 비교했을 때 실질적으로 차이가 없었습니다. Babel-plugin을 추가한다면 기존 Default Import 방식보다 13%가 감소하지만, 플러그인으로 인해 빌드시간이 증가하기 때문에 시간과 비용적으로 좋지 않다고 생각했습니다.
 - **Reflow 방지**<br>레이아웃 단계를 재발생 시키는 css 속성을 변경하여 Reflow 제거 및 최소화
 - **React 최적화**<br>React Hooks API 를 적절하게 사용하여 불필요한 렌더링 방지
 

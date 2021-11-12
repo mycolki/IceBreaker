@@ -3,11 +3,16 @@ import styled from 'styled-components';
 
 import { flexCenterColumn } from '../../styles/share/common';
 
-function Modal({ children, onClose, dimmed, background }) {
+function Modal({ children, onClose, dimmed, background, height }) {
   return (
     <Wrapper>
       <Dimmed data-testid="dimmed" dimmed={dimmed} onClick={onClose} />
-      <StyledModal className="modal" tabIndex="-1" background={background}>
+      <StyledModal
+        className="modal"
+        tabIndex="-1"
+        background={background}
+        height={height}
+      >
         {children}
         <CloseButton className="close" onClick={onClose}>
           x
@@ -24,11 +29,13 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   dimmed: PropTypes.bool,
   background: PropTypes.string,
+  height: PropTypes.string,
 };
 
 Modal.defaultProps = {
   dimmed: true,
   background: 'lightPurple',
+  height: '300px',
 };
 
 const Wrapper = styled.div`
@@ -59,7 +66,7 @@ const StyledModal = styled.div`
   top: 50%;
   left: 50%;
   width: 300px;
-  height: 300px;
+  height: ${({ height }) => height && height};
   text-align: center;
   transform: translate(-50%, -50%);
   border-radius: 25px;
