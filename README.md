@@ -96,7 +96,7 @@
   <img src="readme.asset/05-cube.png" alt="breaking" style="width: 20%; margin: 5px;"/>
   <img src="readme.asset/07-answer.png"  alt="answer" style="width: 20%; margin: 5px;" />
   <img src="readme.asset/06-item.png" alt="item" style="width: 20%; margin: 5px;"/>
-  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 18%; margin: 5px;" />
+  <img src="readme.asset/10-ranking.png"  alt="ranking" style="width: 20%; margin: 5px;" />
 </div>
 
 <br>
@@ -242,7 +242,7 @@ _**ThirdParty Stack**_
 
 ### **<i>Mobile Optimization 모바일 최적화</i>**
 
-로컬 브라우저 환경과 달리 배포 후 모바일 환경에서 초기 렌더링 및 화면 전환시 네트워크 요청 속도가 느려지는 문제가 발생되어, 속도 향상에 중점을 두고 다양한 최적화 방법을 시도했습니다.<br>
+로컬 브라우저 환경과 달리 배포 후 모바일 환경에서 초기 렌더링 및 화면 전환시 네트워크 요청 속도가 느려지는 문제가 발생되어,<br>속도 향상에 중점을 두고 다양한 최적화 방법을 시도했습니다.<br>
 ( Web Inspector & LightHouse 테스트 → 퍼포먼스 성능 28% 향상 )
 
 - **Code-Splitting**<br>React.lazy & React.Suspense 로 컴포넌트 지연 로딩 ‣ vendor.chunk 파일 Transfer 사이즈 85% 감소
