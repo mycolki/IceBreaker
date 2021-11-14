@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 import {
+  changeGameStatus,
   pauseGameProgress,
   changeMessage,
   resetQuizForGameOver,
@@ -17,7 +18,7 @@ import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
 import { flexCenter } from '../../styles/share/common';
 import { ROUTE, GAME_STATUS } from '../../constants/game';
-import { USE_ITEM, RESET } from '../../constants/messages';
+import { USE_ITEM, ANSWER } from '../../constants/messages';
 
 const Portal = lazy(() => import('../Portal'));
 const Modal = lazy(() => import('../Modal'));
@@ -26,12 +27,14 @@ const ItemModal = lazy(() => import('../Modal/ItemModal'));
 function Footer() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const currentQuizIndex = useSelector((state) => state.quiz.currentQuizIndex);
   const gameStatus = useSelector((state) => state.quiz.gameStatus);
-  const itemsCount = useSelector((state) => state.quiz.itemsCount);
   const isGamePaused = useSelector((state) => state.quiz.isGamePaused);
+  const itemsCount = useSelector((state) => state.quiz.itemsCount);
   const isAnswerGuessTime = gameStatus === GAME_STATUS.ANSWER_GUESS_TIME;
 
   const moveToMenu = () => {
+    dispatch(changeGameStatus(GAME_STATUS.END));
     dispatch(resetQuizForGameOver());
     dispatch(resetBattleForGameOver());
     history.push(ROUTE.MENU);
@@ -45,7 +48,7 @@ function Footer() {
   };
 
   const closeItemModal = () => {
-    dispatch(changeMessage(RESET));
+    dispatch(changeMessage(ANSWER[currentQuizIndex + 1]));
     dispatch(pauseGameProgress(false));
   };
 

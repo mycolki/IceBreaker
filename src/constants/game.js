@@ -3,8 +3,7 @@ export const ROOMS = 'rooms';
 export const RANKERS = 'rankers';
 
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 5;
-
+export const QUIZ_LENGTH = 7;
 export const INITIAL_OPPONENT_LEVEL = 1;
 export const INITIAL_ITEMS_COUNTS = 5;
 

@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import { getDatabase, ref, set, get, child, update } from 'firebase/database';
-import sortBy from 'lodash-es/sortBy';
-import cloneDeep from 'lodash-es/cloneDeep';
+import { getDatabase, ref, set, get, child } from 'firebase/database';
 import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';
 import useSound from 'use-sound';
 
 import { changeMessage, resetQuizForGameOver } from '../../store/quizSlice';
 import {
-  saveBreakers,
   saveUserName,
+  saveBreakers,
   resetBattleForGameOver,
 } from '../../store/battleSlice';
 import { copyToClipboard } from '../../utils/copyToClipboard';
@@ -65,21 +63,16 @@ function BattleOver() {
           await get(child(ref(getDatabase()), `${ROOMS}/${roomId}/breakers`))
         ).val();
 
-        const sorted = sortBy(cloneDeep(finalBreakers, 'score'));
+        const max = Math.max(...finalBreakers.map((breaker) => breaker.score));
+        const winner = finalBreakers.filter((breaker) => breaker.score === max);
 
-        if (sorted[0].score === sorted[1].score) {
+        if (winner.length === 2) {
           setIsDraw(true);
-        } else if (sorted[1].name === userName) {
+        } else if (winner[0].name === userName) {
           setIsWinner(true);
-          sorted[1].isWinner = true;
         }
 
-        dispatch(saveBreakers(sorted));
-        setLoading(true);
-
-        update(ref(getDatabase(), `${ROOMS}/${roomId}`), {
-          breakers: sorted,
-        });
+        dispatch(saveBreakers(finalBreakers));
       } catch (err) {
         history.push(ROUTE.ERROR, {
           error: ERROR.LOAD_DATA,
@@ -88,6 +81,7 @@ function BattleOver() {
     };
 
     getBreakers();
+    setLoading(true);
   }, [dispatch, history, roomId, userName]);
 
   const shareGameURL = () => {
@@ -104,7 +98,7 @@ function BattleOver() {
 
   return (
     <Container isWinner={isWinner} isDraw={isDraw}>
-      <Result isWinner={isWinner} isDraw={isDraw}>
+      <div className="result">
         {loading ? (
           <>
             {isDraw ? (
@@ -118,14 +112,14 @@ function BattleOver() {
         ) : (
           <BarSpinner color="purple" />
         )}
-      </Result>
+      </div>
       <Scores>
         <div className="vs">vs</div>
-        {breakers.length !== 0
+        {breakers.length !== 0 && loading
           ? breakers.map((breaker, i) => (
               <ScoreBox
                 key={breaker.name + i}
-                isWinner={breaker.isWinner}
+                isWinner={isWinner}
                 isUser={breaker.name === userName}
               >
                 {breaker.name === userName && (
@@ -173,26 +167,31 @@ export default BattleOver;
 const Container = styled.div`
   height: 100%;
   text-align: center;
-  background: ${({ isDraw }) => isDraw && 'url(/background/draw.webp)'};
-  background: ${({ isWinner }) =>
-    isWinner ? 'url(/background/won.webp)' : 'url(/background/lost.webp)'};
-`;
+  /* background: ${({ isDraw, isWinner }) =>
+    isDraw && !isWinner && 'url(/background/draw.webp)'}; */
+  background: ${({ isWinner, isDraw }) =>
+    isWinner
+      ? 'url(/background/won.webp)'
+      : isDraw
+      ? 'url(/background/draw.webp)'
+      : 'url(/background/lost.webp)'};
 
-const Result = styled.div`
-  height: 45%;
-  position: relative;
+  .result {
+    height: 45%;
+    position: relative;
 
-  .result-title {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    left: 50%;
-    font-size: 44px;
-    transform: translate(-50%, -50%);
-    color: ${({ theme }) => theme.white};
-    -webkit-text-stroke: 2px ${({ theme, isDraw }) => isDraw && theme.green};
-    -webkit-text-stroke: 2px
-      ${({ isWinner, theme }) => (isWinner ? theme.deepBlue : theme.deepPink)};
+    .result-title {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      left: 50%;
+      font-size: 44px;
+      transform: translate(-50%, -50%);
+      color: ${({ theme }) => theme.white};
+      -webkit-text-stroke: 2px ${({ theme, isDraw }) => isDraw && theme.green};
+      -webkit-text-stroke: 2px
+        ${({ isWinner, theme }) => (isWinner ? theme.deepBlue : theme.deepPink)};
+    }
   }
 `;
 

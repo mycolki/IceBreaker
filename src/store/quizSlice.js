@@ -66,7 +66,12 @@ const quizSlice = createSlice({
         state.message = ANSWER[state.currentQuizIndex + 1];
       } else if (action.payload === GAME_STATUS.END) {
         state.currentQuizIndex = 0;
+        state.isGamePaused = false;
+        state.remainingTime = 0;
+        state.userInput = '';
+        state.itemsCount = INITIAL_ITEMS_COUNTS;
         state.message = RESET;
+        state.warningMessage = '';
       }
     },
     decreaseTime(state) {
@@ -114,14 +119,6 @@ const quizSlice = createSlice({
       state.userInput = '';
       state.message = RESET;
     },
-    endGame(state) {
-      state.isGamePaused = false;
-      state.gameStatus = GAME_STATUS.END;
-      state.userInput = '';
-      state.itemsCount = INITIAL_ITEMS_COUNTS;
-      state.message = RESET;
-      state.warningMessage = '';
-    },
     resetQuizForGameOver(state) {
       state.currentQuizIndex = 0;
       state.gameStatus = GAME_STATUS.BEFORE_START;
@@ -145,7 +142,6 @@ export const {
   receiveAttack,
   updateWarningMessage,
   goToNextStep,
-  endGame,
   resetQuizForGameOver,
 } = quizSlice.actions;
 
