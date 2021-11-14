@@ -1,6 +1,6 @@
 import { lazy, Suspense, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';

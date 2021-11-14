@@ -28,7 +28,7 @@ function GameOver() {
     setLoading(true);
 
     return () => dispatch(resetQuizForGameOver());
-  }, [score]);
+  }, [dispatch, score]);
 
   const shareGameURL = () => {
     play();
