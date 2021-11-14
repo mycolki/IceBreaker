@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getDatabase, ref, set, get, child } from '@firebase/database';
-import sampleSize from 'lodash/sampleSize';
+import sampleSize from 'lodash-es/sampleSize';
 import useSound from 'use-sound';
 import PropTypes from 'prop-types';
 

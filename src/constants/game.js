@@ -27,8 +27,8 @@ export const ROUTE = {
 
 export const ANSWER_TIME = 10;
 export const BREAKING_TIME = {
-  1: 5,
-  2: 10,
+  1: 10,
+  2: 7,
   3: 10,
   4: 10,
   5: 7,

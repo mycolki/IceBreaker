@@ -5,7 +5,12 @@ import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-import { pauseGameProgress, changeMessage } from '../../store/quizSlice';
+import {
+  pauseGameProgress,
+  changeMessage,
+  resetQuizForGameOver,
+} from '../../store/quizSlice';
+import { resetBattleForGameOver } from '../../store/battleSlice';
 import usedCokeWeb from '../../asset/usedCoke.webp';
 import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
@@ -26,7 +31,11 @@ function Footer() {
   const isGamePaused = useSelector((state) => state.quiz.isGamePaused);
   const isAnswerGuessTime = gameStatus === GAME_STATUS.ANSWER_GUESS_TIME;
 
-  const moveToMenu = () => history.push(ROUTE.MENU);
+  const moveToMenu = () => {
+    dispatch(resetQuizForGameOver());
+    dispatch(resetBattleForGameOver());
+    history.push(ROUTE.MENU);
+  };
 
   const openItemModal = () => {
     if (!isAnswerGuessTime) return;
@@ -75,9 +84,9 @@ function Footer() {
         </Layer>
       </Stage>
       <Nav coke={coke}>
-        <Link to={ROUTE.MENU}>
-          <span className="menu">MENU</span>
-        </Link>
+        <span className="menu" onClick={moveToMenu}>
+          MENU
+        </span>
         <span className="item" onClick={openItemModal}>
           <img
             className="item-img"

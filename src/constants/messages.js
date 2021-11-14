@@ -16,10 +16,6 @@ export const GAME = {
     type: 'game',
     text: '이미 존재하는 이름입니다. 다시 입력해주세요',
   },
-  PLAY_AUDIO: {
-    type: 'game',
-    text: '배경음악을 켜고 할까요?',
-  },
 };
 
 export const USE_ITEM = {

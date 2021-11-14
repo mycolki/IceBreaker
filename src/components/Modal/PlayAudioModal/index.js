@@ -1,20 +1,10 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import { changeMessage } from '../../../store/quizSlice';
 import { flexCenter } from '../../../styles/share/common';
-import { GAME } from '../../../constants/messages';
 
 import Button from '../../share/Button';
 
 function PlayAudioModal({ onClose, onPlay }) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(changeMessage(GAME.PLAY_AUDIO));
-  }, [dispatch]);
-
   const playAudio = () => {
     onPlay();
     onClose();

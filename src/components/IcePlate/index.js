@@ -10,7 +10,6 @@ import { GAME_STATUS } from '../../constants/game';
 import PlateLayer from '../Ice/PlateLayer';
 import Cubes from '../Ice/Cubes';
 import LoadingPlateLayer from '../Ice/LoadingPlateLayer';
-import DotSpinner from '../share/LoadingSpinner/DotSpinner';
 
 function IcePlate({ selectedAudio }) {
   const dispatch = useDispatch();
@@ -26,10 +25,10 @@ function IcePlate({ selectedAudio }) {
     const img = new window.Image();
     img.src = imgUrl;
     img.onload = () => {
+      setImage(img);
       if (selectedAudio) {
         dispatch(changeGameStatus(GAME_STATUS.ICE_BREAKING_TIME));
       }
-      setImage(img);
     };
   }, [imgUrl, dispatch, selectedAudio]);
 
@@ -49,9 +48,6 @@ function IcePlate({ selectedAudio }) {
           </Layer>
         </Stage>
       ) : (
-        <DotSpinner color="purple" />
-      )}
-      {gameStatus === GAME_STATUS.BEFORE_START && (
         <Stage width={375} height={400}>
           <LoadingPlateLayer />
         </Stage>
