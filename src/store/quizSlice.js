@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import sampleSize from 'lodash/sampleSize';
+import sampleSize from 'lodash-es/sampleSize';
 
 import {
   QUIZ,
@@ -19,7 +19,7 @@ const name = QUIZ;
 const initialState = {
   quizCollection: { byId: {}, allIds: [] },
   currentQuizIndex: 0,
-  gameStatus: '',
+  gameStatus: GAME_STATUS.BEFORE_START,
   isGamePaused: false,
   remainingTime: 0,
   userInput: '',
@@ -30,7 +30,6 @@ const initialState = {
     text: '',
   },
   warningMessage: '',
-  isPlayAudio: false,
 };
 
 const quizSlice = createSlice({
@@ -67,7 +66,12 @@ const quizSlice = createSlice({
         state.message = ANSWER[state.currentQuizIndex + 1];
       } else if (action.payload === GAME_STATUS.END) {
         state.currentQuizIndex = 0;
+        state.isGamePaused = false;
+        state.remainingTime = 0;
+        state.userInput = '';
+        state.itemsCount = INITIAL_ITEMS_COUNTS;
         state.message = RESET;
+        state.warningMessage = '';
       }
     },
     decreaseTime(state) {
@@ -115,19 +119,12 @@ const quizSlice = createSlice({
       state.userInput = '';
       state.message = RESET;
     },
-    endGame(state) {
-      state.gameStatus = GAME_STATUS.END;
-      state.userInput = '';
-      state.message = RESET;
-    },
     resetQuizForGameOver(state) {
-      state.score = 0;
       state.currentQuizIndex = 0;
+      state.gameStatus = GAME_STATUS.BEFORE_START;
+      state.remainingTime = 0;
+      state.score = 0;
       state.message = RESET;
-      state.itemsCount = INITIAL_ITEMS_COUNTS;
-    },
-    playBackgroundAudio(state, action) {
-      state.isPlayAudio = action.payload;
     },
   },
 });
@@ -145,9 +142,7 @@ export const {
   receiveAttack,
   updateWarningMessage,
   goToNextStep,
-  endGame,
   resetQuizForGameOver,
-  playBackgroundAudio,
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

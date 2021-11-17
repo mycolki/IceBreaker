@@ -1,6 +1,6 @@
 {
   "name": "ICE BREAKER",
-  "version": "0.12.6",
+  "version": "0.13.0",
   "private": true,
   "description": "Guess what's inside the ice!",
   "author": "Yang Ha Yun <mycolki@gmail.com>",
@@ -9,7 +9,7 @@
     "firebase": "^9.1.1",
     "gsap": "^3.8.0",
     "konva": "^8.2.1",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --watch",
     "eject": "react-scripts eject",
     "eslint-check": "eslint --print-config path/to/main.js | eslint-config-prettier-check"
@@ -39,6 +39,11 @@
       "airbnb",
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!lodash-es/*)"
     ]
   },
   "browserslist": {

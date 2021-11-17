@@ -10,6 +10,8 @@ import InputBox from '../InputBox';
 const MOCK_URL = '/banana.jpg';
 const MOCK_VALUE = '바나나';
 
+jest.mock('react-redux');
+
 describe('<InputBox /> : render form', () => {
   it('should render form of InputBox', () => {
     useSelector.mockImplementation((selector) =>

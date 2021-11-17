@@ -9,7 +9,6 @@ import {
   changeGameStatus,
   decreaseTime,
   goToNextStep,
-  endGame,
   changeMessage,
 } from '../../store/quizSlice';
 import { ROUTE, ROOMS, GAME_STATUS, QUIZ_LENGTH } from '../../constants/game';
@@ -74,8 +73,8 @@ function Breaking() {
     if (!roomId) return;
 
     onValue(ref(getDatabase(), `${ROOMS}/${roomId}/onBattle`), (snapshot) => {
-      if (!snapshot.val()) {
-        dispatch(endGame());
+      if (snapshot.val() === false) {
+        dispatch(changeGameStatus(GAME_STATUS.END));
         history.push(`${ROUTE.BATTLE_OVER}/${roomId}`);
       }
     });
@@ -92,7 +91,7 @@ function Breaking() {
 
   const goToNextQuiz = () => dispatch(goToNextStep());
   const goToEnding = () => {
-    dispatch(endGame());
+    dispatch(changeGameStatus(GAME_STATUS.END));
 
     if (roomId) {
       update(ref(getDatabase(), `${ROOMS}/${roomId}`), {

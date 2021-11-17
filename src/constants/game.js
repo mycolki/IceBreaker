@@ -3,8 +3,7 @@ export const ROOMS = 'rooms';
 export const RANKERS = 'rankers';
 
 export const BREAKER_LENGTH = 2;
-export const QUIZ_LENGTH = 5;
-
+export const QUIZ_LENGTH = 7;
 export const INITIAL_OPPONENT_LEVEL = 1;
 export const INITIAL_ITEMS_COUNTS = 5;
 
@@ -27,8 +26,8 @@ export const ROUTE = {
 
 export const ANSWER_TIME = 10;
 export const BREAKING_TIME = {
-  1: 5,
-  2: 10,
+  1: 10,
+  2: 7,
   3: 10,
   4: 10,
   5: 7,

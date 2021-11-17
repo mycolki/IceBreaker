@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { getDatabase, ref, onValue, set, update } from 'firebase/database';
-import cloneDeep from 'lodash/cloneDeep';
-import filter from 'lodash/filter';
+import cloneDeep from 'lodash-es/cloneDeep';
+import filter from 'lodash-es/filter';
 
 import { GiBearFace } from 'react-icons/gi';
 import styled from 'styled-components';

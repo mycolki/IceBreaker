@@ -1,18 +1,24 @@
 import { lazy, Suspense, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Stage, Layer, RegularPolygon } from 'react-konva';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-import { pauseGameProgress, changeMessage } from '../../store/quizSlice';
+import {
+  changeGameStatus,
+  pauseGameProgress,
+  changeMessage,
+  resetQuizForGameOver,
+} from '../../store/quizSlice';
+import { resetBattleForGameOver } from '../../store/battleSlice';
 import usedCokeWeb from '../../asset/usedCoke.webp';
 import cokeWeb from '../../asset/coke.webp';
 import coke from '../../asset/coke.png';
 import { rightAndLeft } from '../../styles/share/animation';
 import { flexCenter } from '../../styles/share/common';
 import { ROUTE, GAME_STATUS } from '../../constants/game';
-import { USE_ITEM, RESET } from '../../constants/messages';
+import { USE_ITEM, ANSWER } from '../../constants/messages';
 
 const Portal = lazy(() => import('../Portal'));
 const Modal = lazy(() => import('../Modal'));
@@ -21,12 +27,18 @@ const ItemModal = lazy(() => import('../Modal/ItemModal'));
 function Footer() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const currentQuizIndex = useSelector((state) => state.quiz.currentQuizIndex);
   const gameStatus = useSelector((state) => state.quiz.gameStatus);
-  const itemsCount = useSelector((state) => state.quiz.itemsCount);
   const isGamePaused = useSelector((state) => state.quiz.isGamePaused);
+  const itemsCount = useSelector((state) => state.quiz.itemsCount);
   const isAnswerGuessTime = gameStatus === GAME_STATUS.ANSWER_GUESS_TIME;
 
-  const moveToMenu = () => history.push(ROUTE.MENU);
+  const moveToMenu = () => {
+    dispatch(changeGameStatus(GAME_STATUS.END));
+    dispatch(resetQuizForGameOver());
+    dispatch(resetBattleForGameOver());
+    history.push(ROUTE.MENU);
+  };
 
   const openItemModal = () => {
     if (!isAnswerGuessTime) return;
@@ -36,7 +48,7 @@ function Footer() {
   };
 
   const closeItemModal = () => {
-    dispatch(changeMessage(RESET));
+    dispatch(changeMessage(ANSWER[currentQuizIndex + 1]));
     dispatch(pauseGameProgress(false));
   };
 
@@ -75,9 +87,9 @@ function Footer() {
         </Layer>
       </Stage>
       <Nav coke={coke}>
-        <Link to={ROUTE.MENU}>
-          <span className="menu">MENU</span>
-        </Link>
+        <span className="menu" onClick={moveToMenu}>
+          MENU
+        </span>
         <span className="item" onClick={openItemModal}>
           <img
             className="item-img"
