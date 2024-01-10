@@ -5,7 +5,7 @@
   <img src="readme.asset/01-menu.png" alt="menu" width="35%" />
 </p>
 
-## **<i>Guess what's inside the ice!**</i>
+<i>**Guess what's inside the ice!**</i>
 
 **아이스 브레이커**는 망치로 얼음 큐브를 깨면서🧊🔨<br>
 얼음 아래로 보이는 그림이 무엇인지 맞추는 아케이드 **Web App 게임** 입니다.<br>
