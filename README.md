@@ -15,21 +15,21 @@
 
 # **<i>Shortcut</i>**
 
-**<i>[🗒 Development Plan](#-Development-Plan)</i>**
+**<i>[🗒 Development Plan](##-Development-Plan)</i>**
 
-**<i>[🚀 Motivation](#-Motivation)</i>**
+**<i>[🚀 Motivation](##-Motivation)</i>**
 
-**<i>[📸 Features](#-Features)</i>**
+**<i>[📸 Features](##-Features)</i>**
 
-**<i>[🧳 Stack](#-Stack)</i>**
+**<i>[🧳 Stack](##-Stack)</i>**
 
-**<i>[🕹 Usage](#-Usage)</i>**
+**<i>[📘 Project Log](##-Project-Log)</i>**
 
-**<i>[💾 Deploy](#-Deploy)</i>**
+**<i>[⚒️ Technical Challenge](##-Technical-Challenge)</i>**
 
-**<i>[📘 Project Log](#-Project-Log)</i>**
+**<i>[🕹 Usage](##-Usage)</i>**
 
-**<i>[⚒️ Technical Challenge](#-Technical-Challenge)</i>**
+**<i>[💾 Deploy](##-Deploy)</i>**
 
 <br>
 
@@ -37,16 +37,9 @@
 
 ### **프로젝트 기간**
 
-- **2021.09.27 ~ 2021.10.03 (1주)**
+- **2021.09.27 ~ 2021.10.03 (1주)** 
 
-  아이디어 기획
-
-  목업 디자인
-
-  세부 기능 설계
-
-  애자일 스프린트 계획
-
+  아이디어/명세 기획 - 목업 디자인 - 세부 기능 설계 - 애자일 스프린트 계획
 - **2021.10.04 ~ 2021.10.16 (2주)**
 
   개발 진행
@@ -65,8 +58,6 @@
 
   - **[🎨 MockUp Figma](https://www.figma.com/file/tK8XW8HuDSSGUJU0p7KRhN/ICE-BREAKER?node-id=0%3A1)** : 프로젝트 목업 디자인
     <img src="readme.asset/mockup.png" alt="mockup" width="80%" />
-
-<br>
 
 - **애자일 스프린트 방식의 태스크 매니지먼트**
 
@@ -144,56 +135,18 @@ _**BackEnd**_
 
 <br>
 
-## **🕹 Usage**
-
-- 최신 버전의 Chrome Browser 사용을 권장합니다
-- 프로젝트를 다운받은 후 프로젝트 디렉토리 내부에서 `.env` 파일을 생성하고, 다음 환경 변수를 입력해주세요
-  ```jsREACT_APP_FIREBASE_API_KEY>
-  REACT_APP_FIREBASE_AUTH_DOMAIN>
-  REACT_APP_FIREBASE_DATABASE_URL>
-  REACT_APP_FIREBASE_PROJECT_ID>
-  REACT_APP_FIREBASE_STORAGE_BUCKET>
-  REACT_APP_FIREBASE_MESSAGING_SENDER_ID>
-  REACT_APP_FIREBASE_APP_ID>
-  REACT_APP_ICE_BREAKER_URL=https://icebreaker.colki.me
-  ```
-- 프로젝트를 다운받은 뒤 프로젝트 디렉토리 내부에서 다음 command 를 입력해주세요
-
-  ```js
-  $ npm install
-  ```
-
-- 다음 command 를 입력한 후 로컬 환경에서 애플리케이션을 실행해주세요
-
-  ```js
-  $ npm start
-  ```
-
-  로컬 URL : `http://localhost:3000`
-
-<br>
-
-# **💾 Deploy**
-
-- Netlify 를 이용한 애플리케이션 배포 및 배포 자동화
-- <i>**[Demo Link_ICE BREAKER ⚒️](https://icebreaker.colki.me/)**</i>
-
-<br>
-
 ## **📘 Project Log**
 
 ### **<i>Why React?</i>**
 
 - 선언적인 방식으로 JSX 로 UI 를 렌더링을 하는 리액트의 알고리즘 방식을 더 깊게 이해하고 사용자와의 인터렉션 및 잦은 API 요청에 의해 무분별하게 일어날 수 있는 업데이트를 최소화하기 위해 리액트를 선택했습니다. 또한 각 기능끼리 의존도가 높은 게임의 특성이나 재사용 요소가 많이 보이는 목업 디자인과 기획 요소를 고려했을 때 컴포넌트 구조의 리액트가 적격이라고 생각했습니다. 결과적으로 컴포넌트의 관심사를 분리하여 데이터를 필요한 위치에서만 관리하며 재사용성을 높일 수 있었습니다.
 
-<br>
 
 ### **<i>Why Firebase?</i>**
 
 - imgUrl 과 answer 로 이루어진 퀴즈 데이터의 단순한 구조와, 보안과 관련된 개인 계정을 저장하지 않기 때문에 서버를 따로 만들지 않고 firebase 를 이용하는 방향으로 결정했습니다.
   또한 Socket.io 로 구현했던 [**더빙게임 V-Live프로젝트**](https://github.com/voicelive) 에 비해 실시간 소통의 비중이 상대적으로 적었고, 새로운 방식으로도 실시간 커뮤니케이션을 구현해보고 싶었기 때문에 Firebase Realtime Database 를 선택했습니다. 하지만 게임의 사용자가 많아지거나 게임의 기능을 추가하게 되는 상황에 대해서 미리 고려하고 서버를 선택했으면 하는 아쉬움이 남습니다. 다음에 진행하게 될 서비스에서는 확장성과 유연성에 대해 깊게 더 고민하고 설계하려고 합니다.
 
-<br>
 
 ### **<i>Why Konva?</i>**
 
@@ -206,13 +159,12 @@ _**BackEnd**_
   React-Konva 는 React 와 유사한 마크업 방식으로 JSX 문법내에서 선언적으로 사용할 수 있고, Github 코드 내부를 살펴봤을 때 리액트 컴포넌트를 상속받는 걸 확인했기 때문에 기존 방식과 이질감이 없이 작업할 수 있었습니다.
   Stage > Layer > Shape 구조로 레이어별로 나눠서 작업할 수 있고 레이어 순서를 변경하는 일도 용이했습니다. Fabric, P5 와 달리 JSX 에서 Shape 을 생성함과 동시에 prop 으로 속성을 같이 넣어줄 수 있기 때문에 굉장히 직관적이고 코드도 가벼워졌습니다.
 
-<br>
 
 ### **<i>Who are you ?</i>**
 
 진부한 말일 수 있겠지만 사용자의 관점으로 애플리케이션과 서비스를 바라보고 이해하는 데에 남다른 통찰력이 있다고 자신있게 말할 수 있습니다. 사용자들은 보이지 않는 부분에서도 불편을 느끼고 작은 부분에서는 세심한 배려와 센스를 느낍니다. 저는 그런 디테일한 부분에 민감하게 반응하는 사용자이기에 즐겨 찾는 사이트나 앱을 사용하면서 불편한 부분이나 개선했으면 하는 부분에 대해서 많이 생각하고 제안하는 액션을 취해왔습니다. 사용자로써 쌓아온 오랜시간의 경험을 바탕으로 사용자 친화적인 애플리케이션을 개발하기 위해 노력하는 개발자가 되겠습니다. 🔥
 
-<br>
+<br />
 
 ## **⚒️ Technical Challenge**
 
@@ -236,7 +188,6 @@ _**BackEnd**_
 - **React 최적화**<br>
   React Hooks API 를 사용하여 Breaking 컴포넌트의 상태 업데이트로 인해 Footer 컴포넌트가 불필요하게 렌더링 되는 부분을 최적화하였습니다.
 
-<br>
 
 ### **<i>CleanUp Error</i>**
 
@@ -284,9 +235,46 @@ useEffect(() => {
 Firebase의 onValue 함수는 DB 가 업데이트 되는지 계속해서 리스닝하는 메서드인데 return 을 해주는 방식에서, 분기 처리 수정 후에 return 되지 않으면서 발생한 이벤트 누수였습니다. Firebase 가 V9 SDK 문서에는 onValue 의 return 값에 대한 부분이 명시하지 않았기 때문에, 직접 return 값을 확인한 후에 버그를 개선할 수 있었습니다.
 리액트는 개발자가 의도했을 수 있기 때문에 메모리가 누수되더라도 별다른 조치를 하지 않는 다는 사실도 알게 되었고, 문서에만 의지하지 않고 근본적인 원리를 파고들어 문제를 해결하는 방법을 깨우치는 유익한 시간이었습니다.
 
-<br>
 
 ### **<i>Realtime Battle Mode</i>**
 
 처음 기획했던 아이스브레이커는 솔로 모드로만 진행되는 포맷이었습니다. 원래 계획대로라면 게임만들기 기능을 추가해야 했지만, **이렇게 재밌고 알찬 게임을** 혼자서만 즐기기에는 아깝다는 생각이 들어서 배틀 모드를 추가하게 되었습니다.
 게임의 진행 단계를 명시한 주요 상태를 기반으로 다른 상태들이 서로 의존하지 않도록 설계했기 때문에, 이미 솔로 모드를 기반으로 구현된 로직에 다른 사용자와 게임하는 배틀 모드를 추가했음에도 불구하고 솔로 모드와 배틀모드 두 로직이 큰 의존성 없이 작동할 수 있었습니다.
+
+<br />
+
+## **🕹 Usage**
+
+- 최신 버전의 Chrome Browser 사용을 권장합니다
+- 프로젝트를 다운받은 후 프로젝트 디렉토리 내부에서 `.env` 파일을 생성하고, 다음 환경 변수를 입력해주세요
+  ```jsREACT_APP_FIREBASE_API_KEY>
+  REACT_APP_FIREBASE_AUTH_DOMAIN>
+  REACT_APP_FIREBASE_DATABASE_URL>
+  REACT_APP_FIREBASE_PROJECT_ID>
+  REACT_APP_FIREBASE_STORAGE_BUCKET>
+  REACT_APP_FIREBASE_MESSAGING_SENDER_ID>
+  REACT_APP_FIREBASE_APP_ID>
+  REACT_APP_ICE_BREAKER_URL=https://icebreaker.colki.me
+  ```
+- 프로젝트를 다운받은 뒤 프로젝트 디렉토리 내부에서 다음 command 를 입력해주세요
+
+  ```js
+  $ npm install
+  ```
+
+- 다음 command 를 입력한 후 로컬 환경에서 애플리케이션을 실행해주세요
+
+  ```js
+  $ npm start
+  ```
+
+  로컬 URL : `http://localhost:3000`
+
+<br>
+
+## **💾 Deploy**
+
+- Netlify 를 이용한 애플리케이션 배포 및 배포 자동화
+- <i>**[Demo Link_ICE BREAKER ⚒️](https://icebreaker.colki.me/)**</i>
+
+<br>
