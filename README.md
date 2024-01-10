@@ -12,30 +12,28 @@
 혼자 얼음을 깨거나 친구와 함께 경쟁하면서 얼음을 깰 수 있습니다.
 
 <br>
+
+# **<i>Shortcut</i>**
+
+**<i>[🗒 Development Plan](#-Development-Plan)</i>**
+
+**<i>[🚀 Motivation](#-Motivation)</i>**
+
+**<i>[📸 Features](#-Features)</i>**
+
+**<i>[🧳 Stack](#-Stack)</i>**
+
+**<i>[🕹 Usage](#-Usage)</i>**
+
+**<i>[💾 Deploy](#-Deploy)</i>**
+
+**<i>[📘 Project Log](#-Project-Log)</i>**
+
+**<i>[⚒️ Technical Challenge](#-Technical-Challenge)</i>**
+
 <br>
 
-# **<i>SHORTCUT</i>**
-
-**<i>[🗒 DEVELOPMENT PLAN ](#-DEVELOPMENT-PLAN)</i>**
-
-**<i>[🚀 MOTIVATION](#-MOTIVATION)</i>**
-
-**<i>[📸 FEATURES](#-FEATURES)</i>**
-
-**<i>[🧳 STACK](#-STACK)</i>**
-
-**<i>[🕹 USAGE](#-USAGE)</i>**
-
-**<i>[💾 DEPLOY](#-DEPLOY)</i>**
-
-**<i>[📘 PROJECT LOG](#-PROJECT-LOG)</i>**
-
-**<i>[⚒️ TECHNICAL CHALLENGE](#-TECHNICAL-CHALLENGE)</i>**
-
-<br>
-<br>
-
-# **🗒 DEVELOPMENT PLAN**
+## **🗒 Development Plan**
 
 ### **프로젝트 기간**
 
@@ -81,16 +79,14 @@
 - **Unit Test Case 작성**
 
 <br>
-<br>
 
-# **🚀 MOTIVATION**
+## **🚀 Motivation**
 
 어린 시절 검은색 스케치북에 스크래치를 내서 무지개색으로 그림을 그리던 스크래치북에서 영감을 받아 <br> 조금씩 보이는 그림의 일부를 힌트로 정답을 맞추는 게임을 구상하게 되었습니다. <br> 드래그 방식보다 더 유니크하고 재밌는 방식이 없을까 고민하던 중에 펭귄 얼음깨기 보드게임에서 모티브를 얻어서<br> 얼음을 하나하나 망치로 깨서 들여다 보는 컨셉의 **🧊 ICE BREAKER🔨** 를 제작하게 되었습니다. <br>반짝이고 재밌는 시각적인 요소들을 즐기면서 누구나 쉽게 체험할 수 있도록 만들었습니다.
 
 <br>
-<br>
 
-# **📸 FEATURES**
+## **📸 Features**
 
 <div style="display: flex; text-align: center;">
   <img src="readme.asset/05-cube.png" alt="breaking" style="width: 20%; margin: 5px;"/>
@@ -127,42 +123,28 @@
 - 한 쪽에서 게임 종료시 게임 승패 결과 화면 동시 이동
 
 <br>
-<br>
 
-# **🧳 STACK**
+## **🧳 Stack**
 
 _**FrontEnd**_
 
-- JavaScript ES2015+
-- React
-- React Router Dom
-- Redux (Redux-Toolkit)
-- Styled-Component
-- Konva.js
-- Gsap
+- 코어: React, JavaScript ES2015+, React Router Dom
+- 상태관리: Redux (Redux-Toolkit)
+- 스타일링: Styled-Component
+- 그래픽: Konva.js, Gsap
+- CI/CI: Git, Netlify
+- 테스팅: Jest, React Testing Library
+- 포맷팅: EsLint, Prettier
+- 타입: PropTypes
 
 _**BackEnd**_
 
 - Firebase Realtime Database
 - Amazon S3
 
-_**ThirdParty Stack**_
-
-- Netlify
-- Lodash-Es
-- React-Fastclick
-- Use-Sound
-- PropTypes
-- Jest
-- React Testing Library
-- EsLint
-- Prettier
-- Git
-
-<br>
 <br>
 
-# **🕹 USAGE**
+## **🕹 Usage**
 
 - 최신 버전의 Chrome Browser 사용을 권장합니다
 - 프로젝트를 다운받은 후 프로젝트 디렉토리 내부에서 `.env` 파일을 생성하고, 다음 환경 변수를 입력해주세요
@@ -190,17 +172,15 @@ _**ThirdParty Stack**_
   로컬 URL : `http://localhost:3000`
 
 <br>
-<br>
 
-# **💾 DEPLOY**
+# **💾 Deploy**
 
 - Netlify 를 이용한 애플리케이션 배포 및 배포 자동화
 - <i>**[Demo Link_ICE BREAKER ⚒️](https://icebreaker.colki.me/)**</i>
 
 <br>
-<br>
 
-# **📘 PROJECT LOG**
+## **📘 Project Log**
 
 ### **<i>Why React?</i>**
 
@@ -233,9 +213,8 @@ _**ThirdParty Stack**_
 진부한 말일 수 있겠지만 사용자의 관점으로 애플리케이션과 서비스를 바라보고 이해하는 데에 남다른 통찰력이 있다고 자신있게 말할 수 있습니다. 사용자들은 보이지 않는 부분에서도 불편을 느끼고 작은 부분에서는 세심한 배려와 센스를 느낍니다. 저는 그런 디테일한 부분에 민감하게 반응하는 사용자이기에 즐겨 찾는 사이트나 앱을 사용하면서 불편한 부분이나 개선했으면 하는 부분에 대해서 많이 생각하고 제안하는 액션을 취해왔습니다. 사용자로써 쌓아온 오랜시간의 경험을 바탕으로 사용자 친화적인 애플리케이션을 개발하기 위해 노력하는 개발자가 되겠습니다. 🔥
 
 <br>
-<br>
 
-# **⚒️ TECHNICAL CHALLENGE**
+## **⚒️ Technical Challenge**
 
 ### **<i>Mobile Optimization 모바일 최적화</i>**
 
